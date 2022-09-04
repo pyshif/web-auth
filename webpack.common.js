@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        main: '.src/index.tsx'
+        main: './src/index.tsx'
     },
 
     plugins: [
@@ -53,6 +53,13 @@ module.exports = {
     },
 
     resolve: {
+        alias: {
+            "components": path.resolve(__dirname, 'src/components'),
+            "hooks": path.resolve(__dirname, "src/hooks"),
+            "pages": path.resolve(__dirname, "src/pages"),
+            "utils": path.resolve(__dirname, "src/utils"),
+            "styles": path.resolve(__dirname, "src/styles")
+        },
         extensions: ['.tsx', '.ts', '.js']
     }
 }

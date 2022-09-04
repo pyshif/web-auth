@@ -1,0 +1,33 @@
+{
+    "tabWidth": 4,
+    "useTabs": false,
+    "overrides": [
+        {
+            "files": [
+                "*.tsx",
+                "*.ts",
+                "*.jsx",
+                "*.js"
+            ],
+            "options": {
+                "semi": true,
+                "singleQuote": true,
+                "printWidth": 80,
+                "bracketSpacing": true,
+                "arrowParens": "always"
+            }
+        },
+        {
+            "files": "*.css",
+            "options": {}
+        },
+        {
+            "files": "*.html",
+            "options": {}
+        },
+        {
+            "files": ".md",
+            "options": {}
+        }
+    ]
+}

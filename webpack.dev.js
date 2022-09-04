@@ -3,12 +3,12 @@ const common = require('./webpack.common');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = (env) => {
-    // console.log('env :>> ', env);
+    console.log('env :>> ', env);
     return merge(common, {
         mode: 'development',
         plugins: [
             new Dotenv({
-                path: `./.env.${env.env}`
+                path: `./.env.${env.mode}`
             })
         ],
         devtool: 'source-map',

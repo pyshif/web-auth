@@ -1,17 +1,17 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common');
 const path = require('path');
-const Dotnev = require('dotenv-webpack');
+const Dotenv = require('dotenv-webpack');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (env) => {
-    // console.log('env :>> ', env);
+    console.log('env :>> ', env);
     return merge(common, {
         mode: 'production',
         plugins: [
             new Dotenv({
-                path: `./.env.${env.env}`
+                path: `./.env.${env.mode}`
             })
         ],
         optimization: {
