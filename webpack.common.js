@@ -16,13 +16,14 @@ module.exports = {
         })
     ],
 
+
     module: {
         rules: [
             // JavaScript
             {
                 test: /\.m?jsx?$/i,
                 exclude: /node_modules/i,
-                use: ['bable-loader']
+                use: ['babel-loader']
             },
             {
                 test: /\.m?tsx?$/i,
@@ -59,7 +60,7 @@ module.exports = {
             "pages": path.resolve(__dirname, "src/pages"),
             "utils": path.resolve(__dirname, "src/utils"),
             "styles": path.resolve(__dirname, "src/styles"),
-            "images": path.resolve(__dirname, "src/iamges")
+            "images": path.resolve(__dirname, "src/images")
         },
         extensions: ['.tsx', '.ts', '.js']
     }
