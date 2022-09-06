@@ -1,0 +1,11 @@
+{
+    "transform": {
+        "\\.[tj]sx?$": "ts-jest"
+    },
+    "moduleNameMapper": {
+        "\\.(png|svg|jpg|jpeg|gif|mp4|pdf|mpg|webm|wav|mp3|m4a|aac|oga)": "<rootDir>/src/__mocks__/fileMocks.js",
+        "\\.(woff|woff2|eot|ttf|otf|webp)$": "<rootDir>/src/__mocks__/fileMock.js",
+        "\\.s?[ac]ss$": "<rootDir>/src/__mocks__/styleMock.js"
+    },
+    "testEnvironment": "jsdom"
+}
