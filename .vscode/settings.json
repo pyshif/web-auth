@@ -1,4 +1,10 @@
 {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "files.associations": {
+        // "*.css": "css",
+    },
+    "tailwindCSS.includeLanguages": {
+        "plaintext": "typescriptreact"
+    }
 }

@@ -1,6 +1,7 @@
 import 'styles/App.css';
 import { useState, lazy, Suspense } from 'react';
-import R, { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import routes from 'utils/routes';
 
 const Layout = lazy(() => import('pages/Layout'));
 const Home = lazy(() => import('pages/Home'));
@@ -14,7 +15,7 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route
-                    path="/"
+                    path={routes.home}
                     element={
                         <Suspense fallback={fallback}>
                             <Layout />
@@ -22,7 +23,7 @@ function App() {
                     }
                 >
                     <Route
-                        path="/auth"
+                        path={routes.auth.self}
                         element={
                             <Suspense fallback={fallback}>
                                 <Auth />
