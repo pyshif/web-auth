@@ -1,6 +1,7 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common');
 const Dotenv = require('dotenv-webpack');
+const path = require('path');
 
 module.exports = (env) => {
     console.log('env :>> ', env);
@@ -16,6 +17,13 @@ module.exports = (env) => {
             port: 3000,
             compress: true,
             historyApiFallback: true, // redirect 404 to index.html
+
+        },
+        output: {
+            path: path.resolve(__dirname, 'build'),
+            filename: 'static/js/[name].[contenthash].bundle.js',
+            publicPath: '/',
+            clean: true,
         }
     });
 }
