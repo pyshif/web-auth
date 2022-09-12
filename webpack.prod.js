@@ -17,12 +17,6 @@ module.exports = (env) => {
         optimization: {
             minimize: true,
             minimizer: ['...', new CssMinimizerPlugin(), new TerserPlugin()]
-        },
-        output: {
-            path: path.resolve(__dirname, 'build'),
-            filename: 'static/js/[name].[contenthash].bundle.js',
-            publicPath: '/',
-            clean: true,
         }
     });
 }

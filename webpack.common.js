@@ -63,5 +63,12 @@ module.exports = {
             "images": path.resolve(__dirname, "src/images")
         },
         extensions: ['.tsx', '.ts', '.js']
+    },
+
+    output: {
+        path: path.resolve(__dirname, 'build'),
+        filename: 'static/js/[name].[contenthash].bundle.js',
+        publicPath: '/',
+        clean: true,
     }
 }

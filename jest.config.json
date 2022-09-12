@@ -2,10 +2,17 @@
     "transform": {
         "\\.[tj]sx?$": "ts-jest"
     },
+    "rootDir": "./src",
     "moduleNameMapper": {
-        "\\.(png|svg|jpg|jpeg|gif|mp4|pdf|mpg|webm|wav|mp3|m4a|aac|oga)": "<rootDir>/src/__mocks__/fileMocks.js",
-        "\\.(woff|woff2|eot|ttf|otf|webp)$": "<rootDir>/src/__mocks__/fileMock.js",
-        "\\.s?[ac]ss$": "<rootDir>/src/__mocks__/styleMock.js"
+        "^components(.*)": "<rootDir>/components$1",
+        "^hooks(.*)": "<rootDir>/hooks$1",
+        "^pages(.*)": "<rootDir>/pages$1",
+        "^utils(.*)": "<rootDir>/utils$1",
+        "^styles(.*)": "<rootDir>/styles$1",
+        "^images(.*)": "<rootDir>/__mocks__/fileMock.js",
+        "\\.(png|svg|jpg|jpeg|gif|mp4|pdf|mpg|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+        "\\.(woff|woff2|eot|ttf|otf|webp)$": "<rootDir>/__mocks__/fileMock.js",
+        "\\.s?[ac]ss$": "<rootDir>/__mocks__/styleMock.js"
     },
     "testEnvironment": "jsdom"
 }
