@@ -7,7 +7,9 @@
         "start": "webpack s --env mode=dev -c ./webpack.dev.js",
         "build": "webpack --env mode=prod -c ./webpack.prod.js",
         "prod": "http-server --port 3000 -P http://localhost:3000? ./build",
-        "test": "jest"
+        "test": "jest",
+        "test@dev": "webpack s --env mode=dev -c ./webpack.test.js",
+        "test@prod": "webpack s --env mode=prod -c ./webpack.test.js"
     },
     "keywords": [],
     "author": "",
@@ -41,6 +43,7 @@
         "ts-loader": "^9.3.1",
         "typescript": "^4.8.2",
         "webpack": "^5.74.0",
+        "webpack-bundle-analyzer": "^4.6.1",
         "webpack-cli": "^4.10.0",
         "webpack-dev-server": "^4.10.1",
         "webpack-merge": "^5.8.0"
@@ -50,6 +53,7 @@
         "named-urls": "^2.0.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-router-dom": "^6.3.0"
+        "react-router-dom": "^6.3.0",
+        "styled-components": "^5.3.6"
     }
 }
