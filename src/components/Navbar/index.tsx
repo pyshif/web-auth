@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import routes from 'utils/routes';
 import CompanyBrand from './ComanyBrand';
-import { MobileNav } from './Nav';
+import Nav from './Nav';
 
 type PropsNavbar = {
     className?: string;
@@ -23,7 +23,7 @@ function Navbar(props: PropsNavbar) {
         <Styled>
             <Layout className={props.className}>
                 <CompanyBrand name="colorful" href={routes.home} />
-                <MobileNav className="ml-auto" />
+                <Nav className="ml-auto" />
             </Layout>
         </Styled>
     );

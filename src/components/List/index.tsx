@@ -1,34 +1,43 @@
 import React, { useCallback } from 'react';
+import styled from 'styled-components';
+import { defaults } from 'utils/base';
 
 type PropsList = {
-    payload?: React.ReactNode[];
+    payload: React.ReactNode[];
+    direction?: 'vertical' | 'horizontal';
     isOrder?: boolean;
     className?: string;
 };
 
-function List(props: PropsList) {
-    const defaults = {
-        isOrder: false,
-    };
+type PropsWrapper = {
+    direction?: 'vertical' | 'horizontal';
+    isOrder?: boolean;
+    children?: React.ReactNode;
+    className?: string;
+};
 
-    const options = {
-        ...defaults,
-        ...props,
-    };
-
-    const Wrapper = useCallback(
-        (props: {
-            children?: React.ReactNode;
-            isOrder?: boolean;
-            className?: string;
-        }) => {
-            return props.isOrder ? (
+const Wrapper = styled((props: PropsWrapper) => {
+    return (
+        <>
+            {props.isOrder ? (
                 <ol className={props.className}>{props.children}</ol>
             ) : (
                 <ul className={props.className}>{props.children}</ul>
-            );
+            )}
+        </>
+    );
+})`
+    ${(props) => (props.direction == 'horizontal' ? 'display: flex;' : '')}
+    ${(props) => (props.direction == 'horizontal' ? 'flex-wrap: nowrap;' : '')}
+`;
+
+function List(props: PropsList) {
+    const options = defaults<PropsList>(
+        {
+            direction: 'vertical',
+            isOrder: false,
         },
-        []
+        props
     );
 
     const Payload = useCallback((props: { payload?: React.ReactNode[] }) => {
@@ -43,7 +52,11 @@ function List(props: PropsList) {
     }, []);
 
     return (
-        <Wrapper isOrder={options.isOrder} className={options.className}>
+        <Wrapper
+            isOrder={options.isOrder}
+            direction={options.direction}
+            className={options.className}
+        >
             <Payload payload={options.payload} />
         </Wrapper>
     );

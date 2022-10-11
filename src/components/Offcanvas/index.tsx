@@ -3,7 +3,7 @@ import IconButton from 'components/IconButton';
 import React, { useMemo } from 'react';
 
 type PropsNav = {
-    show: true;
+    show: boolean;
     width?: string;
     maxWidth?: string;
     bg?: string;
@@ -11,6 +11,7 @@ type PropsNav = {
 };
 
 type PropsOffcanvas = PropsNav & {
+    onXMarkClick: () => any;
     body?: React.ReactNode;
     footer?: React.ReactNode;
     className?: string;
@@ -26,6 +27,16 @@ const Styled = styled.nav<PropsNav>`
     border-radius: ${(porps) => porps.rounded};
     padding: 1rem 1.5rem;
     box-shadow: 1px 2px 12px 3px rgb(230, 230, 230);
+
+    ${(props) => (props.show ? '' : 'display: none;')}
+`;
+
+type PropsXMarkButton = {
+    bg?: string;
+};
+
+const XMarkButton = styled(IconButton)<PropsXMarkButton>`
+    background-color: ${(props) => props.bg};
 `;
 
 function Offcanvas(props: PropsOffcanvas) {
@@ -42,13 +53,6 @@ function Offcanvas(props: PropsOffcanvas) {
         ...props,
     };
 
-    const XMarkButton = useMemo(
-        () => styled(IconButton)`
-            background-color: ${options.bg};
-        `,
-        [options.bg]
-    );
-
     return (
         <Styled
             show={options.show}
@@ -60,8 +64,9 @@ function Offcanvas(props: PropsOffcanvas) {
         >
             <XMarkButton
                 icon="xmark"
+                bg={options.bg}
                 className="float-right"
-                onClick={() => {}}
+                onClick={options.onXMarkClick}
             />
             {Body(options.body)}
             {Footer(options.footer)}

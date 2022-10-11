@@ -1,12 +1,10 @@
 import styled from 'styled-components';
 import Link from 'components/Link';
-import { font, text, Size, Transform } from 'utils/font';
-import { defaults } from 'utils/base';
-import { loadOptions } from '@babel/core';
+import { font, text } from 'utils/font';
 
 type PropsCompanyBrand = {
-    name?: string;
-    href?: string;
+    href: string;
+    name: string;
     className?: string;
 };
 
@@ -28,17 +26,9 @@ const BrandLink = styled(Link)`
 const Styled = styled.div``;
 
 function CompanyBrand(props: PropsCompanyBrand) {
-    const options = defaults<PropsCompanyBrand>(
-        {
-            name: 'company brand',
-            href: '/',
-        },
-        props
-    );
-
     return (
-        <Styled className={options.className}>
-            <BrandLink href={options.href}>{options.name}</BrandLink>
+        <Styled className={props.className}>
+            <BrandLink href={props.href}>{props.name}</BrandLink>
         </Styled>
     );
 }

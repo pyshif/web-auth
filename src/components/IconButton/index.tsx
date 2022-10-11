@@ -1,14 +1,8 @@
 import styled, { StyledComponentProps } from 'styled-components';
-
-const icons = {
-    bars: 'fa-solid fa-bars',
-    xmark: 'fa-solid fa-xmark',
-};
-
-type IconButton = 'bars' | 'xmark';
+import { Icon, Icons } from 'components/Icon';
 
 type PropsIconButton = {
-    icon: IconButton;
+    icon: Icons;
     onClick: () => any;
     className?: string;
 };
@@ -21,6 +15,10 @@ const Button = styled.button`
     & > i:hover {
         filter: invert(50%);
         transform: translateX(-1%) translateY(-1%);
+    }
+
+    &:focus-visible {
+        outline: none;
     }
 `;
 
@@ -38,7 +36,7 @@ function IconButton(props: PropsIconButton) {
 
     return (
         <Button className={className} onClick={onClick}>
-            <i className={icons[icon]}></i>
+            <Icon icon={icon} />
         </Button>
     );
 }
