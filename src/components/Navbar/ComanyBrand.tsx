@@ -1,59 +1,44 @@
 import styled from 'styled-components';
+import Link from 'components/Link';
 import { font, text, Size, Transform } from 'utils/font';
+import { defaults } from 'utils/base';
+import { loadOptions } from '@babel/core';
 
 type PropsCompanyBrand = {
     name?: string;
-    route?: string;
+    href?: string;
     className?: string;
-    size?: Size;
-    color?: string;
-    weight?: number;
-    spacing?: string;
-    transform?: Transform;
 };
 
-const Styled = styled.div`
-    a {
-        ${font.didot}
-        ${(props: PropsCompanyBrand) =>
-            text({
-                size: props.size,
-                color: props.color,
-                weight: props.weight,
-                spacing: props.spacing,
-                transform: props.transform,
-            })}
-    }
-`;
-
-function CompanyBrand(props: PropsCompanyBrand) {
-    const defaults = {
-        name: 'company brand',
-        route: '/',
-        className: '',
+const BrandLink = styled(Link)`
+    ${font.didot}
+    ${text({
         size: '3xl',
-        color: 'rgb(71, 85, 105)',
+        color: 'rgb(71, 85, 105);',
         weight: 600,
         spacing: '0.05rem',
         transform: 'uppercase',
-    } as PropsCompanyBrand;
+    })}
 
-    const { name, route, className, size, color, weight, spacing, transform } =
+    &:hover {
+        filter: invert(30%);
+    }
+`;
+
+const Styled = styled.div``;
+
+function CompanyBrand(props: PropsCompanyBrand) {
+    const options = defaults<PropsCompanyBrand>(
         {
-            ...defaults,
-            ...props,
-        };
+            name: 'company brand',
+            href: '/',
+        },
+        props
+    );
 
     return (
-        <Styled
-            className={className}
-            size={size}
-            color={color}
-            weight={weight}
-            spacing={spacing}
-            transform={transform}
-        >
-            <a href={route}>{name}</a>
+        <Styled className={options.className}>
+            <BrandLink href={options.href}>{options.name}</BrandLink>
         </Styled>
     );
 }

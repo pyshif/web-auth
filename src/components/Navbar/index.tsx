@@ -1,44 +1,31 @@
-// TODO: Mobile
-// company brand
-// dropdown list > navlink
-// hamburger list
-
-// TODO: Pad
-// company brand
-// dropdown list > navlink
-// people icon (signin/signout)
-
-// TODO: Desktop
-// company brand
-// dropdown list > navlink
-// people icon (signin/signout)
-import { MouseEvent, useState, useEffect } from 'react';
+import styled from 'styled-components';
 import routes from 'utils/routes';
-import './index.css';
-import Nav from 'components/Nav';
+import CompanyBrand from './ComanyBrand';
+import { MobileNav } from './Nav';
 
-function Navbar() {
+type PropsNavbar = {
+    className?: string;
+};
+
+const Styled = styled.div`
+    border-bottom: 2px solid rgba(229, 231, 235, 0.8);
+    background-color: rgba(250, 250, 250, 1);
+`;
+
+const Layout = styled.div`
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+`;
+
+function Navbar(props: PropsNavbar) {
     return (
-        <div className="border-b-2 bg-white">
-            <div className="container p-4 lg:px-0 lg:mx-auto">
-                <div className="grid grid-cols-[1fr_repeat(2,auto)] lg:grid-cols-[auto_minmax(0,_1fr)_auto] grid-rows-1 items-center">
-                    <div
-                        id="company-brand"
-                        className="uppercase text-2xl text-slate-500 font-semibold tracking-widest"
-                    >
-                        <a href={routes.home}>color4</a>
-                    </div>
-                    <Nav className="mr-5 lg:mr-0" />
-                    <div id="icons" className="">
-                        <button className="lg:hidden text-xl text-slate-500">
-                            <a href={routes.auth.self}>
-                                <span className="fa-solid fa-user"></span>
-                            </a>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Styled>
+            <Layout className={props.className}>
+                <CompanyBrand name="colorful" href={routes.home} />
+                <MobileNav className="ml-auto" />
+            </Layout>
+        </Styled>
     );
 }
 

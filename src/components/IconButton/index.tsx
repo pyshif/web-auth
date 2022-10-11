@@ -5,49 +5,39 @@ const icons = {
     xmark: 'fa-solid fa-xmark',
 };
 
-type PropsButton = {
-    className?: string;
-    bg?: string;
-    color?: string;
-    size?: string;
-};
-
 type IconButton = 'bars' | 'xmark';
 
-type PropsIconButton = PropsButton & {
+type PropsIconButton = {
     icon: IconButton;
     onClick: () => any;
+    className?: string;
 };
 
-const Button = styled.button<PropsButton>`
-    background-color: ${(props) => props.bg};
-    color: ${(props) => props.color};
-    font-size: ${(props) => props.size};
+const Button = styled.button`
+    background-color: ivory;
+    color: rgb(71, 85, 105);
+    font-size: 1.25rem;
+
+    & > i:hover {
+        filter: invert(50%);
+        transform: translateX(-1%) translateY(-1%);
+    }
 `;
 
 function IconButton(props: PropsIconButton) {
     const defaults = {
         className: '',
-        bg: 'ivory',
-        color: 'rgb(71, 85, 105)',
-        size: '1.25rem',
         icon: 'bars',
         onClick: () => {},
     } as PropsIconButton;
 
-    const { className, icon, bg, color, size, onClick } = {
+    const { className, icon, onClick } = {
         ...defaults,
         ...props,
     };
 
     return (
-        <Button
-            className={className}
-            bg={bg}
-            color={color}
-            size={size}
-            onClick={onClick}
-        >
+        <Button className={className} onClick={onClick}>
             <i className={icons[icon]}></i>
         </Button>
     );
