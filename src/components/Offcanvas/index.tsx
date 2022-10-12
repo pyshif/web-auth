@@ -27,6 +27,7 @@ const Styled = styled.nav<PropsNav>`
     border-radius: ${(porps) => porps.rounded};
     padding: 1rem 1.5rem;
     box-shadow: 1px 2px 12px 3px rgb(230, 230, 230);
+    z-index: 1010;
 
     ${(props) => (props.show ? '' : 'display: none;')}
 `;

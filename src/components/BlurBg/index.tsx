@@ -12,6 +12,7 @@ const Styled = styled.div<PropsBlurBg>`
     top: 0;
     height: 100vh;
     width: 100vw;
+    z-index: 1000;
 
     ${(props) => (props.show ? '' : 'display: none;')}
 `;

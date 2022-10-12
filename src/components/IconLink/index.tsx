@@ -1,15 +1,12 @@
 import styled from 'styled-components';
-import Link from 'components/Link';
+import Link, { PropsLink } from 'components/Link';
 import { Icon, Icons } from 'components/Icon';
 import { defaults } from 'utils/base';
 
-type PropsIconLink = {
+type PropsIconLink = PropsLink & {
     icon: Icons;
-    href: string;
-    children: React.ReactNode;
     iconAfter?: boolean;
     iconSpacing?: string;
-    className?: string;
 };
 
 type PropsIconBox = {
@@ -38,7 +35,11 @@ function IconLink(props: PropsIconLink) {
     );
 
     return (
-        <Link href={options.href} className={options.className}>
+        <Link
+            href={options.href}
+            className={options.className}
+            defaults={options.defaults}
+        >
             {!options.iconAfter && (
                 <IconBox
                     icon={options.icon}

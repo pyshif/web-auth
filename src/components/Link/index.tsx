@@ -1,30 +1,44 @@
 import styled from 'styled-components';
-import { font } from 'utils/font';
-import { defaults } from 'utils/base';
+import { fonts } from 'utils/font';
+import { ComponentPropsWithoutRef } from 'react';
 
-type PropsLink = {
-    href: string;
-    children: string | React.ReactNode;
-    className?: string;
+type PropsA = {
+    defaults?: boolean;
 };
 
-const Styled = styled.a`
+const A = styled.a<PropsA>`
     display: inline-block;
-    ${font.didot}
-    font-weight: 600;
     &:hover {
         filter: invert(50%);
     }
+
+    ${(props) =>
+        props.defaults
+            ? `font-size: 0.875rem; font-weight: 600; font-family: ${fonts.didot};`
+            : ''}
 `;
 
-function Link(props: PropsLink) {
-    const options = defaults<PropsLink>({}, props);
+export type PropsLink = ComponentPropsWithoutRef<'a'> & {
+    defaults?: boolean;
+};
 
+function Link(props: PropsLink) {
     return (
-        <Styled href={options.href} className={options.className}>
-            {options.children}
-        </Styled>
+        <A
+            href={props.href}
+            className={props.className}
+            style={props.style}
+            defaults={props.defaults ? true : false}
+        >
+            {props.children}
+        </A>
     );
 }
+
+// Link.defaultStyle = {
+//     fontSize: '1rem',
+//     fontWeight: 600,
+//     fontFamily: fonts.didot,
+// };
 
 export default Link;

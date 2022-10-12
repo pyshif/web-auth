@@ -8,7 +8,7 @@ import BlurBg from 'components/BlurBg';
 import Offcanvas from 'components/Offcanvas';
 import List from 'components/List';
 import IconLink from 'components/IconLink';
-import Link from 'components/Link';
+import Link, { PropsLink } from 'components/Link';
 
 type PropsNav = {
     className?: string;
@@ -18,7 +18,7 @@ const NavIconLink = styled(IconLink)`
     color: rgb(71, 85, 105);
 `;
 
-const NavLink = styled(Link)`
+const NavLink = styled(Link)<PropsLink>`
     color: rgb(71, 85, 105);
 `;
 
@@ -45,6 +45,7 @@ export function MobileNav(props: PropsNav) {
                 icon="house"
                 href={routes.home}
                 className="capitalize p-1 m-1"
+                defaults
             >
                 home
             </NavIconLink>,
@@ -52,6 +53,7 @@ export function MobileNav(props: PropsNav) {
                 icon="user"
                 href={routes.auth.signin}
                 className="capitalize p-1 m-1"
+                defaults
             >
                 auth
             </NavIconLink>,
@@ -77,10 +79,14 @@ export function MobileNav(props: PropsNav) {
 export function TabletNav(props: PropsNav) {
     const Links = useCallback(() => {
         const payload = [
-            <NavLink href={routes.home} className="capitalize p-1 m-1">
+            <NavLink href={routes.home} className="capitalize p-1 m-1" defaults>
                 home
             </NavLink>,
-            <NavLink href={routes.auth.signin} className="capitalize p-1 m-1">
+            <NavLink
+                href={routes.auth.signin}
+                className="capitalize p-1 m-1"
+                defaults
+            >
                 auth
             </NavLink>,
         ];

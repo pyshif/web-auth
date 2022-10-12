@@ -1,11 +1,6 @@
-import styled, { StyledComponentProps } from 'styled-components';
+import styled from 'styled-components';
 import { Icon, Icons } from 'components/Icon';
-
-type PropsIconButton = {
-    icon: Icons;
-    onClick: () => any;
-    className?: string;
-};
+import { ComponentPropsWithoutRef } from 'react';
 
 const Button = styled.button`
     background-color: ivory;
@@ -22,20 +17,22 @@ const Button = styled.button`
     }
 `;
 
+type PropsIconButton = ComponentPropsWithoutRef<'button'> & {
+    icon: Icons;
+};
+
 function IconButton(props: PropsIconButton) {
     const defaults = {
-        className: '',
         icon: 'bars',
-        onClick: () => {},
-    } as PropsIconButton;
+    };
 
-    const { className, icon, onClick } = {
+    const { className, icon, onClick, ...rest } = {
         ...defaults,
         ...props,
     };
 
     return (
-        <Button className={className} onClick={onClick}>
+        <Button className={className} onClick={onClick} {...rest}>
             <Icon icon={icon} />
         </Button>
     );
