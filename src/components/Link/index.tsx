@@ -23,16 +23,7 @@ export type PropsLink = ComponentPropsWithoutRef<'a'> & {
 };
 
 function Link(props: PropsLink) {
-    return (
-        <A
-            href={props.href}
-            className={props.className}
-            style={props.style}
-            defaults={props.defaults ? true : false}
-        >
-            {props.children}
-        </A>
-    );
+    return <A {...props}>{props.children}</A>;
 }
 
 // Link.defaultStyle = {

@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should be users name 1`] = `
+<DocumentFragment>
+  <div
+    class="w-full max-w-sm mx-auto"
+  >
+    <div>
+      <div
+        class="w-16 mx-auto mb-6"
+      >
+        <img
+          alt=""
+          src="[object Object]"
+        />
+      </div>
+      <h1
+        class="title font-medium text-3xl text-center mb-3"
+      >
+        Sign in to your account
+      </h1>
+      <h2
+        class="sub-titile text-md text-center mb-6"
+      >
+        Or 
+        <span
+          class="text-slate-600"
+        >
+          you can 
+          <a
+            class="underline"
+            href="/auth/signup/"
+          >
+            sign up by here
+          </a>
+        </span>
+      </h2>
+    </div>
+    <div
+      class="shadow-xl bg-white rounded-xl p-8"
+    >
+      <form>
+        <div
+          class="mb-3"
+        >
+          <label
+            class="block indent-1 mb-1"
+            for="email-address"
+          >
+            Email address
+          </label>
+          <input
+            class="w-full h-8 px-1 border-[1px] rounded-md"
+            id="email-address"
+            name="emailAddress"
+            type="email"
+          />
+          <div
+            id="email-error-message"
+          />
+        </div>
+        <div
+          class="mb-3"
+        >
+          <label
+            class="block indent-1 mb-1"
+            for="password"
+          >
+            Password
+          </label>
+          <input
+            class="w-full h-8 px-1 border-[1px] rounded-md"
+            id="password"
+            name="password"
+            type="password"
+          />
+          <div
+            id="password-error-message"
+          />
+        </div>
+        <div
+          class="mb-3 flow-root"
+        >
+          <a
+            class="text-sm text-slate-800 float-right"
+            href="/auth/forgot/"
+          >
+            Forgot your password ?
+          </a>
+        </div>
+        <div
+          class="mb-3 text-center"
+        >
+          <button
+            class="text-xl w-full h-9 bg-gray-700 text-white rounded-md"
+          >
+            Sign in
+          </button>
+        </div>
+      </form>
+      <div
+        class="relative flex mb-3"
+      >
+        <div
+          class="grow translate-y-1/2 border-t-[1px] border-slate-400"
+        >
+           
+        </div>
+        <div
+          class="whitespace-normal"
+        >
+           Or continue with 
+        </div>
+        <div
+          class="grow translate-y-1/2 border-t-[1px] border-slate-400"
+        >
+           
+        </div>
+      </div>
+      <div
+        class="mb-3 text-center"
+      >
+        <button
+          class="text-xl w-full h-9 bg-gray-700 text-white rounded-md"
+        >
+          Google Sign In
+        </button>
+        <div
+          data-auto_prompt="false"
+          data-client_id="860287273531-n6vmem35jtadhea1tlu9hd2ed45l4c6v.apps.googleusercontent.com"
+          data-context="signin"
+          data-login_uri="https://api.color4.me"
+          data-ux_mode="popup"
+          id="g_id_onload"
+        />
+        <div
+          class="g_id_signin"
+          data-locale="en"
+          data-logo_alignment="left"
+          data-shape="rectangular"
+          data-size="large"
+          data-text="signin_with"
+          data-theme="outline"
+          data-type="standard"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

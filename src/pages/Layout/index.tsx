@@ -1,21 +1,49 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from 'components/Navbar';
 import Footer from 'components/Footer';
-import './index.css';
+import styled from 'styled-components';
+
+const Styled = styled.div`
+    max-width: 100%;
+    min-height: 100vh;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+        'header'
+        'main'
+        'footer';
+
+    header {
+        grid-area: 'header';
+        /* background: red; */
+    }
+
+    main {
+        grid-area: 'main';
+        /* background: blue; */
+    }
+
+    footer {
+        grid-area: 'footer';
+        /* background: gold; */
+    }
+`;
 
 function Layout() {
     return (
-        <div className="grid grid-cols-1 grid-rows-[auto_minmax(0,_1fr)_auto] min-h-screen">
-            <header className="col-span-1 row-auto">
-                <Navbar />
+        <Styled>
+            <header>
+                <Navbar className="container mx-auto" />
             </header>
-            <main className="bg-white">
+            <main>
                 <Outlet />
             </main>
-            <footer className="bg-amber-500">
+            <footer>
                 <Footer />
             </footer>
-        </div>
+        </Styled>
     );
 }
 
