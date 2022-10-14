@@ -2,9 +2,14 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "files.associations": {
-        // "*.css": "css",
+        "*.css": "tailwindcss",
     },
-    "tailwindCSS.includeLanguages": {
-        "plaintext": "typescriptreact"
-    }
+    "editor.quickSuggestions": {
+        "other": "on",
+        "comments": "off",
+        "strings": "on"
+    },
+    // "tailwindCSS.includeLanguages": {
+    //     "plaintext": "typescriptreact"
+    // },
 }

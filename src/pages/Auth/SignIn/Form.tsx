@@ -103,7 +103,13 @@ function Form(props: PropsForm) {
             </F.Item>
             <F.Item className="float-right">
                 Or{' '}
-                <Link className="after:content-['_👉']"> Sign up by here</Link>
+                <Link
+                    href={routes.auth.signup}
+                    className="after:content-['_👉']"
+                >
+                    {' '}
+                    Sign up by here
+                </Link>
             </F.Item>
         </F>
     );

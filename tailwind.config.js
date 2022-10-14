@@ -3,7 +3,8 @@ module.exports = {
     content: ['./public/index.html', './src/**/*.{tsx,ts,jsx,js}'],
     theme: {
         fontFamily: {
-            didot: ['GFS Didot', 'serif']
+            didot: ['GFS Didot', 'serif'],
+            arial: ['Arial Black', 'sans-serif']
         }
     },
     plugins: []

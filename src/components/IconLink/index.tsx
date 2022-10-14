@@ -29,7 +29,7 @@ function IconLink(props: PropsIconLink) {
     const options = defaults<PropsIconLink>(
         {
             iconAfter: false,
-            iconSpacing: '1.75rem',
+            iconSpacing: '2rem',
         },
         props
     );

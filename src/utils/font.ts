@@ -4,6 +4,11 @@ export const font = {
     arial: "font-family: Arial Black, sans-serif;"
 };
 
+export const fonts = {
+    didot: 'GFS Didot, serif',
+    arial: 'Arial Black, sans-serif',
+};
+
 const fontSize = {
     'xs': '0.75rem',
     'sm': '0.875rem',

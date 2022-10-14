@@ -45,7 +45,7 @@ function Offcanvas(props: PropsOffcanvas) {
         show: true,
         width: '100%',
         maxWidth: '20rem',
-        bg: 'rgb(250, 245, 250, 1)',
+        bg: 'rgb(245, 245, 245, 1)',
         rounded: '0.75rem',
     };
 
