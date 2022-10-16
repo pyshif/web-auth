@@ -15,10 +15,10 @@ type PropsSignUp = {};
 
 function SignUp(props: PropsSignUp) {
     return (
-        <div>
+        <>
             <Board img={Logo} title="Sign up your account" />
             <Form />
-        </div>
+        </>
     );
 }
 

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { ComponentPropsWithoutRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { defaults } from 'utils/base';
 
@@ -7,6 +7,7 @@ type PropsList = {
     direction?: 'vertical' | 'horizontal';
     isOrder?: boolean;
     className?: string;
+    center?: boolean;
 };
 
 type PropsWrapper = {
@@ -46,7 +47,18 @@ function List(props: PropsList) {
             <>
                 {props.payload &&
                     props.payload.map((e, i) => {
-                        return <li key={i}>{e}</li>;
+                        return (
+                            <li
+                                key={i}
+                                style={{
+                                    textAlign: options.center
+                                        ? 'center'
+                                        : 'left',
+                                }}
+                            >
+                                {e}
+                            </li>
+                        );
                     })}
             </>
         );

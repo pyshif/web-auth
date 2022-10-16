@@ -10,7 +10,9 @@ const AuthWrapper = styled((props: PropsAuthWrapper) => (
     <div className={`container mx-auto ${props.className}`}>
         {props.children}
     </div>
-))``;
+))`
+    margin-bottom: 2.25rem;
+`;
 
 function Auth() {
     return (

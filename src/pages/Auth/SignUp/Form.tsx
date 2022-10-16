@@ -24,7 +24,7 @@ function Form(props: PropsForm) {
 
     return (
         <F
-            name="auth"
+            name="auth-signup"
             className="login-form"
             initialValues={{ remember: true }}
             onFinish={onFinish}
@@ -104,7 +104,23 @@ function Form(props: PropsForm) {
                 ]}
             >
                 <Input
-                    prefix={<LockOutlined className="site-form-item-icon" />}
+                    prefix={<LockOutlined />}
+                    type="password"
+                    placeholder="8 - 25 characters"
+                />
+            </F.Item>
+            <F.Item
+                label="Confirm Password"
+                name="confirmPassword"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your password',
+                    },
+                ]}
+            >
+                <Input
+                    prefix={<LockOutlined />}
                     type="password"
                     placeholder="8 - 25 characters"
                 />

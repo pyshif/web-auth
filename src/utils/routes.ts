@@ -7,7 +7,10 @@ const routes = {
         signin: 'signin/',
         signup: 'signup/',
         forgot: 'forgot/',
-        reset: 'reset/'
+        reset: include('reset/', {
+            self: '',
+            resetId: ':resetId/'
+        })
     }),
 }
 

@@ -1,12 +1,16 @@
 
 export const font = {
     didot: "font-family: GFS Didot, serif;",
-    arial: "font-family: Arial Black, sans-serif;"
+    arial: "font-family: Arial Black, sans-serif;",
+    fira: "font-family: Fira Sans, sans-serif",
+    rubik: "font-family: Rubik, sans-serif"
 };
 
 export const fonts = {
     didot: 'GFS Didot, serif',
     arial: 'Arial Black, sans-serif',
+    fira: 'Fira Sans, sans-serif',
+    rubik: 'Rubik, sans-serif'
 };
 
 const fontSize = {

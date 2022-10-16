@@ -2,8 +2,11 @@ import { Outlet } from 'react-router-dom';
 import Navbar from 'components/Navbar';
 import Footer from 'components/Footer';
 import styled from 'styled-components';
+import { fonts } from 'utils/font';
 
 const Styled = styled.div`
+    font-family: ${fonts.rubik};
+
     max-width: 100%;
     min-height: 100vh;
 

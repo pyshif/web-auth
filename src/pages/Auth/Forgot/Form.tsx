@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { Form as F, Checkbox, Button, Input } from 'antd';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import routes from 'utils/routes';
+import { Form as F, Input, Button, message } from 'antd';
 import Link from 'components/Link';
+import routes from 'utils/routes';
 
 const Hr = styled.hr`
     margin-bottom: 1.5rem;
@@ -11,17 +10,19 @@ const Hr = styled.hr`
 type PropsForm = {};
 
 function Form(props: PropsForm) {
-    const onFinish = (values: any) => {
-        console.log('Received values of form :>> ', values);
-    };
-
-    const onClick = (e: any) => {
-        console.log('Received values of form :>> ', e);
-    };
+    function onFinish(values: any) {
+        const hide = message.loading('Action in progress...', 0);
+        console.log('values :>> ', values);
+        setTimeout(() => {
+            message.success('Email has been sent', 3);
+            hide();
+        }, 3000);
+    }
 
     return (
         <F
-            name="auth-signin"
+            name="auth-forgot"
+            className="login-form"
             initialValues={{ remember: true }}
             onFinish={onFinish}
             style={{
@@ -32,8 +33,10 @@ function Form(props: PropsForm) {
                 padding: '2.875rem 2.5rem',
                 margin: 'auto',
             }}
+            layout="vertical"
         >
             <F.Item
+                label="Email"
                 name="email"
                 rules={[
                     {
@@ -47,67 +50,43 @@ function Form(props: PropsForm) {
                 ]}
             >
                 <Input
-                    prefix={<UserOutlined className="site-form-item.icon" />}
-                    placeholder="Email"
+                    // prefix={<UserOutlined className="site-form-item.icon" />}
+                    placeholder="example@gmail.com"
                 />
             </F.Item>
             <F.Item
-                name="password"
+                label="Password Hint"
+                name="passwordHint"
                 rules={[
                     {
                         required: true,
                         message: 'Please input your password!',
                     },
+                    {
+                        pattern: /^[a-zA-Z\d\s]{6,25}$/,
+                        message: '6 ~ 25 characters (letter, number, space)',
+                    },
                 ]}
             >
-                <Input
-                    prefix={<LockOutlined className="site-form-item-icon" />}
-                    type="password"
-                    placeholder="Password"
-                />
+                <Input placeholder="6 - 25 characters" />
             </F.Item>
-            <F.Item>
-                <F.Item
-                    name="remember"
-                    valuePropName="checked"
-                    wrapperCol={{ span: 12 }}
-                    noStyle
-                >
-                    <Checkbox>Remember me</Checkbox>
-                </F.Item>
-                <Link href={routes.auth.forgot} className="float-right">
-                    Forgot password ?
-                </Link>
-            </F.Item>
-
+            <Hr />
             <F.Item>
                 <Button
                     type="default"
                     htmlType="submit"
                     style={{ width: '100%' }}
                 >
-                    Log in
-                </Button>
-            </F.Item>
-            <Hr />
-            <F.Item>
-                <Button
-                    type="default"
-                    htmlType="button"
-                    style={{ width: '100%', color: '#475569' }}
-                    onClick={onClick}
-                >
-                    Googole
+                    Submit
                 </Button>
             </F.Item>
             <F.Item className="float-right">
-                Or{' '}
                 <Link
-                    href={routes.auth.signup}
+                    href={routes.auth.signin}
                     className="after:content-['_👉']"
                 >
                     {' '}
-                    Sign up by here
+                    Back to sign in
                 </Link>
             </F.Item>
         </F>

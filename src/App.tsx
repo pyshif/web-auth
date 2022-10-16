@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import routes from 'utils/routes';
 import 'styles/App.css';
 import 'antd/dist/antd.css';
@@ -42,9 +42,14 @@ function App() {
                             element={pages(Forgot)}
                         ></Route>
                         <Route
-                            path={routes.auth.reset}
+                            path={routes.auth.reset.self}
                             element={pages(Reset)}
                         ></Route>
+                        <Route
+                            path={routes.auth.reset.resetId}
+                            element={pages(Reset)}
+                        ></Route>
+                        <Route index element={<Navigate to="/404" />}></Route>
                     </Route>
                     <Route index element={pages(Home)}></Route>
                 </Route>

@@ -1,3 +1,4 @@
+import { ComponentPropsWithoutRef } from 'react';
 import { defaults } from 'utils/base';
 
 export type FaIcon =
@@ -6,13 +7,18 @@ export type FaIcon =
     | 'user'
     | 'circle-user'
     | 'bars'
-    | 'xmark';
+    | 'xmark'
+    | 'bug'
+    | 'code'
+    | 'envelope'
+    | 'paper-plane'
+    | 'circle-user';
 
 export type OtherIcon = '';
 
 export type Icons = FaIcon | OtherIcon;
 
-type PropsIcon = {
+type PropsIcon = ComponentPropsWithoutRef<'i'> & {
     icon: Icons;
     type?: 'solid' | 'regular';
 };
@@ -27,7 +33,7 @@ export function Icon(props: PropsIcon) {
 
     const fa = `fa-${options.type} fa-${options.icon}`;
 
-    return <i className={fa}></i>;
+    return <i className={fa} {...options}></i>;
 }
 
 export default Icon;

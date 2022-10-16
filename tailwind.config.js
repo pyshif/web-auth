@@ -4,7 +4,9 @@ module.exports = {
     theme: {
         fontFamily: {
             didot: ['GFS Didot', 'serif'],
-            arial: ['Arial Black', 'sans-serif']
+            arial: ['Arial Black', 'sans-serif'],
+            fira: ['Fira Sans', 'sans-serif'],
+            rubik: ['Rubik', 'sans-serif']
         }
     },
     plugins: []
