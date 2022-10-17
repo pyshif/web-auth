@@ -13,6 +13,7 @@ const SignIn = lazy(() => import('pages/Auth/SignIn'));
 const SignUp = lazy(() => import('pages/Auth/SignUp'));
 const Forgot = lazy(() => import('pages/Auth/Forgot'));
 const Reset = lazy(() => import('pages/Auth/Reset'));
+const User = lazy(() => import('pages/User'));
 const Error = lazy(() => import('pages/Error'));
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
                         <Route index element={<Navigate to="/404" />}></Route>
                     </Route>
                     <Route index element={pages(Home)}></Route>
+                    <Route path={routes.user} element={pages(User)}></Route>
                 </Route>
                 <Route path="*" element={pages(Error)}></Route>
             </Routes>

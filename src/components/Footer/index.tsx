@@ -6,7 +6,7 @@ import WebMap from './WebMap';
 import Contact from './Contact';
 
 const Styled = styled.div`
-    color: rgb(230, 230, 230);
+    color: rgb(255, 255, 250);
     /* font-family: Arial, Helvetica, sans-serif; */
     font-size: 0.75rem;
     background-color: rgb(31, 45, 65);

@@ -4,7 +4,7 @@ import { font } from 'utils/font';
 import Icon from 'components/Icon';
 
 const Section = styled.section`
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     text-align: center;
 `;
 
@@ -24,6 +24,13 @@ const Text = styled.p`
     }
 `;
 
+const Dot = styled.span`
+    margin: 0 0.25rem;
+    &:before {
+        content: '・';
+    }
+`;
+
 type PropsContact = ComponentPropsWithoutRef<'section'> & {};
 
 function Contact(props: PropsContact) {
@@ -31,11 +38,11 @@ function Contact(props: PropsContact) {
         <Section {...props}>
             <Text>
                 <span>
-                    <Icon icon="circle-user" /> DEVELOPER: Chen, Po Yu
+                    <Icon icon="circle-user" /> Developer: Chen, Po Yu
                 </span>
-                {'・'}
+                <Dot />
                 <span>
-                    <Icon icon="envelope" /> EMAIL: pyfissh@gmail.com
+                    <Icon icon="envelope" /> Email: pyfissh@gmail.com
                 </span>
             </Text>
         </Section>

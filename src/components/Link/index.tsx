@@ -14,7 +14,7 @@ const A = styled.a<PropsA>`
 
     ${(props) =>
         props.defaults
-            ? `font-size: 0.875rem; font-weight: 600; font-family: ${fonts.didot};`
+            ? `font-size: 0.875rem; font-weight: 600; font-family: ${fonts.rubik};`
             : ''}
 `;
 

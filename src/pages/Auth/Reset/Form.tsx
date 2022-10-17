@@ -29,7 +29,36 @@ function Form(props: PropsForm) {
                 margin: 'auto',
             }}
         >
-            <F.Item name="newPassword" label="New Password">
+            <F.Item
+                name="newPassword"
+                label="New Password"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your password',
+                    },
+                    {
+                        pattern: /^[a-zA-Z\d!@#$%&*?]{8,25}$/,
+                        message: '8 ~ 25 characters',
+                    },
+                    {
+                        pattern: /^(?=.*[a-z])/,
+                        message: 'at least 1 lowercase letter',
+                    },
+                    {
+                        pattern: /^(?=.*[A-Z])/,
+                        message: 'at least 1 uppercase letter',
+                    },
+                    {
+                        pattern: /^(?=.*\d)/,
+                        message: 'at least 1 number',
+                    },
+                    {
+                        pattern: /^(?=.*[!@#$%&*?])/,
+                        message: 'at least 1 symbol !@#$%&*?',
+                    },
+                ]}
+            >
                 <Input
                     prefix={<LockOutlined />}
                     type="password"

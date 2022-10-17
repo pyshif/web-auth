@@ -17,7 +17,7 @@ const Section = styled.section`
 
 const Title = styled.p`
     font-size: 1.125rem;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     text-align: center;
 
     &:after {
@@ -25,20 +25,15 @@ const Title = styled.p`
         display: block;
         width: 100%;
         height: 1px;
-        background: rgba(250, 250, 250, 0.2);
+        background: rgba(255, 255, 250, 0.2);
         padding: 0 1rem;
         margin: 0.375rem 0 0;
     }
 `;
 
 const NavLink = styled(Link)`
-    font-size: 1rem;
-    color: white;
-
-    &:hover {
-        filter: invert(30%);
-    }
-
+    font-size: 0.85rem;
+    color: rgb(255, 255, 250);
     margin-bottom: 0.5rem;
 `;
 
@@ -47,7 +42,7 @@ type PropsWebMap = ComponentPropsWithoutRef<'section'> & {};
 function WebMap(props: PropsWebMap) {
     return (
         <Section>
-            <Title>navigate</Title>
+            <Title>Navigate</Title>
             <List
                 payload={[
                     <NavLink href={routes.auth.signin}>Sign In</NavLink>,

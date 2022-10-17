@@ -12,7 +12,8 @@ export type FaIcon =
     | 'code'
     | 'envelope'
     | 'paper-plane'
-    | 'circle-user';
+    | 'circle-user'
+    | 'github';
 
 export type OtherIcon = '';
 
@@ -20,7 +21,7 @@ export type Icons = FaIcon | OtherIcon;
 
 type PropsIcon = ComponentPropsWithoutRef<'i'> & {
     icon: Icons;
-    type?: 'solid' | 'regular';
+    type?: 'solid' | 'regular' | 'brands';
 };
 
 export function Icon(props: PropsIcon) {

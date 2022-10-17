@@ -12,6 +12,7 @@ const routes = {
             resetId: ':resetId/'
         })
     }),
+    user: '/user'
 }
 
 export default routes;
