@@ -1,5 +1,18 @@
+import styled from 'styled-components';
+import Animation from './Animation';
+
+const Section = styled.section`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
 function Home() {
-    return <div>This is Home Page.</div>;
+    return (
+        <Section>
+            <Animation />
+        </Section>
+    );
 }
 
 export default Home;

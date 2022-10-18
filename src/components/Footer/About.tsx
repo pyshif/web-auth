@@ -12,6 +12,9 @@ import { Postcss } from '@styled-icons/simple-icons/Postcss';
 import { Webpack } from '@styled-icons/simple-icons/Webpack';
 import { Babel } from '@styled-icons/simple-icons/Babel';
 import { Typescript } from '@styled-icons/simple-icons/Typescript';
+import { Jest } from '@styled-icons/simple-icons/Jest';
+import { Githubactions } from '@styled-icons/simple-icons/Githubactions';
+import { Greensock } from '@styled-icons/simple-icons/Greensock';
 
 import { Nodejs } from '@styled-icons/boxicons-logos/Nodejs';
 import { Express } from '@styled-icons/simple-icons/Express';
@@ -19,9 +22,13 @@ import { Mariadb } from '@styled-icons/simple-icons/Mariadb';
 import { Aws } from '@styled-icons/boxicons-logos/Aws';
 
 const IconWrapper = styled.div`
-    & > * {
+    & svg {
         margin: 0 0 1rem 0.85rem;
         width: 2.5rem;
+    }
+
+    & a {
+        color: rgb(255, 255, 250);
     }
 `;
 
@@ -66,7 +73,7 @@ type PropsAbout = ComponentPropsWithoutRef<'section'> & {};
 
 function About(props: PropsAbout) {
     return (
-        <Section>
+        <Section {...props}>
             <Title>What is this project ?</Title>
             <Text>
                 Colorful is a web project about JWT authentication and Google
@@ -74,22 +81,60 @@ function About(props: PropsAbout) {
             </Text>
             <Text>In frontend, we use this technology:</Text>
             <IconWrapper>
-                <ReactLogo />
-                <Styledcomponents />
-                <Redux />
-                <Antdesign />
-                <TailwindCss />
-                <Postcss />
-                <Webpack />
-                <Babel />
-                <Typescript />
+                <Link href="https://reactjs.org/" target="_blank">
+                    <ReactLogo />
+                </Link>
+                <Link href="https://styled-components.com/" target="_blank">
+                    <Styledcomponents />
+                </Link>
+                <Link href="https://redux.js.org/" target="_blank">
+                    <Redux />
+                </Link>
+                <Link href="https://ant.design/" target="_blank">
+                    <Antdesign />
+                </Link>
+                <Link href="https://tailwindcss.com/" target="_blank">
+                    <TailwindCss />
+                </Link>
+                <Link href="https://postcss.org/" target="_blank">
+                    <Postcss />
+                </Link>
+                <Link href="https://webpack.js.org/" target="_blank">
+                    <Webpack />
+                </Link>
+                <Link href="https://babeljs.io/" target="_blank">
+                    <Babel />
+                </Link>
+                <Link href="https://www.typescriptlang.org/" target="_blank">
+                    <Typescript />
+                </Link>
+                <Link href="https://jestjs.io/" target="_blank">
+                    <Jest />
+                </Link>
+                <Link
+                    href="https://github.com/features/actions"
+                    target="_blank"
+                >
+                    <Githubactions />
+                </Link>
+                <Link href="https://greensock.com/" target="_blank">
+                    <Greensock />
+                </Link>
             </IconWrapper>
             <Text>In backend, we use this technology:</Text>
             <IconWrapper>
-                <Nodejs />
-                <Express />
-                <Mariadb />
-                <Aws />
+                <Link href="https://nodejs.org/en/" target="_blank">
+                    <Nodejs />
+                </Link>
+                <Link href="https://expressjs.com/" target="_blank">
+                    <Express />
+                </Link>
+                <Link href="https://mariadb.org/" target="_blank">
+                    <Mariadb />
+                </Link>
+                <Link href="https://aws.amazon.com/" target="_blank">
+                    <Aws />
+                </Link>
             </IconWrapper>
             <Text>
                 If you want to know more about our project, welcome to my github

@@ -18,8 +18,8 @@ function Footer() {
         <Styled>
             <div className="container mx-auto">
                 <div className="flex flex-wrap justify-center mb-3">
-                    <About className="order-2" />
-                    <WebMap className="order-1" />
+                    <About />
+                    <WebMap />
                 </div>
                 <Contact />
             </div>

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Card, Image } from 'antd';
 import { ComponentPropsWithoutRef } from 'react';
 import { font } from 'utils/font';
+import { RightToBracket } from 'styled-icons/fa-solid';
 
 type PropsBoard = ComponentPropsWithoutRef<'div'> & {
     img?: string;
@@ -13,6 +14,7 @@ const Text = styled.p`
     font-weight: 500;
     text-align: center;
     margin-bottom: 0;
+    color: rgb(31, 45, 65);
 `;
 
 function Board(props: PropsBoard) {
@@ -27,6 +29,8 @@ function Board(props: PropsBoard) {
                     style={{
                         width: 60,
                         margin: 'auto',
+                        filter: 'invert(20%)',
+                        color: 'rgb(31, 45, 65)',
                     }}
                 />
             }
@@ -40,7 +44,7 @@ function Board(props: PropsBoard) {
             }}
             {...rest}
         >
-            <Text style={{}}>{title}</Text>
+            <Text>{title}</Text>
         </Card>
     );
 }

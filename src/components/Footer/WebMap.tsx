@@ -41,7 +41,7 @@ type PropsWebMap = ComponentPropsWithoutRef<'section'> & {};
 
 function WebMap(props: PropsWebMap) {
     return (
-        <Section>
+        <Section {...props}>
             <Title>Navigate</Title>
             <List
                 payload={[
