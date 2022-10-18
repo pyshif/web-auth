@@ -45,6 +45,7 @@ function WebMap(props: PropsWebMap) {
             <Title>Navigate</Title>
             <List
                 payload={[
+                    <NavLink href={routes.home}>Introduction</NavLink>,
                     <NavLink href={routes.auth.signin}>Sign In</NavLink>,
                     <NavLink href={routes.auth.signup}>Sign Up</NavLink>,
                     <NavLink href={routes.auth.forgot}>

@@ -4,6 +4,7 @@ import { font } from 'utils/font';
 import About from './About';
 import WebMap from './WebMap';
 import Contact from './Contact';
+import TellMe from './TellMe';
 
 const Styled = styled.div`
     color: rgb(255, 255, 250);
@@ -21,6 +22,7 @@ function Footer() {
                     <About />
                     <WebMap />
                 </div>
+                <TellMe />
                 <Contact />
             </div>
         </Styled>
