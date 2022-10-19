@@ -81,58 +81,107 @@ function About(props: PropsAbout) {
             </Text>
             <Text>In frontend, we use this technology:</Text>
             <IconWrapper>
-                <Link href="https://reactjs.org/" target="_blank">
+                <Link href="https://reactjs.org/" target="_blank" title="react">
                     <ReactLogo />
                 </Link>
-                <Link href="https://styled-components.com/" target="_blank">
+                <Link
+                    href="https://styled-components.com/"
+                    target="_blank"
+                    title="styled-components"
+                >
                     <Styledcomponents />
                 </Link>
-                <Link href="https://redux.js.org/" target="_blank">
+                <Link
+                    href="https://redux.js.org/"
+                    target="_blank"
+                    title="redux"
+                >
                     <Redux />
                 </Link>
-                <Link href="https://ant.design/" target="_blank">
+                <Link
+                    href="https://ant.design/"
+                    target="_blank"
+                    title="ant-design"
+                >
                     <Antdesign />
                 </Link>
-                <Link href="https://tailwindcss.com/" target="_blank">
+                <Link
+                    href="https://tailwindcss.com/"
+                    target="_blank"
+                    title="tailwindcss"
+                >
                     <TailwindCss />
                 </Link>
-                <Link href="https://postcss.org/" target="_blank">
+                <Link
+                    href="https://postcss.org/"
+                    target="_blank"
+                    title="postcss"
+                >
                     <Postcss />
                 </Link>
-                <Link href="https://webpack.js.org/" target="_blank">
+                <Link
+                    href="https://webpack.js.org/"
+                    target="_blank"
+                    title="webpack"
+                >
                     <Webpack />
                 </Link>
-                <Link href="https://babeljs.io/" target="_blank">
+                <Link href="https://babeljs.io/" target="_blank" title="babel">
                     <Babel />
                 </Link>
-                <Link href="https://www.typescriptlang.org/" target="_blank">
+                <Link
+                    href="https://www.typescriptlang.org/"
+                    target="_blank"
+                    title="typescript"
+                >
                     <Typescript />
                 </Link>
-                <Link href="https://jestjs.io/" target="_blank">
+                <Link href="https://jestjs.io/" target="_blank" title="jest">
                     <Jest />
                 </Link>
                 <Link
                     href="https://github.com/features/actions"
                     target="_blank"
+                    title="github-action"
                 >
                     <Githubactions />
                 </Link>
-                <Link href="https://greensock.com/" target="_blank">
+                <Link
+                    href="https://greensock.com/"
+                    target="_blank"
+                    title="green-sock"
+                >
                     <Greensock />
                 </Link>
             </IconWrapper>
             <Text>In backend, we use this technology:</Text>
             <IconWrapper>
-                <Link href="https://nodejs.org/en/" target="_blank">
+                <Link
+                    href="https://nodejs.org/en/"
+                    target="_blank"
+                    title="node.js"
+                >
                     <Nodejs />
                 </Link>
-                <Link href="https://expressjs.com/" target="_blank">
+                <Link
+                    href="https://expressjs.com/"
+                    target="_blank"
+                    title="express"
+                >
                     <Express />
                 </Link>
-                <Link href="https://mariadb.org/" target="_blank">
+                <Link
+                    href="https://mariadb.org/"
+                    target="_blank"
+                    title="mariadb"
+                >
                     <Mariadb />
                 </Link>
-                <Link href="https://aws.amazon.com/" target="_blank">
+                <Link
+                    href="https://aws.amazon.com/"
+                    target="_blank"
+                    title="aws"
+                >
                     <Aws />
                 </Link>
             </IconWrapper>

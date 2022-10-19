@@ -83,6 +83,7 @@ function Animation(props: PropsAnimation) {
                 .to('.server-check', { duration: 0.75, opacity: 1 })
                 .to('.server-response', { duration: 0.75, opacity: 1 })
                 .to('.server-response', { duration: 2, x: '-100%' })
+                .to('.server-response', { duration: 0.75, opacity: 0 })
                 .to('.client-check', { duration: 0.75, opacity: 1 });
         }, AntRef);
 

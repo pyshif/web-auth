@@ -20,15 +20,18 @@ function Home() {
                 <hr style={{ marginBottom: '1.5rem' }} />
                 <h2 style={{ fontSize: '1.5rem' }}>How we do ?</h2>
                 <ul className="list-disc pl-5">
-                    <li>Access token is saved in memory.</li>
                     <li>
-                        Refresh token is saved in http-only cookies. To avoid
-                        other JS program taken.
+                        We store the access token in memory to increase
+                        security.
                     </li>
-                    <li>Access token expired every 15 mins.</li>
-                    <li>Refresh token expired every 6 months.</li>
                     <li>
-                        Remove access token and refresh token when sign out.
+                        We store the refresh token in http-only cookies to avoid
+                        another program access.
+                    </li>
+                    <li>The access token expires every 15-minute.</li>
+                    <li>The refresh token expires every 6-month.</li>
+                    <li>
+                        The system clears the tokens after the user signs out.
                     </li>
                 </ul>
             </div>
