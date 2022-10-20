@@ -38,27 +38,27 @@ const FlagIcon = styled(Flag)`
 `;
 
 function Footer() {
-    const RunRef = useRef<any>();
-    const FlagRef = useRef<any>();
+    // const RunRef = useRef<any>();
+    // const FlagRef = useRef<any>();
 
-    useEffect(() => {
-        const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-        tl.to(RunRef.current, {
-            duration: 20,
-            right: '1.25rem',
-            rotate: 360,
-            ease: 'none',
-        }).to(FlagRef.current, { duration: 2, opacity: 1 });
-    }, []);
+    // useEffect(() => {
+    //     const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+    //     tl.to(RunRef.current, {
+    //         duration: 20,
+    //         right: '1.25rem',
+    //         rotate: 360,
+    //         ease: 'none',
+    //     }).to(FlagRef.current, { duration: 2, opacity: 1 });
+    // }, []);
 
     return (
         <Styled>
             <div className="container mx-auto">
                 {/* decoration animation */}
-                <Way>
+                {/* <Way>
                     <RunIcon ref={RunRef} />
                     <FlagIcon ref={FlagRef} />
-                </Way>
+                </Way> */}
                 <RunIcon></RunIcon>
                 {/* content */}
                 <div className="flex flex-wrap justify-center mb-3">

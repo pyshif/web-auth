@@ -77,7 +77,7 @@ function About(props: PropsAbout) {
             <Title>What is this project ?</Title>
             <Text>
                 Colorful is a web project about JWT authentication and Google
-                Sign In API.
+                Sign-In API.
             </Text>
             <Text>In frontend, we use this technology:</Text>
             <IconWrapper>

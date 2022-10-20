@@ -63,7 +63,8 @@ module.exports = {
             utils: path.resolve(__dirname, "src/utils"),
             styles: path.resolve(__dirname, "src/styles"),
             images: path.resolve(__dirname, "src/images"),
-            contexts: path.resolve(__dirname, 'src/contexts')
+            contexts: path.resolve(__dirname, 'src/contexts'),
+            stores: path.resolve(__dirname, 'src/stores')
         },
         extensions: ['.tsx', '.ts', '.js']
     },

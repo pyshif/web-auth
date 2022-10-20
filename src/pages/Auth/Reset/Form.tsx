@@ -1,34 +1,68 @@
 import styled from 'styled-components';
+import Sep from 'components/Sep';
+import { useNavigate } from 'react-router-dom';
 import { Form as F, Input, Button, message } from 'antd';
 import { LockOutlined } from '@ant-design/icons';
 import Link from 'components/Link';
 import routes from 'utils/routes';
 
-const Hr = styled.hr`
-    margin-bottom: 1.5rem;
+const ResetForm = styled(F)`
+    width: 100%;
+    max-width: 360px;
+    border: 1px solid rgb(240, 240, 240);
+    border-radius: 0.5rem;
+    padding: 2.875rem 2.5rem;
+    margin: auto;
+`;
+
+const SubmitButton = styled(Button).attrs({
+    htmlType: 'submit',
+})`
+    width: 100%;
 `;
 
 type PropsForm = {};
 
 function Form(props: PropsForm) {
-    const onFinish = (values: any) => {
+    const navigate = useNavigate();
+
+    async function onFinish(values: any) {
         console.log('values :>> ', values);
-    };
+        // confirm access token or match params
+
+        // validate values
+
+        // prepare payload
+
+        // send request
+        // display loading-message
+        const hide = message.loading('Reset password in progress...', 0);
+        try {
+            // receive response
+            const response = await new Promise((value) =>
+                setTimeout(() => {
+                    const random = Math.random() * 10 + 1;
+                    value(random);
+                }, 3000)
+            );
+
+            if ((response as number) < 6) throw new Error('something error');
+
+            message.success('Reset password successful!');
+            hide();
+
+            // sign out
+
+            //
+            navigate(routes.auth.signin);
+        } catch (error) {
+            message.error('Reset password failed! Please try again later.');
+            hide();
+        }
+    }
 
     return (
-        <F
-            name="auth-reset"
-            layout="vertical"
-            onFinish={onFinish}
-            style={{
-                width: '100%',
-                maxWidth: 360,
-                border: '1px solid rgba(240, 240, 240)',
-                borderRadius: '0.5rem',
-                padding: '2.875rem 2.5rem',
-                margin: 'auto',
-            }}
-        >
+        <ResetForm name="auth-reset" layout="vertical" onFinish={onFinish}>
             <F.Item
                 name="newPassword"
                 label="New Password"
@@ -72,15 +106,9 @@ function Form(props: PropsForm) {
                     placeholder="Password"
                 />
             </F.Item>
-            <Hr />
+            <Sep />
             <F.Item>
-                <Button
-                    htmlType="submit"
-                    type="default"
-                    style={{ width: '100%' }}
-                >
-                    Submit
-                </Button>
+                <SubmitButton>Submit</SubmitButton>
             </F.Item>
             <F.Item className="float-right">
                 <Link
@@ -91,7 +119,7 @@ function Form(props: PropsForm) {
                     Back to sign in
                 </Link>
             </F.Item>
-        </F>
+        </ResetForm>
     );
 }
 

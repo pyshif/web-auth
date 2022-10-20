@@ -1,37 +1,77 @@
 import styled from 'styled-components';
-import { Form as F, Checkbox, Button, Input } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import Sep from 'components/Sep';
+import { Form as F, Checkbox, Button, Input, message } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import routes from 'utils/routes';
 import Link from 'components/Link';
 
-const Hr = styled.hr`
-    margin-bottom: 1.5rem;
+const SignInForm = styled(F)`
+    width: 100%;
+    max-width: 360px;
+    border: 1px solid rgba(240, 240, 240);
+    border-radius: 0.5rem;
+    padding: 2.875rem 2.5rem;
+    margin: auto;
 `;
 
-type PropsForm = {};
+const SubmitButton = styled(Button).attrs({
+    htmlType: 'submit',
+})`
+    width: 100%;
+`;
 
-function Form(props: PropsForm) {
-    const onFinish = (values: any) => {
+const GoogleButton = styled(Button)`
+    width: 100%;
+`;
+
+function Form() {
+    const navigate = useNavigate();
+
+    async function onFinish(values: any) {
         console.log('Received values of form :>> ', values);
-    };
+        // remember checked
+        // TODO: crypt account and password and store into localstorage
 
-    const onClick = (e: any) => {
+        // prepare payload
+        // TODO: prepare payload
+
+        // send request
+        // display message loading
+        const hide = message.loading('Sign-in progress...', 0);
+        try {
+            // receive success-response
+            // TODO: complete axios
+            const response = await new Promise((value) =>
+                setTimeout(() => {
+                    const random = Math.random() * 10 + 1;
+                    value(random);
+                }, 3000)
+            );
+
+            if ((response as number) < 6) throw new Error('something error');
+            // display message success, hide loading, redirect hint
+            message.success('Sign-in successful!', 3);
+            hide();
+            // redirect to user-profile page
+            navigate(routes.user);
+        } catch (error) {
+            // display message error, hide loading-message
+            message.loading('somthing error...', 3);
+            hide();
+        }
+    }
+
+    function onGoogleButton(e: any) {
         console.log('Received values of form :>> ', e);
-    };
+        // TODO: complete google login in
+    }
 
     return (
-        <F
+        <SignInForm
             name="auth-signin"
             initialValues={{ remember: true }}
             onFinish={onFinish}
-            style={{
-                width: '100%',
-                maxWidth: 360,
-                border: '1px solid rgba(240, 240, 240)',
-                borderRadius: '0.5rem',
-                padding: '2.875rem 2.5rem',
-                margin: 'auto',
-            }}
         >
             <F.Item
                 name="email"
@@ -81,24 +121,11 @@ function Form(props: PropsForm) {
             </F.Item>
 
             <F.Item>
-                <Button
-                    type="default"
-                    htmlType="submit"
-                    style={{ width: '100%' }}
-                >
-                    Log in
-                </Button>
+                <SubmitButton>Log in</SubmitButton>
             </F.Item>
-            <Hr />
+            <Sep />
             <F.Item>
-                <Button
-                    type="default"
-                    htmlType="button"
-                    style={{ width: '100%', color: '#475569' }}
-                    onClick={onClick}
-                >
-                    Googole
-                </Button>
+                <GoogleButton onClick={onGoogleButton}>Googole</GoogleButton>
             </F.Item>
             <F.Item className="float-right">
                 Or{' '}
@@ -110,7 +137,7 @@ function Form(props: PropsForm) {
                     Sign up by here
                 </Link>
             </F.Item>
-        </F>
+        </SignInForm>
     );
 }
 

@@ -6,6 +6,8 @@ import Form from './Form';
 
 type PropsReset = {};
 
+// has access token or match-params
+
 function Reset(props: PropsReset) {
     const location = useLocation();
     const match = useMatch(routes.auth.reset.resetId);

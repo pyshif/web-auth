@@ -1,42 +1,69 @@
 import styled from 'styled-components';
+import Sep from 'components/Sep';
+import { useNavigate } from 'react-router-dom';
 import { Form as F, Input, Button, message } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import Link from 'components/Link';
 import routes from 'utils/routes';
 
-const Hr = styled.hr`
-    margin-bottom: 1.5rem;
+const SignUpForm = styled(F)`
+    width: 100%;
+    max-width: 360px;
+    border: 1px solid rgb(240, 240, 240);
+    border-radius: 0.5rem;
+    padding: 2.875rem 2.5rem;
+    margin: auto;
+`;
+
+const RegisterButton = styled(Button).attrs({
+    htmlType: 'submit',
+})`
+    width: 100%;
 `;
 
 type PropsForm = {};
 
 function Form(props: PropsForm) {
-    function onFinish(values: any) {
-        const hide = message.loading('Register in progress...', 0);
+    const navigate = useNavigate();
 
-        setTimeout(() => {
-            message.success('Success! Please confirm your email.', 3);
+    async function onFinish(values: any) {
+        console.log('values :>> ', values);
+        // prepare payload
+
+        // send request
+        // display loading-message
+        const hide = message.loading('Register in progress...', 0);
+        try {
+            // receive response
+            const response = await new Promise((value) =>
+                setTimeout(() => {
+                    const random = Math.random() * 10 + 1;
+                    value(random);
+                }, 3000)
+            );
+            // console.log('response :>> ', response);
+            if ((response as number) < 6) throw new Error('something error');
+
+            message.success(
+                'Sign-up successful! Please check your mailbox.',
+                3
+            );
             hide();
-        }, 5000);
+            // redirect to sign-in page
+            navigate(routes.auth.signin);
+        } catch (error) {
+            // display error-message
+            message.error('Sign-up failed! Please try again after 1-min.', 3);
+            hide();
+        }
     }
 
-    function onClick(values: any) {}
-
     return (
-        <F
+        <SignUpForm
             name="auth-signup"
-            className="login-form"
             initialValues={{ remember: true }}
-            onFinish={onFinish}
-            style={{
-                width: '100%',
-                maxWidth: 360,
-                border: '1px solid rgba(240, 240, 240)',
-                borderRadius: '0.5rem',
-                padding: '2.875rem 2.5rem',
-                margin: 'auto',
-            }}
             layout="vertical"
+            onFinish={onFinish}
         >
             <F.Item
                 label="Username"
@@ -69,8 +96,8 @@ function Form(props: PropsForm) {
                 ]}
             >
                 <Input
-                    // prefix={<UserOutlined className="site-form-item.icon" />}
-                    placeholder="example@gmail.com"
+                    prefix={<UserOutlined />}
+                    placeholder="example@mail.com"
                 />
             </F.Item>
             <F.Item
@@ -141,15 +168,9 @@ function Form(props: PropsForm) {
             >
                 <Input placeholder="6 - 25 characters" />
             </F.Item>
-            <Hr />
+            <Sep />
             <F.Item>
-                <Button
-                    type="default"
-                    htmlType="submit"
-                    style={{ width: '100%' }}
-                >
-                    Register
-                </Button>
+                <RegisterButton>Register</RegisterButton>
             </F.Item>
 
             <F.Item className="float-right">
@@ -161,7 +182,7 @@ function Form(props: PropsForm) {
                     Back to sign in
                 </Link>
             </F.Item>
-        </F>
+        </SignUpForm>
     );
 }
 
