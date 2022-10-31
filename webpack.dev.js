@@ -28,6 +28,7 @@ module.exports = (env) => {
             port: 3000,
             compress: true,
             historyApiFallback: true, // redirect 404 to index.html
+            disableDotRule: true // for using dot in url path
         }
     });
 }
