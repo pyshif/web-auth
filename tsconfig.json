@@ -45,14 +45,17 @@
             "images/*": [
                 "src/images/*"
             ],
-            "stores/*": [
-                "src/stores/*"
+            "store/*": [
+                "src/store/*"
             ],
-            "features/*": [
-                "src/features/*"
+            "store": [
+                "src/store/index.ts"
             ],
             "api/*": [
-                "src/api/*"
+                "src/api/*",
+            ],
+            "api": [
+                "src/api/index.ts"
             ]
         }, /* Specify a set of entries that re-map imports to additional lookup locations. */
         // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
@@ -123,8 +126,8 @@
     "include": [
         "./src/**/*.tsx",
         "./src/**/*.ts",
-        "./test/**/*.tsx",
-        "./test/**/*.ts",
-        "./types/assets.d.ts"
+        "test/**/*.tsx",
+        "test/**/*.ts",
+        "./types/assets.d.ts",
     ]
 }

@@ -9,6 +9,8 @@
         "^pages(.*)": "<rootDir>/pages$1",
         "^utils(.*)": "<rootDir>/utils$1",
         "^styles(.*)": "<rootDir>/styles$1",
+        "^api(.*)": "<rootDir>/api$1",
+        "^store(.*)": "<rootDir>/store$1",
         "^images(.*)": "<rootDir>/__mocks__/fileMock.js",
         "\\.(png|svg|jpg|jpeg|gif|mp4|pdf|mpg|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
         "\\.(woff|woff2|eot|ttf|otf|webp)$": "<rootDir>/__mocks__/fileMock.js",
