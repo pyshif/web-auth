@@ -9,7 +9,6 @@ import user from './user';
 import google from './google';
 
 
-
 function auth(axios: AxiosInstance) {
     const apiSignUp = signUp(axios);
     const apiSignIn = signIn(axios);
@@ -20,7 +19,13 @@ function auth(axios: AxiosInstance) {
     const apiGoogle = google(axios);
 
     return {
-        health: () => axios.get(routes.auth.health.GET),
+        health: () => {
+            return axios({
+                method: 'GET',
+                url: routes.auth.health.GET,
+                withCredentials: true
+            });
+        },
         accessTokenValid: (accessToken: string) => {
             return axios({
                 method: 'GET',

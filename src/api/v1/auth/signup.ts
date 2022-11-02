@@ -2,7 +2,7 @@ import { AxiosInstance } from 'axios';
 import routes from 'api/v1/routes';
 import { reverse } from 'named-urls';
 
-
+// request payload
 export type DataSignUp = {
     name: string,
     account: string,
@@ -11,6 +11,14 @@ export type DataSignUp = {
     hint: string,
 };
 
+// response payload
+export type ResponseSignUp = {
+    headers: {
+        status: string | '403' | '401' | '400' | '200';
+    }
+};
+
+// axios
 function signUp(axios: AxiosInstance) {
     return {
         signUp: (data: DataSignUp) => {

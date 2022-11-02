@@ -1,6 +1,21 @@
 import routes from 'api/v1/routes';
 import { AxiosInstance } from 'axios';
 
+// response
+export type ResponseGoogle = {
+    headers: {
+        status: string | '403' | '200';
+    },
+    payload: {
+        name: string,
+        email: string,
+        phone: string,
+        birthday: string,
+        avatar: string,
+    }
+};
+
+// axios
 function google(axios: AxiosInstance) {
     return {
         googleSignIn: (googleIDToken: string) => {

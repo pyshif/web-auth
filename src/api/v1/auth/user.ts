@@ -2,21 +2,42 @@ import routes from 'api/v1/routes';
 import { AxiosInstance } from 'axios';
 import { reverse } from 'named-urls';
 
-type DataEditUserInfo = {
+// request payload
+export type DataEditUserInfo = {
     name?: string,
     birthday?: string,
     phone?: string,
 };
 
-type DataEditUserEmail = {
+export type DataEditUserEmail = {
     email: string
 }
 
-type DataEditUserAvatar = FormData;
+export type DataEditUserAvatar = FormData;
 
+// response payload
+export type ResponseEditUserInfo = {
+    headers: {
+        status: string | '403' | '401' | '200',
+    }
+}
+
+export type ResponseEditUserEmail = {
+    headers: {
+        status: string | '403' | '401' | '200',
+    }
+}
+
+export type ResponseEditUserAvatar = {
+    headers: {
+        status: string | '403' | '200',
+    }
+}
+
+// axios
 function User(axios: AxiosInstance) {
     return {
-        EditUserInfo: (accessToken: string, data: DataEditUserInfo) => {
+        editUserInfo: (accessToken: string, data: DataEditUserInfo) => {
             return axios({
                 method: 'POST',
                 url: routes.auth.edit.personalInfo.POST,
@@ -24,7 +45,7 @@ function User(axios: AxiosInstance) {
                 headers: { Authorization: 'Bearer' + accessToken }
             });
         },
-        EditUserEmail: (accessToken: string, data: DataEditUserEmail) => {
+        editUserEmail: (accessToken: string, data: DataEditUserEmail) => {
             return axios({
                 method: 'POST',
                 url: routes.auth.edit.email.POST,
@@ -39,7 +60,7 @@ function User(axios: AxiosInstance) {
         //         url: reverse(routes.auth.edit.email._token.GET, { _token }),
         //     });
         // }
-        EditUserAvatar: (accessToken: string, data: DataEditUserAvatar) => {
+        editUserAvatar: (accessToken: string, data: DataEditUserAvatar) => {
             return axios({
                 method: 'POST',
                 url: routes.auth.edit.avatar.POST,
