@@ -5,12 +5,12 @@ import { reverse } from 'named-urls';
 // request payload
 export type DataForgot = {
     email: string,
-    hint: string,
+    passwordHint: string,
 };
 
 export type DataResetPasswordByLink = {
-    new_password: string,
-    confirm_password: string,
+    newPassword: string,
+    confirmPassword: string,
 };
 
 // response payload
@@ -37,10 +37,10 @@ function forgot(axios: AxiosInstance) {
             })
         },
         // will deprecate
-        resetPasswordByLink(_token: string, data: DataResetPasswordByLink) {
+        resetPasswordByLink(linkToken: string, data: DataResetPasswordByLink) {
             return axios({
                 method: 'POST',
-                url: reverse(routes.auth.forgot._token.POST, { _token }),
+                url: reverse(routes.auth.forgot._token.POST, { _token: linkToken }),
                 data,
             })
         }

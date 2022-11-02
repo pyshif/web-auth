@@ -5,7 +5,7 @@ import { AxiosInstance } from 'axios';
 
 // request payload
 export type DataSignIn = {
-    account: string,
+    email: string,
     password: string,
 };
 

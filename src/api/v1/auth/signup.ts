@@ -22,21 +22,18 @@ export type ResponseSignUp = {
 function signUp(axios: AxiosInstance) {
     return {
         signUp: (data: DataSignUp) => {
-            // console.log('routes.auth.signUp.POST :>> ', routes.auth.signUp.POST);
             return axios({
                 method: 'POST',
                 url: routes.auth.signUp.POST,
                 data
             })
         },
-        // This is unuseful for fronted, just example
-        // signUpConfirm: (_token: string) => {
-        //     // console.log('reverse(routes.auth.signUp._token.GET, {_token}) :>> ', reverse(routes.auth.signUp._token.GET, { _token }));
-        //     return axios({
-        //         method: 'GET',
-        //         url: reverse(routes.auth.signUp._token.GET, { _token })
-        //     });
-        // }
+        validateEmailAddress: (linkToken: string) => {
+            return axios({
+                method: 'GET',
+                url: reverse(routes.auth.signUp._token.GET, { _token: linkToken })
+            });
+        }
     }
 }
 
