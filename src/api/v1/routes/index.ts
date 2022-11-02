@@ -12,6 +12,10 @@ const routes = {
         }),
         signUp: include('signup/', {
             POST: '',
+            // for unit testing
+            _token: include(':_token/', {
+                GET: ''
+            })
         }),
         signIn: include('signin/', {
             POST: ''
@@ -38,6 +42,7 @@ const routes = {
             POST: '',
         }),
         user: include('user/', {
+            DELETE: '',
             name: include('name/', {
                 POST: ''
             }),
