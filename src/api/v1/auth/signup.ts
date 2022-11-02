@@ -5,10 +5,10 @@ import { reverse } from 'named-urls';
 // request payload
 export type DataSignUp = {
     name: string,
-    account: string,
+    email: string,
     password: string,
-    confirm_password: string,
-    hint: string,
+    confirmPassword: string,
+    passwordHint: string,
 };
 
 // response payload
