@@ -10,20 +10,20 @@ const routes = {
         health: include('health/', {
             GET: ''
         }),
-        accessTokenValid: include('/', {
-            GET: ''
-        }),
         signUp: include('signup/', {
             POST: '',
-            // _token: include(':_token/', {
-            //     GET: ''
-            // })
-        }),
-        accessTokenRefresh: include('token/', {
-            GET: ''
         }),
         signIn: include('signin/', {
             POST: ''
+        }),
+        google: include('google/', {
+            POST: ''
+        }),
+        token: include('token/', {
+            GET: '',
+            new: include('new/', {
+                GET: ''
+            }),
         }),
         signOut: include('signout/', {
             DELETE: ''
@@ -31,29 +31,26 @@ const routes = {
         forgot: include('forgot/', {
             POST: '',
             _token: include(':_token/', {
-                // GET: '',
                 POST: ''
             })
         }),
-        reset: include('reset-password/', {
+        reset: include('reset/', {
             POST: '',
         }),
-        edit: include('edit/', {
-            personalInfo: include('personal-info/', {
+        user: include('user/', {
+            name: include('name/', {
+                POST: ''
+            }),
+            birthday: include('birthday/', {
+                POST: ''
+            }),
+            phone: include('phone/', {
                 POST: ''
             }),
             email: include('email/', {
                 POST: '',
-                // _token: include(':_token/', {
-                //     GET: ''
-                // })
             }),
             avatar: include('avatar/', {
-                POST: ''
-            })
-        }),
-        google: include('google/', {
-            signin: include('signin', {
                 POST: ''
             })
         }),
