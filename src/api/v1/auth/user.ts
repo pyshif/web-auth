@@ -37,36 +37,51 @@ export type ResponseEditUserAvatar = {
 // axios
 function User(axios: AxiosInstance) {
     return {
-        editUserInfo: (accessToken: string, data: DataEditUserInfo) => {
+        editUserName: (accessToken: string, name: string) => {
             return axios({
                 method: 'POST',
-                url: routes.auth.edit.personalInfo.POST,
-                data,
-                headers: { Authorization: 'Bearer' + accessToken }
+                url: routes.auth.user.name.POST,
+                data: {
+                    name
+                },
+                headers: { Authorization: `Bearer ${accessToken}` }
             });
+        },
+        editUserBirthday: (accessToken: string, birthday: string) => {
+            return axios({
+                method: 'POST',
+                url: routes.auth.user.birthday.POST,
+                data: {
+                    birthday,
+                },
+                headers: { Authorization: `Bearer ${accessToken}` }
+            })
+        },
+        editUserPhone: (accessToken: string, phone: string) => {
+            return axios({
+                method: 'POST',
+                url: routes.auth.user.phone.POST,
+                data: {
+                    phone
+                },
+                headers: { Authorization: `Bearer ${accessToken}` }
+            })
         },
         editUserEmail: (accessToken: string, data: DataEditUserEmail) => {
             return axios({
                 method: 'POST',
-                url: routes.auth.edit.email.POST,
+                url: routes.auth.user.email.POST,
                 data,
-                headers: { Authorization: 'Bearer' + accessToken }
+                headers: { Authorization: `Bearer ${accessToken}` }
             });
         },
-        // This is unuseful here. Just example
-        // ValidateEmail: (_token: string) => {
-        //     return axios({
-        //         method: 'GET',
-        //         url: reverse(routes.auth.edit.email._token.GET, { _token }),
-        //     });
-        // }
         editUserAvatar: (accessToken: string, data: DataEditUserAvatar) => {
             return axios({
                 method: 'POST',
-                url: routes.auth.edit.avatar.POST,
+                url: routes.auth.user.avatar.POST,
                 data,
                 headers: {
-                    Authorization: 'Bearer' + accessToken,
+                    Authorization: `Bearer ${accessToken}`,
                     'Content-Type': 'multipart/form-data'
                 }
             });

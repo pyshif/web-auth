@@ -21,10 +21,10 @@ function google(axios: AxiosInstance) {
         googleSignIn: (googleIDToken: string) => {
             return axios({
                 method: 'POST',
-                url: routes.auth.google.signin.POST,
+                url: routes.auth.google.POST,
                 withCredentials: true,
                 headers: {
-                    Authorization: 'Bearer' + googleIDToken,
+                    Authorization: `Bearer ${googleIDToken}`,
                 }
             });
         },

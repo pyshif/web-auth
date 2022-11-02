@@ -22,7 +22,7 @@ function Reset(axios: AxiosInstance) {
                 method: 'POST',
                 url: routes.auth.reset.POST,
                 data,
-                headers: { Authorization: 'Bearer' + accessToken }
+                headers: { Authorization: `Bearer ${accessToken}` }
             });
         }
     }

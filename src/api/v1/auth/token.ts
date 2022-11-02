@@ -9,7 +9,7 @@ function token(axios: AxiosInstance) {
                 method: 'GET',
                 url: routes.auth.token.GET,
                 withCredentials: true,
-                headers: { Authorization: 'Bearer' + accessToken }
+                headers: { Authorization: `Bearer ${accessToken}` }
             });
         },
         requestToken: () => {
