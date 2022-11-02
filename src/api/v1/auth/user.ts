@@ -37,6 +37,13 @@ export type ResponseEditUserAvatar = {
 // axios
 function User(axios: AxiosInstance) {
     return {
+        deleteUser: (accessToken: string) => {
+            return axios({
+                method: 'DELETE',
+                url: routes.auth.user.DELETE,
+                headers: { Authorization: `Bearer ${accessToken}` }
+            })
+        },
         editUserName: (accessToken: string, name: string) => {
             return axios({
                 method: 'POST',
