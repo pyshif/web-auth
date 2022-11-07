@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Sep from 'components/Sep';
 import { Form as F, Checkbox, Button, Input, message } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import routes from 'utils/routes';
 import Link from 'components/Link';
+import { useAppSelector, useAppDispatch } from 'store';
+import { apiSignIn, DataSignIn } from 'store/features/authSlice';
 
 const SignInForm = styled(F)`
     width: 100%;
@@ -27,39 +30,31 @@ const GoogleButton = styled(Button)`
 
 function Form() {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { status, token, user } = useAppSelector((state) => state.auth);
 
     async function onFinish(values: any) {
-        console.log('Received values of form :>> ', values);
-        // remember checked
-        // TODO: crypt account and password and store into localstorage
+        // TODO: complete remember feature
 
-        // prepare payload
-        // TODO: prepare payload
+        // payload
+        const { email, password } = values;
+        const data: DataSignIn = {
+            email,
+            password,
+        };
 
-        // send request
-        // display message loading
+        // request
         const hide = message.loading('Sign-in progress...', 0);
-        try {
-            // receive success-response
-            // TODO: complete axios
-            const response = await new Promise((value) =>
-                setTimeout(() => {
-                    const random = Math.random() * 10 + 1;
-                    value(random);
-                }, 3000)
-            );
-
-            if ((response as number) < 6) throw new Error('something error');
-            // display message success, hide loading, redirect hint
-            message.success('Sign-in successful!', 3);
-            hide();
-            // redirect to user-profile page
-            navigate(routes.user);
-        } catch (error) {
-            // display message error, hide loading-message
-            message.loading('somthing error...', 3);
-            hide();
-        }
+        dispatch(apiSignIn(data))
+            .then(() => {
+                message.success('Sign-in successful!');
+                hide();
+                navigate(routes.user);
+            })
+            .catch((error) => {
+                message.error('Sign-in failed! Error: ' + error.message);
+                hide();
+            });
     }
 
     function onGoogleButton(e: any) {
