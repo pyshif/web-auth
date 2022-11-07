@@ -43,17 +43,19 @@ export function MobileNav(props: PropsNav) {
         const payload = [
             <NavIconLink
                 icon="house"
-                href={routes.home}
+                to={routes.home}
                 className="capitalize p-1 m-1"
                 defaults
+                scrollToTop
             >
                 home
             </NavIconLink>,
             <NavIconLink
                 icon="user"
-                href={routes.auth.signin}
+                to={routes.auth.signin}
                 className="capitalize p-1 m-1"
                 defaults
+                scrollToTop
             >
                 auth
             </NavIconLink>,
@@ -79,13 +81,19 @@ export function MobileNav(props: PropsNav) {
 export function TabletNav(props: PropsNav) {
     const Links = useCallback(() => {
         const payload = [
-            <NavLink href={routes.home} className="capitalize p-1 m-1" defaults>
+            <NavLink
+                to={routes.home}
+                className="capitalize p-1 m-1"
+                defaults
+                scrollToTop
+            >
                 home
             </NavLink>,
             <NavLink
-                href={routes.auth.signin}
+                to={routes.auth.signin}
                 className="capitalize p-1 m-1"
                 defaults
+                scrollToTop
             >
                 auth
             </NavLink>,

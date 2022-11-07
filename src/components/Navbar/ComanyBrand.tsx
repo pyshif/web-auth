@@ -28,7 +28,9 @@ const Styled = styled.div``;
 function CompanyBrand(props: PropsCompanyBrand) {
     return (
         <Styled className={props.className}>
-            <BrandLink href={props.href}>{props.name}</BrandLink>
+            <BrandLink to={props.href} scrollToTop>
+                {props.name}
+            </BrandLink>
         </Styled>
     );
 }

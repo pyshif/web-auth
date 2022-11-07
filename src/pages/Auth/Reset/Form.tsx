@@ -112,8 +112,9 @@ function Form(props: PropsForm) {
             </F.Item>
             <F.Item className="float-right">
                 <Link
-                    href={routes.auth.signin}
+                    to={routes.auth.signin}
                     className="after:content-['_👉']"
+                    scrollToTop
                 >
                     {' '}
                     Back to sign in

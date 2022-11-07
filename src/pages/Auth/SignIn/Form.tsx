@@ -110,7 +110,11 @@ function Form() {
                 >
                     <Checkbox>Remember me</Checkbox>
                 </F.Item>
-                <Link href={routes.auth.forgot} className="float-right">
+                <Link
+                    to={routes.auth.forgot}
+                    className="float-right"
+                    scrollToTop
+                >
                     Forgot password ?
                 </Link>
             </F.Item>
@@ -125,8 +129,9 @@ function Form() {
             <F.Item className="float-right">
                 Or{' '}
                 <Link
-                    href={routes.auth.signup}
+                    to={routes.auth.signup}
                     className="after:content-['_👉']"
+                    scrollToTop
                 >
                     {' '}
                     Sign up by here

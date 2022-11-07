@@ -4,6 +4,7 @@ import Link from 'components/Link';
 import List from 'components/List';
 import routes from 'utils/routes';
 import device from 'utils/device';
+import { Link as RL } from 'react-router-dom';
 
 const Section = styled.section`
     padding: 1rem 1rem;
@@ -45,14 +46,22 @@ function WebMap(props: PropsWebMap) {
             <Title>Navigate</Title>
             <List
                 payload={[
-                    <NavLink href={routes.home}>Introduction</NavLink>,
-                    <NavLink href={routes.user}>User Profile</NavLink>,
-                    <NavLink href={routes.auth.signin}>Sign In</NavLink>,
-                    <NavLink href={routes.auth.signup}>Sign Up</NavLink>,
-                    <NavLink href={routes.auth.forgot}>
+                    <NavLink to={routes.home} scrollToTop>
+                        Introduction
+                    </NavLink>,
+                    <NavLink to={routes.user} scrollToTop>
+                        User Profile
+                    </NavLink>,
+                    <NavLink to={routes.auth.signin} scrollToTop>
+                        Sign In
+                    </NavLink>,
+                    <NavLink to={routes.auth.signup} scrollToTop>
+                        Sign Up
+                    </NavLink>,
+                    <NavLink to={routes.auth.forgot} scrollToTop>
                         Forgot Password
                     </NavLink>,
-                    <NavLink href={routes.auth.reset.self}>
+                    <NavLink to={routes.auth.reset.self} scrollToTop>
                         Reset Password
                     </NavLink>,
                 ]}

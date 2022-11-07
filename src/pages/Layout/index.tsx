@@ -8,30 +8,31 @@ const Styled = styled.div`
     font-family: ${fonts.rubik};
 
     max-width: 100%;
-    min-height: 100vh;
+    /* min-height: 100vh; */
+    height: 100vh;
 
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr) auto;
     grid-template-areas:
         'header'
-        'main'
-        'footer';
+        'main';
+    /* 'footer'; */
 
     header {
-        grid-area: 'header';
+        grid-area: header;
         /* background: red; */
     }
 
     main {
-        grid-area: 'main';
+        grid-area: main;
+        overflow: auto;
         /* background: blue; */
     }
 
-    footer {
-        grid-area: 'footer';
-        /* background: gold; */
-    }
+    /* footer {
+        grid-area: footer;
+    } */
 `;
 
 function Layout() {
@@ -42,10 +43,10 @@ function Layout() {
             </header>
             <main>
                 <Outlet />
+                <footer>
+                    <Footer />
+                </footer>
             </main>
-            <footer>
-                <Footer />
-            </footer>
         </Styled>
     );
 }

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import routes from 'utils/routes';
 import CompanyBrand from './ComanyBrand';
 import Nav from './Nav';
+import device from 'utils/device';
 
 type PropsNavbar = {
     className?: string;

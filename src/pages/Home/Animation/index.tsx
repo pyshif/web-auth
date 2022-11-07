@@ -41,11 +41,15 @@ const Items = styled.div`
     height: 100%;
 `;
 
-const Item = styled((props) => <div {...props}>{props.children}</div>)`
+// const Item = styled((props) => <div {...props}>{props.children}</div>)`
+// `;
+
+const Item = styled.div`
     width: 100%;
     position: relative;
     & > * {
-        width: ${(props) => (props.iconSize ? props.iconSize : '3.5rem')};
+        width: ${(props: { iconSize: string }) =>
+            props.iconSize ? props.iconSize : '3.5rem'};
         color: rgb(31, 45, 65);
     }
 `;

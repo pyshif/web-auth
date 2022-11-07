@@ -1,35 +1,47 @@
 import styled from 'styled-components';
+import { ComponentProps } from 'react';
+import { Link as RLink } from 'react-router-dom';
 import { fonts } from 'utils/font';
-import { ComponentPropsWithoutRef } from 'react';
 
-type PropsA = {
+export type PropsLink = ComponentProps<typeof RLink> & {
     defaults?: boolean;
+    scrollToTop?: boolean;
 };
 
-const A = styled.a<PropsA>`
+const L = styled(RLink)<PropsLink>`
     display: inline-block;
     &:hover {
         filter: invert(50%);
     }
 
-    ${(props) =>
+    /* ${(props) =>
         props.defaults
             ? `font-size: 0.875rem; font-weight: 600; font-family: ${fonts.rubik};`
-            : ''}
+            : ''} */
 `;
 
-export type PropsLink = ComponentPropsWithoutRef<'a'> & {
-    defaults?: boolean;
-};
-
 function Link(props: PropsLink) {
-    return <A {...props}>{props.children}</A>;
-}
+    const { scrollToTop, defaults, ...rest } = props;
+    const defaultStyle = {
+        fontSize: '0.875rem',
+        fontWeight: '600',
+        fontFamily: fonts.rubik,
+    };
 
-// Link.defaultStyle = {
-//     fontSize: '1rem',
-//     fontWeight: 600,
-//     fontFamily: fonts.didot,
-// };
+    return (
+        <L
+            onClick={() => {
+                const main = document.querySelector('main');
+                if (main && scrollToTop) main.scroll(0, 0);
+                // if (scrollToTop) window.scroll(0, 0);
+                // console.log('scrollToTop :>> ', scrollToTop);
+            }}
+            style={defaults ? defaultStyle : {}}
+            {...rest}
+        >
+            {props.children}
+        </L>
+    );
+}
 
 export default Link;

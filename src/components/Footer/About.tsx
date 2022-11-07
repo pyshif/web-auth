@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import { ComponentPropsWithoutRef } from 'react';
 import device from 'utils/device';
 import Icon from 'components/Icon';
-import Link from 'components/Link';
+import ALink from 'components/ALink';
 import { ReactLogo } from '@styled-icons/boxicons-logos/ReactLogo';
+import { Reactrouter } from '@styled-icons/simple-icons/Reactrouter';
 import { Styledcomponents } from '@styled-icons/simple-icons/Styledcomponents';
 import { Redux } from '@styled-icons/boxicons-logos/Redux';
 import { Antdesign } from '@styled-icons/simple-icons/Antdesign';
@@ -59,7 +60,7 @@ const Title = styled.p`
     }
 `;
 
-const SocialLink = styled(Link)`
+const SocialLink = styled(ALink)`
     font-size: 0.75rem;
     color: rgb(255, 255, 250);
     margin-right: 1rem;
@@ -81,125 +82,82 @@ function About(props: PropsAbout) {
             </Text>
             <Text>In frontend, we use this technology:</Text>
             <IconWrapper>
-                <Link href="https://reactjs.org/" target="_blank" title="react">
+                <ALink href="https://reactjs.org/" title="react">
                     <ReactLogo />
-                </Link>
-                <Link
+                </ALink>
+                <ALink
+                    href="https://reactrouter.com/en/main"
+                    title="react-router-dom"
+                >
+                    <Reactrouter />
+                </ALink>
+                <ALink
                     href="https://styled-components.com/"
-                    target="_blank"
                     title="styled-components"
                 >
                     <Styledcomponents />
-                </Link>
-                <Link
-                    href="https://redux.js.org/"
-                    target="_blank"
-                    title="redux"
-                >
+                </ALink>
+                <ALink href="https://redux.js.org/" title="redux">
                     <Redux />
-                </Link>
-                <Link
-                    href="https://ant.design/"
-                    target="_blank"
-                    title="ant-design"
-                >
+                </ALink>
+                <ALink href="https://ant.design/" title="ant-design">
                     <Antdesign />
-                </Link>
-                <Link
-                    href="https://tailwindcss.com/"
-                    target="_blank"
-                    title="tailwindcss"
-                >
+                </ALink>
+                <ALink href="https://tailwindcss.com/" title="tailwindcss">
                     <TailwindCss />
-                </Link>
-                <Link
-                    href="https://postcss.org/"
-                    target="_blank"
-                    title="postcss"
-                >
+                </ALink>
+                <ALink href="https://postcss.org/" title="postcss">
                     <Postcss />
-                </Link>
-                <Link
-                    href="https://webpack.js.org/"
-                    target="_blank"
-                    title="webpack"
-                >
+                </ALink>
+                <ALink href="https://webpack.js.org/" title="webpack">
                     <Webpack />
-                </Link>
-                <Link href="https://babeljs.io/" target="_blank" title="babel">
+                </ALink>
+                <ALink href="https://babeljs.io/" title="babel">
                     <Babel />
-                </Link>
-                <Link
+                </ALink>
+                <ALink
                     href="https://www.typescriptlang.org/"
-                    target="_blank"
                     title="typescript"
                 >
                     <Typescript />
-                </Link>
-                <Link href="https://jestjs.io/" target="_blank" title="jest">
+                </ALink>
+                <ALink href="https://jestjs.io/" title="jest">
                     <Jest />
-                </Link>
-                <Link
+                </ALink>
+                <ALink
                     href="https://github.com/features/actions"
-                    target="_blank"
                     title="github-action"
                 >
                     <Githubactions />
-                </Link>
-                <Link
-                    href="https://greensock.com/"
-                    target="_blank"
-                    title="green-sock"
-                >
+                </ALink>
+                <ALink href="https://greensock.com/" title="green-sock">
                     <Greensock />
-                </Link>
+                </ALink>
             </IconWrapper>
             <Text>In backend, we use this technology:</Text>
             <IconWrapper>
-                <Link
-                    href="https://nodejs.org/en/"
-                    target="_blank"
-                    title="node.js"
-                >
+                <ALink href="https://nodejs.org/en/" title="node.js">
                     <Nodejs />
-                </Link>
-                <Link
-                    href="https://expressjs.com/"
-                    target="_blank"
-                    title="express"
-                >
+                </ALink>
+                <ALink href="https://expressjs.com/" title="express">
                     <Express />
-                </Link>
-                <Link
-                    href="https://mariadb.org/"
-                    target="_blank"
-                    title="mariadb"
-                >
+                </ALink>
+                <ALink href="https://mariadb.org/" title="mariadb">
                     <Mariadb />
-                </Link>
-                <Link
-                    href="https://aws.amazon.com/"
-                    target="_blank"
-                    title="aws"
-                >
+                </ALink>
+                <ALink href="https://aws.amazon.com/" title="aws">
                     <Aws />
-                </Link>
+                </ALink>
             </IconWrapper>
             <Text>
                 If you want to know more about our project, welcome to my github
                 repo.
             </Text>
             <br />
-            <SocialLink
-                href="https://github.com/pyshif/web-auth"
-                target="_blank"
-            >
+            <SocialLink href="https://github.com/pyshif/web-auth">
                 <Icon icon="github" type="brands" /> Frontend Repo
             </SocialLink>
-            <SocialLink
-                href="https://github.com/pyshif/web-auth-server"
-                target="_blank"
-            >
+            <SocialLink href="https://github.com/pyshif/web-auth-server">
                 <Icon icon="github" type="brands" /> Backend Repo
             </SocialLink>
         </Section>
