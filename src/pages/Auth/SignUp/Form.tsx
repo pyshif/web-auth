@@ -5,6 +5,8 @@ import { Form as F, Input, Button, message } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import Link from 'components/Link';
 import routes from 'utils/routes';
+import { apiSignUp, DataSignUp } from 'store/features/authSlice';
+import { useAppSelector, useAppDispatch } from 'store/index';
 
 const SignUpForm = styled(F)`
     width: 100%;
@@ -25,37 +27,40 @@ type PropsForm = {};
 
 function Form(props: PropsForm) {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { status, token, user } = useAppSelector((state) => state.auth);
 
     async function onFinish(values: any) {
-        console.log('values :>> ', values);
+        // console.log('values :>> ', values);
+        const { username, email, password, confirmPassword, passwordHint } =
+            values;
+
         // prepare payload
+        const data: DataSignUp = {
+            name: username,
+            email: email,
+            password: password,
+            confirmPassword: confirmPassword,
+            passwordHint: passwordHint,
+        };
 
-        // send request
-        // display loading-message
-        const hide = message.loading('Register in progress...', 0);
-        try {
-            // receive response
-            const response = await new Promise((value) =>
-                setTimeout(() => {
-                    const random = Math.random() * 10 + 1;
-                    value(random);
-                }, 3000)
-            );
-            // console.log('response :>> ', response);
-            if ((response as number) < 6) throw new Error('something error');
-
-            message.success(
-                'Sign-up successful! Please check your mailbox.',
-                3
-            );
-            hide();
-            // redirect to sign-in page
-            navigate(routes.auth.signin);
-        } catch (error) {
-            // display error-message
-            message.error('Sign-up failed! Please try again after 1-min.', 3);
-            hide();
-        }
+        // send spi
+        const hide = message.loading('Sign-up in progress...', 0);
+        dispatch(apiSignUp(data))
+            .then(() => {
+                console.log('status :>> ', status);
+                console.log('token :>> ', token);
+                console.log('user :>> ', user);
+                message.success(
+                    'Sign-up successful! Please receive validation email.'
+                );
+                hide();
+                navigate(routes.auth.signin);
+            })
+            .catch((error) => {
+                message.error('Sign-up failed! Error: ' + error.message);
+                hide();
+            });
     }
 
     return (
@@ -144,6 +149,7 @@ function Form(props: PropsForm) {
                         required: true,
                         message: 'Please input your password',
                     },
+                    // TODO: validate password and confirm-password are equal.
                 ]}
             >
                 <Input
