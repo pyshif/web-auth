@@ -5,7 +5,7 @@ export type { DataForgot, DataResetPasswordByLink } from './v1/auth/forgot';
 export type { DataResetPassword } from './v1/auth/reset';
 export type { DataSignIn } from './v1/auth/signin';
 export type { DataSignUp } from './v1/auth/signup';
-export type { DataEditUserInfo, DataEditUserEmail, DataEditUserAvatar } from './v1/auth/user';
+export type { DataUpdateUserAvatar } from './v1/auth/user';
 
 // create custom axios
 const instance = axios.create({

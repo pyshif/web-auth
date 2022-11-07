@@ -3,36 +3,7 @@ import { AxiosInstance } from 'axios';
 import { reverse } from 'named-urls';
 
 // request payload
-export type DataEditUserInfo = {
-    name?: string,
-    birthday?: string,
-    phone?: string,
-};
-
-export type DataEditUserEmail = {
-    email: string
-}
-
-export type DataEditUserAvatar = FormData;
-
-// response payload
-export type ResponseEditUserInfo = {
-    headers: {
-        status: string | '403' | '401' | '200',
-    }
-}
-
-export type ResponseEditUserEmail = {
-    headers: {
-        status: string | '403' | '401' | '200',
-    }
-}
-
-export type ResponseEditUserAvatar = {
-    headers: {
-        status: string | '403' | '200',
-    }
-}
+export type DataUpdateUserAvatar = FormData;
 
 // axios
 function User(axios: AxiosInstance) {
@@ -44,7 +15,7 @@ function User(axios: AxiosInstance) {
                 headers: { Authorization: `Bearer ${accessToken}` }
             })
         },
-        editUserName: (accessToken: string, name: string) => {
+        updateUserName: (accessToken: string, name: string) => {
             return axios({
                 method: 'POST',
                 url: routes.auth.user.name.POST,
@@ -54,7 +25,7 @@ function User(axios: AxiosInstance) {
                 headers: { Authorization: `Bearer ${accessToken}` }
             });
         },
-        editUserBirthday: (accessToken: string, birthday: string) => {
+        updateUserBirthday: (accessToken: string, birthday: string) => {
             return axios({
                 method: 'POST',
                 url: routes.auth.user.birthday.POST,
@@ -64,7 +35,7 @@ function User(axios: AxiosInstance) {
                 headers: { Authorization: `Bearer ${accessToken}` }
             })
         },
-        editUserPhone: (accessToken: string, phone: string) => {
+        updateUserPhone: (accessToken: string, phone: string) => {
             return axios({
                 method: 'POST',
                 url: routes.auth.user.phone.POST,
@@ -74,15 +45,27 @@ function User(axios: AxiosInstance) {
                 headers: { Authorization: `Bearer ${accessToken}` }
             })
         },
-        editUserEmail: (accessToken: string, data: DataEditUserEmail) => {
+        updateUserGender: (accessToken: string, gender: 'male' | 'female') => {
+            return axios({
+                method: 'POST',
+                url: routes.auth.user.gender.POST,
+                data: {
+                    gender
+                },
+                headers: { Authorization: `Bearer ${accessToken}` }
+            })
+        },
+        updateUserEmail: (accessToken: string, email: string) => {
             return axios({
                 method: 'POST',
                 url: routes.auth.user.email.POST,
-                data,
+                data: {
+                    email
+                },
                 headers: { Authorization: `Bearer ${accessToken}` }
             });
         },
-        editUserAvatar: (accessToken: string, data: DataEditUserAvatar) => {
+        updateUserAvatar: (accessToken: string, data: DataUpdateUserAvatar) => {
             return axios({
                 method: 'POST',
                 url: routes.auth.user.avatar.POST,
@@ -92,7 +75,13 @@ function User(axios: AxiosInstance) {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-        }
+        },
+        validateUserNewEmail: (linkToken: string) => {
+            return axios({
+                method: 'GET',
+                url: reverse(routes.auth.user.email._token.GET, { _token: linkToken }),
+            });
+        },
     }
 }
 

@@ -52,8 +52,14 @@ const routes = {
             phone: include('phone/', {
                 POST: ''
             }),
+            gender: include('gender/', {
+                POST: ''
+            }),
             email: include('email/', {
                 POST: '',
+                _token: include(':_token/', {
+                    GET: '',
+                })
             }),
             avatar: include('avatar/', {
                 POST: ''
