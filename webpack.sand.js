@@ -8,7 +8,7 @@ module.exports = (env) => {
     console.log('env :>> ', env);
 
     const test = {
-        entry: './test/index.tsx'
+        entry: './sand/index.tsx'
     }
 
     switch (env.mode) {

@@ -8,7 +8,7 @@
         "build": "webpack --env mode=prod -c ./webpack.prod.js",
         "prod": "http-server --port 3000 -P http://localhost:3000? ./build",
         "test": "jest",
-        "sand": "webpack s --env mode=dev -c ./webpack.test.js"
+        "sand": "webpack s --env mode=dev -c ./webpack.sand.js"
     },
     "keywords": [],
     "author": "",
@@ -58,6 +58,7 @@
         "antd": "^4.23.5",
         "axios": "^1.1.3",
         "gsap": "^3.11.3",
+        "jwt-decode": "^3.1.2",
         "lodash": "^4.17.21",
         "named-urls": "^2.0.1",
         "react": "^18.2.0",
