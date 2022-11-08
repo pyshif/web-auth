@@ -39,12 +39,12 @@ const initialState: StateAuth = {
     error: null,
     token: '',
     user: {
-        name: 'unknown',
-        birthday: 'YYYY-MM-DD',
-        phone: '+886911000111',
-        gender: 'male',
+        name: '',
+        birthday: '',
+        phone: '',
+        gender: '',
         avatar: '',
-        email: 'unknown@mail.com'
+        email: ''
     },
 };
 
@@ -357,12 +357,20 @@ const authSlice = createSlice({
             .addCase(apiSignOut.fulfilled, (state, action) => {
                 // console.log('fulfilled :>>', state, action);
                 state.status = 'succeeded';
-
+                console.log('initialState :>> ', initialState);
+                state.token = '';
+                state.user = {
+                    name: '',
+                    birthday: '',
+                    phone: '',
+                    gender: '',
+                    avatar: '',
+                    email: ''
+                }
             })
             .addCase(apiSignOut.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
-
             })
             // forgot
             .addCase(apiForgotPassword.pending, (state, action) => {
