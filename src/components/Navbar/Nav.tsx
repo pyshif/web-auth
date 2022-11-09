@@ -9,6 +9,7 @@ import Offcanvas from 'components/Offcanvas';
 import List from 'components/List';
 import IconLink from 'components/IconLink';
 import Link, { PropsLink } from 'components/Link';
+import SignOutButton from 'components/SignOutButton';
 
 type PropsNav = {
     className?: string;
@@ -67,6 +68,7 @@ export function MobileNav(props: PropsNav) {
     return (
         <nav className={options.className}>
             <IconButton icon="bars" onClick={handleHiddenState} />
+            <SignOutButton style={{ marginLeft: '1rem' }} />
             <BlurBg show={!hidden} onClick={handleHiddenState} />
             <Offcanvas
                 show={!hidden}
@@ -97,6 +99,7 @@ export function TabletNav(props: PropsNav) {
             >
                 auth
             </NavLink>,
+            <SignOutButton />,
         ];
 
         return <List payload={payload} direction="horizontal" />;

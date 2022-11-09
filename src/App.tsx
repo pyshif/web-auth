@@ -1,9 +1,13 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import routes from 'utils/routes';
 import 'styles/App.css';
 import 'antd/dist/antd.css';
 import Loading from 'components/Loading';
+
+// redux
+import { useAppDispatch } from 'store';
+import { apiRequestToken } from 'store/features/authSlice';
 
 // page
 const Layout = lazy(() => import('pages/Layout'));
@@ -16,46 +20,65 @@ const Reset = lazy(() => import('pages/Auth/Reset'));
 const User = lazy(() => import('pages/User'));
 const Error = lazy(() => import('pages/Error'));
 
+// common function
+function lazyPage(Component: any) {
+    return (
+        <Suspense fallback={<Loading />}>
+            <Component />
+        </Suspense>
+    );
+}
+
+// hook
+function useRequestToken() {
+    // request access-token by refresh-token which store in cookies (http-only, secure)
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(apiRequestToken())
+            .then(() => {
+                console.log('request token success!');
+            })
+            .catch((error) => {
+                console.log('request token failed!');
+            });
+    }, []);
+}
+
 function App() {
-    function pages(C: any) {
-        return (
-            <Suspense fallback={<Loading />}>
-                <C />
-            </Suspense>
-        );
-    }
+    useRequestToken();
 
     return (
         <BrowserRouter>
             <Routes>
-                <Route path={routes.home} element={pages(Layout)}>
-                    <Route path={routes.auth.self} element={pages(Auth)}>
+                <Route path={routes.home} element={lazyPage(Layout)}>
+                    <Route path={routes.auth.self} element={lazyPage(Auth)}>
                         <Route
                             path={routes.auth.signin}
-                            element={pages(SignIn)}
+                            element={lazyPage(SignIn)}
                         ></Route>
                         <Route
                             path={routes.auth.signup}
-                            element={pages(SignUp)}
+                            element={lazyPage(SignUp)}
                         ></Route>
                         <Route
                             path={routes.auth.forgot}
-                            element={pages(Forgot)}
+                            element={lazyPage(Forgot)}
                         ></Route>
                         <Route
                             path={routes.auth.reset.self}
-                            element={pages(Reset)}
+                            element={lazyPage(Reset)}
                         ></Route>
                         <Route
                             path={routes.auth.reset.resetId}
-                            element={pages(Reset)}
+                            element={lazyPage(Reset)}
                         ></Route>
                         <Route index element={<Navigate to="/404" />}></Route>
                     </Route>
-                    <Route index element={pages(Home)}></Route>
-                    <Route path={routes.user} element={pages(User)}></Route>
+                    <Route index element={lazyPage(Home)}></Route>
+                    <Route path={routes.user} element={lazyPage(User)}></Route>
                 </Route>
-                <Route path="*" element={pages(Error)}></Route>
+                <Route path="*" element={lazyPage(Error)}></Route>
             </Routes>
         </BrowserRouter>
     );

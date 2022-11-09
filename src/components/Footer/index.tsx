@@ -59,7 +59,7 @@ function Footer() {
                     <RunIcon ref={RunRef} />
                     <FlagIcon ref={FlagRef} />
                 </Way> */}
-                <RunIcon></RunIcon>
+                {/* <RunIcon></RunIcon> */}
                 {/* content */}
                 <div className="flex flex-wrap justify-center mb-3">
                     <About />

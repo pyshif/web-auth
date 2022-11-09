@@ -13,7 +13,8 @@ export type FaIcon =
     | 'envelope'
     | 'paper-plane'
     | 'circle-user'
-    | 'github';
+    | 'github'
+    | 'right-from-bracket';
 
 export type OtherIcon = '';
 
