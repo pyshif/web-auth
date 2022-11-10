@@ -108,7 +108,6 @@ export const apiValidateToken = createAsyncThunk<any, string>('auth/validateToke
 export const apiRequestToken = createAsyncThunk<any>('auth/requestToken', async () => {
     const response = await api.v1.auth.requestToken() as unknown as any;
     const { accessToken } = response.data;
-    // console.log('accessToken :>> ', accessToken);
     if (!accessToken) {
         throw new Error('Invalid access-token!');
     }
@@ -209,6 +208,9 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        // resetStatus: (state) => {
+        //     state.status = 'idle';
+        // }
     },
     extraReducers: (builder) => {
         builder
@@ -226,7 +228,7 @@ const authSlice = createSlice({
             .addCase(apiHealth.rejected, (state, action) => {
                 console.log('rejected :>>', state, action);
                 state.status = 'failed';
-
+                throw new Error();
             })
             // sign-up
             .addCase(apiSignUp.pending, (state, action) => {
@@ -241,6 +243,7 @@ const authSlice = createSlice({
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
                 state.error = action.payload as AxiosError;
+                throw new Error();
             })
             // sign-in
             .addCase(apiSignIn.pending, (state, action) => {
@@ -254,9 +257,10 @@ const authSlice = createSlice({
                 state.user = action.payload.user;
             })
             .addCase(apiSignIn.rejected, (state, action) => {
-                // console.log('rejected :>>', state, action);
+                // console.log('rejected :>>', action);
                 state.status = 'failed';
                 state.error = action.payload as AxiosError;
+                throw new Error();
             })
             // token
             .addCase(apiValidateToken.pending, (state, action) => {
@@ -271,6 +275,7 @@ const authSlice = createSlice({
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
                 state.error = action.payload as AxiosError;
+                throw new Error();
             })
             .addCase(apiRequestToken.pending, (state, action) => {
                 // console.log('pending :>>', state, action);
@@ -285,6 +290,7 @@ const authSlice = createSlice({
             .addCase(apiRequestToken.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
+                throw new Error();
             })
             // sign-out
             .addCase(apiSignOut.pending, (state, action) => {
@@ -309,6 +315,7 @@ const authSlice = createSlice({
             .addCase(apiSignOut.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
+                throw new Error();
             })
             // forgot
             .addCase(apiForgotPassword.pending, (state, action) => {
@@ -324,6 +331,7 @@ const authSlice = createSlice({
             .addCase(apiForgotPassword.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
+                throw new Error();
 
             })
             .addCase(apiResetPasswordByLink.pending, (state, action) => {
@@ -339,7 +347,7 @@ const authSlice = createSlice({
             .addCase(apiResetPasswordByLink.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
-
+                throw new Error();
             })
             // reset
             .addCase(apiResetPassword.pending, (state, action) => {
@@ -355,7 +363,7 @@ const authSlice = createSlice({
             .addCase(apiResetPassword.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
-
+                throw new Error;
             })
             // user
             .addCase(apiUpdateUserName.pending, (state, action) => {
@@ -371,7 +379,7 @@ const authSlice = createSlice({
             .addCase(apiUpdateUserName.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
-
+                throw new Error;
             })
             .addCase(apiUpdateUserBirthday.pending, (state, action) => {
                 // console.log('pending :>>', state, action);
@@ -386,7 +394,7 @@ const authSlice = createSlice({
             .addCase(apiUpdateUserBirthday.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
-
+                throw new Error;
             })
             .addCase(apiUpdateUserPhone.pending, (state, action) => {
                 // console.log('pending :>>', state, action);
@@ -396,12 +404,11 @@ const authSlice = createSlice({
             .addCase(apiUpdateUserPhone.fulfilled, (state, action) => {
                 // console.log('fulfilled :>>', state, action);
                 state.status = 'succeeded';
-
             })
             .addCase(apiUpdateUserPhone.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
-
+                throw new Error;
             })
             .addCase(apiUpdateUserGender.pending, (state, action) => {
                 // console.log('pending :>>', state, action);
@@ -416,7 +423,7 @@ const authSlice = createSlice({
             .addCase(apiUpdateUserGender.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
-
+                throw new Error;
             })
             .addCase(apiUpdateUserEmail.pending, (state, action) => {
                 // console.log('pending :>>', state, action);
@@ -426,27 +433,24 @@ const authSlice = createSlice({
             .addCase(apiUpdateUserEmail.fulfilled, (state, action) => {
                 // console.log('fulfilled :>>', state, action);
                 state.status = 'succeeded';
-
             })
             .addCase(apiUpdateUserEmail.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
-
+                throw new Error;
             })
             .addCase(apiUpdateUserAvatar.pending, (state, action) => {
                 // console.log('pending :>>', state, action);
                 state.status = 'loading';
-
             })
             .addCase(apiUpdateUserAvatar.fulfilled, (state, action) => {
                 // console.log('fulfilled :>>', state, action);
                 state.status = 'succeeded';
-
             })
             .addCase(apiUpdateUserAvatar.rejected, (state, action) => {
                 // console.log('rejected :>>', state, action);
                 state.status = 'failed';
-
+                throw new Error;
             })
     }
 });

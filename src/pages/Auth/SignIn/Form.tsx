@@ -47,12 +47,12 @@ function Form() {
         const hide = message.loading('Sign-in progress...', 0);
         dispatch(apiSignIn(data))
             .then(() => {
-                message.success('Sign-in successful!');
-                hide();
+                message.success('Sign-in successful!'), 3;
                 navigate(routes.user);
+                hide();
             })
             .catch((error) => {
-                message.error('Sign-in failed! Error: ' + error.message);
+                message.error('Sign-in failed!', 3);
                 hide();
             });
     }
