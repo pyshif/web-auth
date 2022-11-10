@@ -108,7 +108,7 @@ export const apiValidateToken = createAsyncThunk<any, string>('auth/validateToke
 export const apiRequestToken = createAsyncThunk<any>('auth/requestToken', async () => {
     const response = await api.v1.auth.requestToken() as unknown as any;
     const { accessToken } = response.data;
-    console.log('accessToken :>> ', accessToken);
+    // console.log('accessToken :>> ', accessToken);
     if (!accessToken) {
         throw new Error('Invalid access-token!');
     }

@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { Avatar as AvatarOfAntd, Form, message } from 'antd';
+import { Avatar as AvatarOfAntd, Form as FormOfAntd, message } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useAppSelector, useAppDispatch } from 'store';
 import { apiUpdateUserAvatar } from 'store/features/authSlice';
@@ -24,18 +24,20 @@ const Container = styled.div`
 const Input = styled.input.attrs({
     type: 'file',
     name: 'avatar',
-})`
-    /* visibility: hidden; */
-`;
+})``;
 
 // Avatar
-type PropsAvatar = React.ComponentProps<typeof AvatarOfAntd>;
+type PropsAvatar = React.ComponentProps<typeof AvatarOfAntd> & {
+    uploading: boolean;
+    endUpload: () => void;
+};
 
 function Avatar(props: PropsAvatar) {
-    const { size, icon, src, ...rest } = props;
-    // const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
+    const { size, icon, src, uploading, endUpload, ...rest } = props;
     const dispatch = useAppDispatch();
     const { token } = useAppSelector((state) => state.auth);
+    const dataRef = useRef<FormData | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
 
     const validateFileList = (files: FileList): boolean => {
         // console.log('files :>> ', files);
@@ -70,24 +72,9 @@ function Avatar(props: PropsAvatar) {
         return true;
     };
 
-    const generatePayload = async (files: FileList) => {
+    const generatePayload = async (files: FileList): Promise<FormData> => {
         const data = new FormData();
         const key = 'avatar';
-
-        // // wait all files read as data url and append to form-data
-        // await Promise.all(
-        //     // return numbers of promise
-        //     Array.from(files).map((f) => {
-        //         return new Promise((resolve) => {
-        //             const reader = new FileReader();
-        //             reader.onload = () => {
-        //                 resolve(''); // fulfilled
-        //                 setPreview(reader.result);
-        //             };
-        //             reader.readAsDataURL(f);
-        //         });
-        //     })
-        // );
 
         Array.from(files).forEach((f) => {
             data.append(key, f);
@@ -95,16 +82,28 @@ function Avatar(props: PropsAvatar) {
 
         return data;
     };
-
-    const handleUploadAvatar = async (event: any) => {
+    // handle preview and payload
+    const handlePreviewAvatar = async (event: any) => {
         // validate
         if (!validateFileList(event.target.files)) return;
         // create payload
+        dataRef.current = await generatePayload(event.target.files);
+        // preview
+        const reader = new FileReader();
+        reader.onload = () => {
+            if (!reader.result) return;
+            setPreview(reader.result as string);
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    };
+
+    // upload avatar by props of parent-component's state
+    const handleUploadAvatar = () => {
+        // payload
         const accessToken = token;
-        const data = await generatePayload(event.target.files);
+        const data = dataRef.current as FormData;
         // send request
         const hide = message.loading('Update avatar in progress...', 0);
-
         dispatch(apiUpdateUserAvatar({ accessToken, data }))
             .then(() => {
                 message.success('Update avatar success!', 3);
@@ -119,18 +118,24 @@ function Avatar(props: PropsAvatar) {
             });
     };
 
-    // demand: onChange -> upload avatar and preview
-    // onFinish -> done , send request
+    useEffect(() => {
+        if (uploading && dataRef.current != null) {
+            handleUploadAvatar();
+            dataRef.current = null;
+        }
+        endUpload();
+        // console.log('uploading :>> ', uploading);
+    }, [uploading]);
 
     return (
         <Container>
             <AvatarOfAntd
                 size={64}
                 icon={<UserOutlined style={{ verticalAlign: 'middle' }} />}
-                src={src}
+                src={!preview ? src : preview}
                 {...rest}
             />
-            <Input onChange={handleUploadAvatar} />
+            <Input onChange={handlePreviewAvatar} />
         </Container>
     );
 }

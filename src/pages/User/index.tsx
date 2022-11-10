@@ -1,38 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import Hidden from 'components/Hidden';
 import Sep from 'components/Sep';
+import { Card, Button, Form, Input, message } from 'antd';
+import { useAppDispatch, useAppSelector } from 'store/index';
 import {
-    Avatar,
-    Card,
-    Button,
-    Upload,
-    Form as F,
-    Input,
-    DatePicker,
-    message,
-} from 'antd';
-import type { UploadProps, DatePickerProps } from 'antd';
-import { UserOutlined, UploadOutlined } from '@ant-design/icons';
-import AvatarJPG from 'images/avatar-example.jpg';
-
-// Get
-// TODO: Get Profile Data from Redux
-
-// Set
-// TODO: Upload Avatar: click -> choose file -> preview -> send to backend -> message(progress...) -> success -> message(success) -> update Redux
-// TODO: Update Profile: enter edit -> update data -> done -> send to backend -> message(progress...) -> sucess -> message(success) -> update Redux
-
-const Section = styled.section`
-    /* input::placeholder {
-        color: green;
-    } */
-    input[disabled],
-    .ant-picker.ant-picker-disabled {
-        color: rgb(0, 0, 0);
-        background: rgb(255, 255, 255);
-    }
-`;
+    apiUpdateUserName,
+    apiUpdateUserBirthday,
+    apiUpdateUserPhone,
+    apiUpdateUserGender,
+    apiUpdateUserEmail,
+    apiRequestToken,
+    apiSignOut,
+} from 'store/features/authSlice';
+import Avatar from 'components/Avatar';
 
 const Profile = styled(Card)`
     width: 100%;
@@ -40,139 +20,158 @@ const Profile = styled(Card)`
     margin: 0 auto;
 `;
 
-type PropsUser = {
-    avatar: string;
-    username: string;
-    birthday: string;
-    gender: string;
-    phone: string;
-    email: string;
-};
-
-const propsUpload: UploadProps = {
-    action: 'https://localhost:3000/upload.do',
-    beforeUpload: (file) => {
-        console.log('file :>> ', file);
-        const isPNG = file.type === 'image/png';
-        const isJPG = file.type === 'image/jpg' || file.type === 'image/jpeg';
-        if (!isPNG && !isJPG) {
-            message.error(`${file.name} is not a png or jpg file!`);
-        }
-
-        return isPNG || isJPG || Upload.LIST_IGNORE;
-    },
-    onChange: (info) => {
-        console.log(info.fileList);
-    },
-};
+type PropsUser = void;
 
 function User(props: PropsUser) {
-    const [profile, setProfile] = useState<PropsUser>({
-        avatar: AvatarJPG,
-        username: 'Liz Chen',
-        birthday: '1993-01-01',
-        gender: 'female',
-        phone: '0911-111-111',
-        email: 'liz@mail.com',
-    });
-    const [readOnly, setReadOnly] = useState<boolean>(true);
+    const dispatch = useAppDispatch();
+    const { token, user } = useAppSelector((state) => state.auth);
+    const [uploading, setUploading] = useState<boolean>(false);
 
     async function onFinish(values: any) {
-        console.log('onFinish');
         console.log('values :>> ', values);
-        // prepare payload
+        // data
+        const { name, birthday, gender, phone, email } = values;
+        const promiseArr = new Array();
+        let mustToSignOut = false;
 
-        // send request (promise)
-        // display loading-message
-        const hide = message.loading('profile updating in progress...', 0);
-        try {
-            // receive success-response
-            const response = await new Promise((value) =>
-                setTimeout(() => {
-                    const random = Math.random() * 10 + 1;
-                    console.log('random :>> ', random);
-                    value(random);
-                }, 5000)
-            );
-            if ((response as number) < 5) throw new Error('something error');
-            // display success-message, and hide loading-message
-            message.success('profile updating successful!', 3);
-            hide();
-            // re-disabled form
-            setReadOnly(true);
-        } catch (error) {
-            // receive failed-response
-            console.log('error :>> ', error);
-            // display failed-message, and hide loading-message
-            message.error('profile updating failed!', 3);
-            hide();
+        // updating avatar
+        setUploading(true);
+
+        // updating username
+        if (name !== user.name) {
+            const hide = message.loading('Update username in progress...', 0);
+            dispatch(apiUpdateUserName({ accessToken: token, name: name }))
+                .then(() => {
+                    message.success('Update username success!', 3);
+                    hide();
+                })
+                .catch((error) => {
+                    message.error('Update username failed!', 3);
+                    hide();
+                });
         }
-    }
 
-    function onReadOnly(e: React.MouseEvent<HTMLButtonElement>) {
-        console.log('onReadOnly');
-        setReadOnly(false);
+        // updaing birthday
+        if (birthday !== user.birthday) {
+            const hide = message.loading('Update birthday in progress...', 0);
+            dispatch(
+                apiUpdateUserBirthday({
+                    accessToken: token,
+                    birthday: birthday,
+                })
+            )
+                .then(() => {
+                    message.success('Update birthday success!', 3);
+                    hide();
+                })
+                .catch((error) => {
+                    message.error('Update birthday failed!', 3);
+                    hide();
+                });
+        }
+        // updaing gender
+        if (gender !== user.gender) {
+            const hide = message.loading('Update gender in progress...', 0);
+            dispatch(
+                apiUpdateUserGender({
+                    accessToken: token,
+                    gender: gender,
+                })
+            )
+                .then(() => {
+                    message.success('Update gender success!', 3);
+                    hide();
+                })
+                .catch((error) => {
+                    message.error('Update gender failed!', 3);
+                    hide();
+                });
+        }
+        // updating phone number
+        if (phone !== user.phone) {
+            const hide = message.loading(
+                'Update phone number in progress...',
+                0
+            );
+            dispatch(
+                apiUpdateUserPhone({
+                    accessToken: token,
+                    phone: phone,
+                })
+            )
+                .then(() => {
+                    message.success('Update phone number success!', 3);
+                    hide();
+                })
+                .catch((error) => {
+                    message.error('Update phone number failed!', 3);
+                    hide();
+                });
+        }
+        // updating email address
+        if (email !== user.email) {
+            const hide = message.loading('Update email address in progress', 0);
+            dispatch(
+                apiUpdateUserEmail({
+                    accessToken: token,
+                    email: email,
+                })
+            )
+                .then(() => {
+                    mustToSignOut = true; // because refresh/access token need reset
+                    message.success('Update email address success!', 3);
+                    hide();
+                })
+                .catch((error) => {
+                    message.success('Update email address failed!', 3);
+                    hide();
+                });
+        }
     }
 
     return (
-        <Section>
-            <div className="container mx-auto px-5 py-9">
-                <Profile title="User Profile">
-                    <F
-                        name="user-profile"
-                        labelCol={{ span: 6 }}
-                        onFinish={onFinish}
-                        disabled={readOnly}
-                        initialValues={profile}
-                    >
-                        <Upload {...propsUpload}>
-                            <Avatar
-                                size={64}
-                                icon={
-                                    <UserOutlined
-                                        style={{ verticalAlign: 'middle' }}
-                                    />
-                                }
-                                src={profile.avatar}
-                            />
-                        </Upload>
+        <section className="container mx-auto px-5 py-9">
+            <Profile title="User Profile">
+                <Form
+                    name="user-profile"
+                    labelCol={{ span: 6 }}
+                    onFinish={onFinish}
+                    initialValues={user}
+                >
+                    <Avatar
+                        src={user.avatar}
+                        uploading={uploading}
+                        endUpload={() => {
+                            setUploading(false);
+                        }}
+                    />
 
-                        <Sep />
+                    <Sep />
 
-                        <F.Item label="Username" name="username">
-                            <Input type="text" placeholder="username" />
-                        </F.Item>
-                        <F.Item label="Birthday" name="birthday">
-                            <Input type="date" />
-                        </F.Item>
-                        <F.Item label="Gender" name="gender">
-                            <Input placeholder="male, female, other" />
-                        </F.Item>
-                        <F.Item label="Phone" name="phone">
-                            <Input type="tel" placeholder="0911-111-111" />
-                        </F.Item>
-                        <F.Item label="Email" name="email">
-                            <Input
-                                type="email"
-                                placeholder="example@mail.com"
-                            />
-                        </F.Item>
-                        <Hidden state={readOnly}>
-                            <F.Item className="float-right">
-                                <Button type="default" htmlType="submit" danger>
-                                    Done
-                                </Button>
-                            </F.Item>
-                        </Hidden>
-                    </F>
-                    <Hidden state={!readOnly}>
-                        <Button className="float-right" onClick={onReadOnly}>
-                            Edit
+                    <Form.Item label="Username" name="name">
+                        <Input type="text" placeholder="username" />
+                    </Form.Item>
+                    <Form.Item label="Birthday" name="birthday">
+                        <Input type="date" />
+                    </Form.Item>
+                    <Form.Item label="Gender" name="gender">
+                        <Input placeholder="male or female" />
+                    </Form.Item>
+                    <Form.Item label="Phone" name="phone">
+                        <Input type="tel" placeholder="0900000000" />
+                    </Form.Item>
+                    <Form.Item label="Email" name="email">
+                        <Input type="email" placeholder="example@mail.com" />
+                    </Form.Item>
+
+                    <Form.Item className="float-right">
+                        <Button type="default" htmlType="submit">
+                            Update
                         </Button>
-                    </Hidden>
-                </Profile>
-            </div>
-        </Section>
+                    </Form.Item>
+                </Form>
+            </Profile>
+        </section>
     );
 }
 
