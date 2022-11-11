@@ -2,7 +2,7 @@ import routes from 'api/v1/routes';
 import { AxiosInstance } from 'axios';
 import { reverse } from 'named-urls';
 
-// request payload
+// request data type
 export type DataForgot = {
     email: string,
     passwordHint: string,
@@ -11,19 +11,6 @@ export type DataForgot = {
 export type DataResetPasswordByLink = {
     newPassword: string,
     confirmPassword: string,
-};
-
-// response payload
-export type ResponseForgot = {
-    headers: {
-        status: string | '401' | '403' | '200';
-    }
-};
-
-export type ResponseResetPasswordByLink = {
-    headers: {
-        status: string | '403' | '200';
-    }
 };
 
 // axios

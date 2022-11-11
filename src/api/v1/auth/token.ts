@@ -1,6 +1,11 @@
 import { AxiosInstance } from "axios";
 import routes from 'api/v1/routes';
 
+// response data type
+export type DataResponseRequestToken = {
+    accessToken: string;
+};
+
 
 function token(axios: AxiosInstance) {
     return {

@@ -2,20 +2,13 @@ import { AxiosInstance } from 'axios';
 import routes from 'api/v1/routes';
 import { reverse } from 'named-urls';
 
-// request payload
+// request data type
 export type DataSignUp = {
     name: string,
     email: string,
     password: string,
     confirmPassword: string,
     passwordHint: string,
-};
-
-// response payload
-export type ResponseSignUp = {
-    headers: {
-        status: string | '403' | '401' | '400' | '200';
-    }
 };
 
 // axios

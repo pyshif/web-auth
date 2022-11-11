@@ -2,7 +2,7 @@ import routes from 'api/v1/routes';
 import { AxiosInstance } from 'axios';
 import { reverse } from 'named-urls';
 
-// request payload
+// request data type
 export type DataUpdateUserAvatar = FormData;
 
 // axios
