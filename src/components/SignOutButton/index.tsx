@@ -15,16 +15,16 @@ function SignOutButton(props: PropsSignOutButton) {
 
     const handleSignOut = useCallback(() => {
         const hide = message.loading('Sign-out in progress...', 0);
-        dispatch(apiSignOut())
-            .then(() => {
-                message.success('Sign-out successful!');
-                hide();
-                navigate(routes.home);
-            })
-            .catch((error) => {
-                message.error('Sign-out failed! Error: ' + error.message);
-                hide();
-            });
+        dispatch(apiSignOut()).then((action) => {
+            const { error } = action as unknown as any;
+            if (error) {
+                message.error('Sign-out failed!', 3);
+                return hide();
+            }
+            message.success('Sign-out successful!', 3);
+            navigate(routes.home);
+            return hide();
+        });
     }, []);
 
     const { style, ...rest } = props;

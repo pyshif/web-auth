@@ -104,18 +104,15 @@ function Avatar(props: PropsAvatar) {
         const data = dataRef.current as FormData;
         // send request
         const hide = message.loading('Update avatar in progress...', 0);
-        dispatch(apiUpdateUserAvatar({ accessToken, data }))
-            .then(() => {
-                message.success('Update avatar success!', 3);
-                hide();
-            })
-            .catch((error) => {
-                message.error(
-                    'Update avatar failed! Error: ' + error.message,
-                    3
-                );
-                hide();
-            });
+        dispatch(apiUpdateUserAvatar({ accessToken, data })).then((action) => {
+            const { error } = action as unknown as any;
+            if (error) {
+                message.error('Update avatar failed!', 3);
+                return hide();
+            }
+            message.success('Update avatar success!', 3);
+            return hide();
+        });
     };
 
     useEffect(() => {

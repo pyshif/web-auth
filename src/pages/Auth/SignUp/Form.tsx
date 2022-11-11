@@ -46,21 +46,19 @@ function Form(props: PropsForm) {
 
         // send spi
         const hide = message.loading('Sign-up in progress...', 0);
-        dispatch(apiSignUp(data))
-            .then(() => {
-                console.log('status :>> ', status);
-                console.log('token :>> ', token);
-                console.log('user :>> ', user);
-                message.success(
-                    'Sign-up successful! Please receive validation email.'
-                );
-                hide();
-                navigate(routes.auth.signin);
-            })
-            .catch((error) => {
-                message.error('Sign-up failed! Error: ' + error.message);
-                hide();
-            });
+        dispatch(apiSignUp(data)).then((action) => {
+            const { error } = action as unknown as any;
+            if (error) {
+                message.error('Sign-up failed!', 3);
+                return hide();
+            }
+            message.success(
+                'Sign-up success! Please receive validation email.',
+                3
+            );
+            navigate(routes.auth.signin);
+            return hide();
+        });
     }
 
     return (

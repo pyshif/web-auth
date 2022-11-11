@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import routes from 'utils/routes';
 import styled from 'styled-components';
 import Sep from 'components/Sep';
 import { Card, Button, Form, Input, message } from 'antd';
@@ -9,7 +11,6 @@ import {
     apiUpdateUserPhone,
     apiUpdateUserGender,
     apiUpdateUserEmail,
-    apiRequestToken,
     apiSignOut,
 } from 'store/features/authSlice';
 import Avatar from 'components/Avatar';
@@ -23,32 +24,32 @@ const Profile = styled(Card)`
 type PropsUser = void;
 
 function User(props: PropsUser) {
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { token, user } = useAppSelector((state) => state.auth);
     const [uploading, setUploading] = useState<boolean>(false);
 
     async function onFinish(values: any) {
-        console.log('values :>> ', values);
         // data
         const { name, birthday, gender, phone, email } = values;
-        const promiseArr = new Array();
-        let mustToSignOut = false;
 
         // updating avatar
         setUploading(true);
 
         // updating username
         if (name !== user.name) {
-            const hide = message.loading('Update username in progress...', 0);
-            dispatch(apiUpdateUserName({ accessToken: token, name: name }))
-                .then(() => {
-                    message.success('Update username success!', 3);
-                    hide();
-                })
-                .catch((error) => {
-                    message.error('Update username failed!', 3);
-                    hide();
-                });
+            const hide = message.loading('Update user name in progress...', 0);
+            dispatch(
+                apiUpdateUserName({ accessToken: token, name: name })
+            ).then((action) => {
+                const { error } = action as unknown as any;
+                if (error) {
+                    message.error('Update user name failed!', 3);
+                    return hide();
+                }
+                message.success('Update user name success!', 3);
+                return hide();
+            });
         }
 
         // updaing birthday
@@ -59,15 +60,15 @@ function User(props: PropsUser) {
                     accessToken: token,
                     birthday: birthday,
                 })
-            )
-                .then(() => {
-                    message.success('Update birthday success!', 3);
-                    hide();
-                })
-                .catch((error) => {
+            ).then((action) => {
+                const { error } = action as unknown as any;
+                if (error) {
                     message.error('Update birthday failed!', 3);
-                    hide();
-                });
+                    return hide();
+                }
+                message.success('Update birthday success!', 3);
+                return hide();
+            });
         }
         // updaing gender
         if (gender !== user.gender) {
@@ -77,15 +78,15 @@ function User(props: PropsUser) {
                     accessToken: token,
                     gender: gender,
                 })
-            )
-                .then(() => {
-                    message.success('Update gender success!', 3);
-                    hide();
-                })
-                .catch((error) => {
+            ).then((action) => {
+                const { error } = action as unknown as any;
+                if (error) {
                     message.error('Update gender failed!', 3);
-                    hide();
-                });
+                    return hide();
+                }
+                message.success('Update gender success!', 3);
+                return hide();
+            });
         }
         // updating phone number
         if (phone !== user.phone) {
@@ -98,15 +99,15 @@ function User(props: PropsUser) {
                     accessToken: token,
                     phone: phone,
                 })
-            )
-                .then(() => {
-                    message.success('Update phone number success!', 3);
-                    hide();
-                })
-                .catch((error) => {
+            ).then((action) => {
+                const { error } = action as unknown as any;
+                if (error) {
                     message.error('Update phone number failed!', 3);
-                    hide();
-                });
+                    return hide();
+                }
+                message.success('Update phone number success!', 3);
+                return hide();
+            });
         }
         // updating email address
         if (email !== user.email) {
@@ -116,16 +117,26 @@ function User(props: PropsUser) {
                     accessToken: token,
                     email: email,
                 })
-            )
-                .then(() => {
-                    mustToSignOut = true; // because refresh/access token need reset
-                    message.success('Update email address success!', 3);
-                    hide();
-                })
-                .catch((error) => {
+            ).then((action) => {
+                const { error } = action as unknown as any;
+                if (error) {
                     message.success('Update email address failed!', 3);
-                    hide();
+                    return hide();
+                }
+                // have to login again
+                dispatch(apiSignOut()).then((action) => {
+                    message.success('Redirect in 3s...', 3);
+                    setTimeout(() => {
+                        navigate(routes.auth.signin);
+                    }, 3000);
                 });
+
+                message.success(
+                    'Update email address success! Please login again.',
+                    3
+                );
+                return hide();
+            });
         }
     }
 
