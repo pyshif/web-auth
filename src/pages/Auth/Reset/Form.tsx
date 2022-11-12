@@ -3,6 +3,12 @@ import Sep from 'components/Sep';
 import { useNavigate } from 'react-router-dom';
 import { Form as F, Input, Button, message } from 'antd';
 import { LockOutlined } from '@ant-design/icons';
+import { useAppDispatch, useAppSelector } from 'store/index';
+import {
+    apiResetPassword,
+    apiResetPasswordByLink,
+    apiSignOut,
+} from 'store/features/authSlice';
 import Link from 'components/Link';
 import routes from 'utils/routes';
 
@@ -21,43 +27,85 @@ const SubmitButton = styled(Button).attrs({
     width: 100%;
 `;
 
-type PropsForm = {};
+type PropsForm = {
+    resetId: string;
+};
 
 function Form(props: PropsForm) {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { token } = useAppSelector((state) => state.auth);
+
+    const { resetId } = props;
 
     async function onFinish(values: any) {
-        console.log('values :>> ', values);
-        // confirm access token or match params
+        // console.log('values :>> ', values);
+        const { newPassword, confirmPassword } = values;
 
-        // validate values
+        // reset password by access-token
+        if (!resetId) {
+            if (!token) return message.error('Please sign-in first!', 3);
 
-        // prepare payload
+            const accessToken = token;
+            const data = {
+                newPassword,
+                confirmPassword,
+            };
 
-        // send request
-        // display loading-message
-        const hide = message.loading('Reset password in progress...', 0);
-        try {
-            // receive response
-            const response = await new Promise((value) =>
-                setTimeout(() => {
-                    const random = Math.random() * 10 + 1;
-                    value(random);
-                }, 3000)
-            );
+            const hide = message.loading('Reset password in progress', 0);
+            dispatch(apiResetPassword({ accessToken, data }))
+                .then((action) => {
+                    const { error } = action as unknown as any;
+                    if (error) {
+                        message.error('Reset password failed!', 3);
+                        return hide();
+                    }
+                    message.success(
+                        'Reset password success! Please sign-in again',
+                        3
+                    );
+                    return hide();
+                })
+                .then(() => {
+                    dispatch(apiSignOut()).then((action) => {
+                        message.loading(
+                            'Redirect to sign-in page in 3-secs.',
+                            3
+                        );
+                        setTimeout(() => {
+                            navigate(routes.auth.signin);
+                        }, 3000);
+                    });
+                });
+        }
+        // reset password by link
+        else {
+            const linkToken = resetId;
+            const data = {
+                newPassword,
+                confirmPassword,
+            };
 
-            if ((response as number) < 6) throw new Error('something error');
-
-            message.success('Reset password successful!');
-            hide();
-
-            // sign out
-
-            //
-            navigate(routes.auth.signin);
-        } catch (error) {
-            message.error('Reset password failed! Please try again later.');
-            hide();
+            const hide = message.loading('Reset password in progress', 0);
+            dispatch(apiResetPasswordByLink({ linkToken, data }))
+                .then((action) => {
+                    const { error } = action as unknown as any;
+                    if (error) {
+                        message.error('Reset password failed', 3);
+                        return hide();
+                    }
+                    message.success(
+                        'Reset password success! Please sign-in again',
+                        3
+                    );
+                    return hide();
+                })
+                .then(() => {
+                    message.loading('Redirect to sign-in page in 3-secs.', 3);
+                    setTimeout(() => {
+                        navigate(routes.auth.signin);
+                    }, 3000);
+                });
         }
     }
 

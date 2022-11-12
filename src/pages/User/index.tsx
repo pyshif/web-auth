@@ -117,26 +117,28 @@ function User(props: PropsUser) {
                     accessToken: token,
                     email: email,
                 })
-            ).then((action) => {
-                const { error } = action as unknown as any;
-                if (error) {
-                    message.success('Update email address failed!', 3);
+            )
+                .then((action) => {
+                    const { error } = action as unknown as any;
+                    if (error) {
+                        message.success('Update email address failed!', 3);
+                        return hide();
+                    }
+                    message.success(
+                        'Update email address success! Please receive validation email.',
+                        3
+                    );
                     return hide();
-                }
-                // have to login again
-                dispatch(apiSignOut()).then((action) => {
-                    message.success('Redirect in 3s...', 3);
-                    setTimeout(() => {
-                        navigate(routes.auth.signin);
-                    }, 3000);
+                })
+                .then(() => {
+                    // have to login again
+                    dispatch(apiSignOut()).then((action) => {
+                        message.loading('Redirect to sign-in page in 3s...', 3);
+                        setTimeout(() => {
+                            navigate(routes.auth.signin);
+                        }, 3000);
+                    });
                 });
-
-                message.success(
-                    'Update email address success! Please login again.',
-                    3
-                );
-                return hide();
-            });
         }
     }
 

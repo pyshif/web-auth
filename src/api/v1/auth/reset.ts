@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios';
 
 // request data type
 export type DataResetPassword = {
-    password: string,
+    newPassword: string,
     confirmPassword: string,
 };
 
