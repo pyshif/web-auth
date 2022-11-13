@@ -32,6 +32,7 @@ const TA = styled(TextArea)`
     }
 `;
 
+// TODO: complete tell me api features
 function TellMe(props: PropsTellMe) {
     return (
         <section>

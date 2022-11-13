@@ -37,10 +37,10 @@ function useRequestToken() {
     useEffect(() => {
         dispatch(apiRequestToken())
             .then(() => {
-                console.log('request token success!');
+                // console.log('request token success!');
             })
             .catch((error) => {
-                console.log('request token failed!');
+                // console.log('request token failed!');
             });
     }, []);
 }

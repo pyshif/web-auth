@@ -34,10 +34,10 @@ function Form() {
     const { status, token, user } = useAppSelector((state) => state.auth);
 
     async function onFinish(values: any) {
-        // TODO: complete remember feature
+        // console.log('values :>> ', values);
+        const { email, password, remember } = values;
 
         // payload
-        const { email, password } = values;
         const data: DataSignIn = {
             email,
             password,
@@ -53,6 +53,17 @@ function Form() {
             }
             message.success('Sign-in success!', 3);
             navigate(routes.user);
+            // remember feature
+            // FIXME: protect user data in localstorage
+            // cookies -> aes -> user email, password
+            if (remember) {
+                localStorage.setItem(
+                    'C4UR',
+                    JSON.stringify({ email, password })
+                );
+            } else {
+                localStorage.removeItem('C4UR');
+            }
             return hide();
         });
     }
@@ -60,12 +71,26 @@ function Form() {
     function onGoogleButton(e: any) {
         console.log('Received values of form :>> ', e);
         // TODO: complete google login in
+
+        // load google gis library -> define loading handler
+    }
+
+    let localUser = {
+        email: '',
+        password: '',
+    };
+    if (localStorage.getItem('C4UR')) {
+        localUser = JSON.parse(localStorage.getItem('C4UR') as string);
     }
 
     return (
         <SignInForm
             name="auth-signin"
-            initialValues={{ remember: true }}
+            initialValues={{
+                email: localUser.email,
+                password: localUser.password,
+                remember: false,
+            }}
             onFinish={onFinish}
         >
             <F.Item
