@@ -31,6 +31,7 @@ const Wrapper = styled((props: PropsWrapper) => {
     ${(props) => (props.direction == 'horizontal' ? 'display: flex;' : '')}
     ${(props) => (props.direction == 'horizontal' ? 'flex-wrap: nowrap;' : '')}
     margin: 0;
+    align-items: center;
 `;
 
 function List(props: PropsList) {
