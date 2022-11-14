@@ -9,7 +9,6 @@ function useScript(src: string, options?: { async: boolean, defer: boolean }) {
     if (!options) {
         options = { async: false, defer: false }
     }
-    console.log('options :>> ', options);
 
     const [action, setAction] = useState<ActionUseScript>({
         status: 'idle',

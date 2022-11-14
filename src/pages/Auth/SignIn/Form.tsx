@@ -8,6 +8,7 @@ import routes from 'utils/routes';
 import Link from 'components/Link';
 import { useAppSelector, useAppDispatch } from 'store';
 import { apiSignIn, DataSignIn } from 'store/features/authSlice';
+import useGSI from 'hooks/GSI';
 
 const SignInForm = styled(F)`
     width: 100%;
@@ -24,14 +25,12 @@ const SubmitButton = styled(Button).attrs({
     width: 100%;
 `;
 
-const GoogleButton = styled(Button)`
-    width: 100%;
-`;
-
 function Form() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { status, token, user } = useAppSelector((state) => state.auth);
+    // Google Sign-In
+    useGSI();
 
     async function onFinish(values: any) {
         // console.log('values :>> ', values);
@@ -66,13 +65,6 @@ function Form() {
             }
             return hide();
         });
-    }
-
-    function onGoogleButton(e: any) {
-        console.log('Received values of form :>> ', e);
-        // TODO: complete google login in
-
-        // load google gis library -> define loading handler
     }
 
     let localUser = {
@@ -149,7 +141,7 @@ function Form() {
             </F.Item>
             <Sep />
             <F.Item>
-                <GoogleButton onClick={onGoogleButton}>Googole</GoogleButton>
+                <div id="gsi-btn"></div>
             </F.Item>
             <F.Item className="float-right">
                 Or{' '}

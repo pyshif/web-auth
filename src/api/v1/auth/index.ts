@@ -2,7 +2,7 @@ import { AxiosInstance } from 'axios';
 import routes from 'api/v1/routes';
 import signUp from './signup';
 import signIn from './signin';
-import google from './google';
+import gsi from './gsi';
 import token from './token';
 import signOut from './signout';
 import forgot from './forgot';
@@ -12,7 +12,7 @@ import user from './user';
 function auth(axios: AxiosInstance) {
     const apiSignUp = signUp(axios);
     const apiSignIn = signIn(axios);
-    const apiGoogle = google(axios);
+    const apiGSI = gsi(axios);
     const apiToken = token(axios);
     const apiSignOut = signOut(axios);
     const apiForgot = forgot(axios);
@@ -29,7 +29,7 @@ function auth(axios: AxiosInstance) {
         },
         ...apiSignUp,
         ...apiSignIn,
-        ...apiGoogle,
+        ...apiGSI,
         ...apiToken,
         ...apiSignOut,
         ...apiForgot,

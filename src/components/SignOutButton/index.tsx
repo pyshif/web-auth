@@ -1,6 +1,6 @@
 import IconButton from 'components/IconButton';
 import { useAppDispatch, useAppSelector } from 'store';
-import { apiSignOut } from 'store/features/authSlice';
+import { apiSignOut, apiGoogleSignOut } from 'store/features/authSlice';
 import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import routes from 'utils/routes';
@@ -11,9 +11,12 @@ type PropsSignOutButton = Partial<ComponentProps<typeof IconButton>>;
 function SignOutButton(props: PropsSignOutButton) {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { token } = useAppSelector((state) => state.auth);
+    const { token, user } = useAppSelector((state) => state.auth);
 
     const handleSignOut = useCallback(() => {
+        // disable and revoke google id token
+        dispatch(apiGoogleSignOut(user.email));
+        // sign out
         const hide = message.loading('Sign-out in progress...', 0);
         dispatch(apiSignOut()).then((action) => {
             const { error } = action as unknown as any;

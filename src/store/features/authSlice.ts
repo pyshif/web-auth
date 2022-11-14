@@ -76,6 +76,7 @@ export const apiSignIn = createAsyncThunk<any, DataSignIn>('auth/signIn', async 
         throw new Error('Invalid access-token!');
     }
     const user = decodeJWT(accessToken) as any;
+    // console.log('user :>> ', user);
     return {
         status: response.status,
         token: accessToken,
@@ -93,8 +94,24 @@ export const apiSignIn = createAsyncThunk<any, DataSignIn>('auth/signIn', async 
 // google
 export const apiGoogleSignIn = createAsyncThunk<any, string>('auth/google', async (googleIDToken) => {
     const response = await api.v1.auth.googleSignIn(googleIDToken) as unknown as any;
-
-    return response;
+    const { accessToken } = response.data;
+    if (!accessToken) {
+        throw new Error('Invalid access-token!');
+    }
+    const user = decodeJWT(accessToken) as any;
+    // console.log('user :>> ', user);
+    return {
+        status: response.status,
+        token: accessToken,
+        user: {
+            name: user.name,
+            birthday: user.birthday,
+            phone: user.phone,
+            gender: user.gender,
+            avatar: user.avatar,
+            email: user.email,
+        }
+    }
 });
 
 // token
@@ -133,6 +150,10 @@ export const apiSignOut = createAsyncThunk<any>('auth/signOut', async () => {
     return {
         status: response.status
     };
+});
+
+export const apiGoogleSignOut = createAsyncThunk<void, string>('auth/google/signout', async (hint: string) => {
+    await api.v1.auth.googleSignOut(hint);
 });
 
 // forgot
@@ -258,6 +279,23 @@ const authSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.payload as AxiosError;
             })
+            .addCase(apiGoogleSignIn.pending, (state, action) => {
+                // console.log('pending :>>', state, action);
+                state.status = 'loading';
+
+            })
+            .addCase(apiGoogleSignIn.fulfilled, (state, action) => {
+                // console.log('fulfilled :>>', state, action);
+                state.status = 'succeeded';
+                state.token = action.payload.token;
+                state.user = action.payload.user;
+            })
+            .addCase(apiGoogleSignIn.rejected, (state, action) => {
+                // console.log('rejected :>>', state, action);
+                state.status = 'failed';
+                state.error = action.payload as AxiosError;
+            })
+
             // token
             .addCase(apiValidateToken.pending, (state, action) => {
                 // console.log('pending :>>', state, action);
@@ -317,6 +355,18 @@ const authSlice = createSlice({
                     avatar: '',
                     email: ''
                 }
+            })
+            .addCase(apiGoogleSignOut.pending, (state, action) => {
+                // console.log('pending :>>', state, action);
+                state.status = 'loading';
+            })
+            .addCase(apiGoogleSignOut.fulfilled, (state, action) => {
+                // console.log('fulfilled :>>', state, action);
+                state.status = 'succeeded';
+            })
+            .addCase(apiGoogleSignOut.rejected, (state, action) => {
+                // console.log('rejected :>>', state, action);
+                state.status = 'failed';
             })
             // forgot
             .addCase(apiForgotPassword.pending, (state, action) => {

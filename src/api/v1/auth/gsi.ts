@@ -1,5 +1,10 @@
 import routes from 'api/v1/routes';
 import { AxiosInstance } from 'axios';
+import { RevocationResponse } from 'google-one-tap';
+
+declare global {
+    const google: typeof import('google-one-tap');
+}
 
 // response
 export type ResponseGoogle = {
@@ -16,7 +21,7 @@ export type ResponseGoogle = {
 };
 
 // axios
-function google(axios: AxiosInstance) {
+function gsi(axios: AxiosInstance) {
     return {
         googleSignIn: (googleIDToken: string) => {
             return axios({
@@ -28,7 +33,17 @@ function google(axios: AxiosInstance) {
                 }
             });
         },
+        googleSignOut: (hint: string) => {
+            // hint is email or payload.sub
+            google.accounts.id.disableAutoSelect();
+
+            google.accounts.id.revoke(hint, (done: RevocationResponse) => {
+                const { error, successful } = done;
+                if (error) return console.log('google revoke error :>>', error);
+                console.log('google revoke success :>>',)
+            })
+        }
     }
 }
 
-export default google;
+export default gsi;
