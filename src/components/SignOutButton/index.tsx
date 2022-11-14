@@ -4,7 +4,7 @@ import { apiSignOut, apiGoogleSignOut } from 'store/features/authSlice';
 import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import routes from 'utils/routes';
-import { useCallback, ComponentProps } from 'react';
+import { ComponentProps } from 'react';
 
 type PropsSignOutButton = Partial<ComponentProps<typeof IconButton>>;
 
@@ -13,8 +13,9 @@ function SignOutButton(props: PropsSignOutButton) {
     const dispatch = useAppDispatch();
     const { token, user } = useAppSelector((state) => state.auth);
 
-    const handleSignOut = useCallback(() => {
+    const handleSignOut = () => {
         // disable and revoke google id token
+        // console.log('user :>> ', user);
         dispatch(apiGoogleSignOut(user.email));
         // sign out
         const hide = message.loading('Sign-out in progress...', 0);
@@ -28,7 +29,7 @@ function SignOutButton(props: PropsSignOutButton) {
             navigate(routes.home);
             return hide();
         });
-    }, []);
+    };
 
     const { style, ...rest } = props;
     const css = token === '' ? { display: 'none' } : { ...style };

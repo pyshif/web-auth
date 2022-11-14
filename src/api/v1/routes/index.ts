@@ -21,7 +21,12 @@ const routes = {
             POST: ''
         }),
         google: include('google/', {
-            POST: ''
+            popup: include('popup/', {
+                POST: ''
+            }),
+            redirect: include('redirect/', {
+                POST: ''
+            })
         }),
         token: include('token/', {
             GET: '',

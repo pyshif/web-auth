@@ -30,6 +30,12 @@ module.exports = (env) => {
             historyApiFallback: {
                 disableDotRule: true // for using dot in url path
             }, // redirect 404 to index.html
+            headers: {
+                // for google-sign-in button popup mode.
+                'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+                // 'Cross-Origin-Opener-Policy': 'same-origin',
+                // 'Cross-Origin-Embedder-Policy': 'require-corp'
+            }
         }
     });
 }

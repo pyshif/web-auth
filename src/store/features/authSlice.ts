@@ -40,7 +40,7 @@ const initialState: StateAuth = {
     token: '',
     user: {
         name: '',
-        birthday: '',
+        birthday: '1911-01-01',
         phone: '',
         gender: '',
         avatar: '',
@@ -153,6 +153,7 @@ export const apiSignOut = createAsyncThunk<any>('auth/signOut', async () => {
 });
 
 export const apiGoogleSignOut = createAsyncThunk<void, string>('auth/google/signout', async (hint: string) => {
+    // console.log('hint :>> ', hint);
     await api.v1.auth.googleSignOut(hint);
 });
 

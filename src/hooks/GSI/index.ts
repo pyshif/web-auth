@@ -7,7 +7,6 @@ import { message } from 'antd';
 import routes from 'utils/routes';
 import { CredentialResponse } from 'google-one-tap';
 
-
 // GSI JavaScript API Reference
 // https://developers.google.com/identity/gsi/web/reference/js-reference#google.accounts.id.initialize
 
@@ -39,12 +38,11 @@ import { CredentialResponse } from 'google-one-tap';
 //   "jti": "abc161803398874def"
 // }
 
-// google.accounts.id.disableAutoSelect();
-
 declare namespace window {
     let onGoogleLibraryLoad: () => void;
 }
 
+// popup mode
 function useGSI() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -52,6 +50,9 @@ function useGSI() {
 
     const handleResponse = (user: CredentialResponse) => {
         // console.log('user :>> ', user);
+        // const decodeJWT = import('jwt-decode');
+        // console.log('user.credential :>> ', user.credential);
+        // console.log('decodeJWT(user.credential) :>> ', decodeJWT(user.credential));
         const hide = message.loading('Google sign-in in progress...', 0);
         dispatch(apiGoogleSignIn(user.credential)).then((action) => {
             const { error } = action as any;
@@ -85,8 +86,66 @@ function useGSI() {
                 logo_alignment: 'center',
                 locale: 'en',
             });
+
+            // const gsiIframe = document.querySelector('#gsi-btn iframe') as HTMLIFrameElement;
+            // console.log('gsiIframe :>> ', gsiIframe);
+            // gsiIframe.setAttribute('sandbox', 'allow-scripts allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-forms allow-same-origin');
+            // gsiIframe.setAttribute('referrerpolicy', 'origin-when-cross-origin');
         }
     }, [state]);
 }
+
+// redirect mode
+// import apiRoutes from 'api/v1/routes';
+// function useGSI() {
+//     const navigate = useNavigate();
+//     const dispatch = useAppDispatch();
+//     const state = useScript(process.env.GOOGLE_GSI_SRC as string);
+
+//     const handleResponse = (user: CredentialResponse) => {
+//         // console.log('user :>> ', user);
+//         // console.log('user.credential :>> ', user.credential);
+//         // console.log('decodeJWT(user.credential) :>> ', decodeJWT(user.credential));
+//         const hide = message.loading('Google sign-in in progress...', 0);
+//         dispatch(apiGoogleSignIn(user.credential)).then((action) => {
+//             const { error } = action as any;
+//             if (error) {
+//                 message.error('Google sign-in failed!', 3);
+//                 return hide();
+//             }
+//             message.success('Google sign-in success!', 3);
+//             navigate(routes.user);
+//             return hide();
+//         });
+//     }
+
+//     useEffect(() => {
+//         // console.log('state :>> ', state);
+//         let login_uri = process.env.API_URL + apiRoutes.auth.google.redirect.POST;
+//         login_uri = login_uri.slice(0, login_uri.length - 1);
+//         console.log('login_uri :>> ', login_uri);
+
+//         if (state.status === 'succeeded') {
+//             google.accounts.id.initialize({
+//                 client_id: process.env.GOOGLE_GSI_CLIENT_ID as string,
+//                 callback: handleResponse,
+//                 ux_mode: 'redirect',
+//                 login_uri: login_uri,
+//                 auto_select: true,
+//             });
+
+//             const gsiBtn = document.querySelector('#gsi-btn') as HTMLElement;
+//             google.accounts.id.renderButton(gsiBtn, {
+//                 type: 'standard',
+//                 size: 'large',
+//                 width: 278,
+//                 theme: 'outline',
+//                 text: 'signin_with',
+//                 logo_alignment: 'center',
+//                 locale: 'en',
+//             });
+//         }
+//     }, [state]);
+// }
 
 export default useGSI;
