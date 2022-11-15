@@ -9,6 +9,8 @@ import { CredentialResponse } from 'google-one-tap';
 
 // GSI JavaScript API Reference
 // https://developers.google.com/identity/gsi/web/reference/js-reference#google.accounts.id.initialize
+// GSI Popup mode setup
+// https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid#content_security_policy
 
 // Credential
 // 

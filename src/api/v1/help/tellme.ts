@@ -5,12 +5,12 @@ import routes from 'api/v1/routes';
 
 function tellme(axios: AxiosInstance) {
     return {
-        tellMe: (message: string) => {
+        tellMe: (feedback: string) => {
             return axios({
                 method: 'POST',
-                url: routes.auth.help.tellme.POST,
+                url: routes.help.tellme.POST,
                 data: {
-                    message
+                    feedback
                 }
             })
         }

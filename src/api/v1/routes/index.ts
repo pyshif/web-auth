@@ -71,10 +71,11 @@ const routes = {
                 POST: ''
             })
         }),
-        help: include('help/', {
-            tellme: include('tellme/', {
-                POST: ''
-            })
+    }),
+
+    help: include('help/', {
+        tellme: include('tellme/', {
+            POST: ''
         })
     })
 };

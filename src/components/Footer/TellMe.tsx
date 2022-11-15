@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { Form as F, Input } from 'antd';
+import { Form, Input, Button, message } from 'antd';
+import { useAppDispatch, useAppSelector } from 'store';
+import { apiTellMe } from 'store/features/helpSlice';
 
 type PropsTellMe = {};
 
@@ -34,6 +36,29 @@ const TA = styled(TextArea)`
 
 // TODO: complete tell me api features
 function TellMe(props: PropsTellMe) {
+    const dispatch = useAppDispatch();
+
+    const onFinish = (values: any) => {
+        console.log('values :>> ', values);
+        const { feedback } = values;
+        // validate
+        if (!feedback) return;
+
+        const hide = message.loading('Send feedback in progress...', 0);
+        dispatch(apiTellMe(feedback)).then((action) => {
+            const { error } = action as unknown as any;
+            if (error) {
+                message.error(
+                    'Send feedback failed! Please try again later.',
+                    3
+                );
+                return hide();
+            }
+            message.success('Send feedback success!', 3);
+            return hide();
+        });
+    };
+
     return (
         <section>
             <Title>Tell me</Title>
@@ -41,17 +66,19 @@ function TellMe(props: PropsTellMe) {
                 You can leave a message here for me. I am glad to receive any
                 advice!
             </Text>
-            <F>
-                <F.Item>
+            <Form onFinish={onFinish} style={{ position: 'relative' }}>
+                <Form.Item name="feedback">
                     <TA
                         showCount
                         maxLength={300}
                         autoSize
                         placeholder="write something... 😄"
-                        onChange={() => {}}
                     />
-                </F.Item>
-            </F>
+                </Form.Item>
+                <Form.Item style={{ position: 'absolute', top: 0, right: 0 }}>
+                    <Button htmlType="submit">Send</Button>
+                </Form.Item>
+            </Form>
             <Text>
                 You can also send an email to me by yourself. My email is here
                 👇.
