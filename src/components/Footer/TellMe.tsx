@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Form, Input, Button, message } from 'antd';
 import { useAppDispatch, useAppSelector } from 'store';
 import { apiTellMe } from 'store/features/helpSlice';
+import { useSelector } from 'react-redux';
 
 type PropsTellMe = {};
 
@@ -37,19 +38,21 @@ const TA = styled(TextArea)`
 // TODO: complete tell me api features
 function TellMe(props: PropsTellMe) {
     const dispatch = useAppDispatch();
+    const { token } = useAppSelector((state) => state.auth);
 
     const onFinish = (values: any) => {
-        console.log('values :>> ', values);
+        // console.log('values :>> ', values);
         const { feedback } = values;
         // validate
         if (!feedback) return;
 
         const hide = message.loading('Send feedback in progress...', 0);
-        dispatch(apiTellMe(feedback)).then((action) => {
+        const accessToken = token;
+        dispatch(apiTellMe({ accessToken, feedback })).then((action) => {
             const { error } = action as unknown as any;
             if (error) {
                 message.error(
-                    'Send feedback failed! Please try again later.',
+                    'Send feedback failed! Please sign-in first or try again later.',
                     3
                 );
                 return hide();
@@ -72,7 +75,7 @@ function TellMe(props: PropsTellMe) {
                         showCount
                         maxLength={300}
                         autoSize
-                        placeholder="write something... 😄"
+                        placeholder="write something... 😄 (Please sign-in first!)"
                     />
                 </Form.Item>
                 <Form.Item style={{ position: 'absolute', top: 0, right: 0 }}>

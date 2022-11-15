@@ -9,8 +9,8 @@ const initialState = {
     status: 'loading'
 }
 
-export const apiTellMe = createAsyncThunk<void, string>('help/tellme', async (message) => {
-    const response = await api.v1.help.tellMe(message);
+export const apiTellMe = createAsyncThunk<void, { accessToken: string, feedback: string }>('help/tellme', async ({ accessToken, feedback }) => {
+    const response = await api.v1.help.tellMe(accessToken, feedback);
 });
 
 const helpSlice = createSlice({
@@ -20,15 +20,15 @@ const helpSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(apiTellMe.pending, (state, action) => {
-                console.log('pending :>>', state, action);
+                // console.log('pending :>>', state, action);
                 state.status = 'loading';
             })
             .addCase(apiTellMe.fulfilled, (state, action) => {
-                console.log('fulfilled :>>', state, action);
+                // console.log('fulfilled :>>', state, action);
                 state.status = 'succeeded';
             })
             .addCase(apiTellMe.rejected, (state, action) => {
-                console.log('rejected :>>', state, action);
+                // console.log('rejected :>>', state, action);
                 state.status = 'failed';
             })
     }
