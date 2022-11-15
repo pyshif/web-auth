@@ -1,5 +1,6 @@
 import axios from 'axios';
 import auth from './v1/auth';
+import help from './v1/help';
 
 export type { DataForgot, DataResetPasswordByLink } from './v1/auth/forgot';
 export type { DataResetPassword } from './v1/auth/reset';
@@ -14,11 +15,15 @@ const instance = axios.create({
 
 // api
 const apiAuth = auth(instance);
+const apiHelp = help(instance);
 
 const api = {
     v1: {
         auth: {
             ...apiAuth
+        },
+        help: {
+            ...apiHelp
         }
     }
 };

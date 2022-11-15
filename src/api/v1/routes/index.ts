@@ -1,4 +1,5 @@
 import { include } from 'named-urls';
+import { I } from 'styled-icons/fa-solid';
 
 // 1. This is 'v1' api routes/url.
 // 2. This is for management api routes/url (not include baseURL)
@@ -70,6 +71,11 @@ const routes = {
                 POST: ''
             })
         }),
+        help: include('help/', {
+            tellme: include('tellme/', {
+                POST: ''
+            })
+        })
     })
 };
 
