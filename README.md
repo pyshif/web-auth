@@ -8,35 +8,61 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 ## 目錄
 
-如果你想『運行專案進行修改』，詳見 1 ~ 6。
+如果你想『運行專案進行修改』，詳見 1 ~ 8。
 
-如果你想『了解網站功能、使用技術』，詳見 7 ~ 12。
+如果你想『了解網站功能、使用技術』，詳見 9 ~ 14。
 
 1. [安裝](#安裝)
 
 2. [運行](#運行)
 
-3. [專案結構](#專案結構)
+> npm command, mode introduction
 
-4. [模組引用路徑](#模組引用路徑)
+3. [沙盒模式](#沙盒模式)
 
-5. [前端路由管理](#前端路由管理)
+4. [專案結構](#專案結構)
 
-6. [後端路由管理](#後端路由管理)
+> folder structure purpose
+
+5. [模組引用路徑](#模組引用路徑)
+
+> webpack alias, tsconfig paths, jest.config
+
+6. [前端路由管理](#前端路由管理)
+
+> named-url, routes
+
+7. [後端路由管理](#後端路由管理)
+
+> named-url, routes, folder-structure
+
+8. [打包編譯](#打包編譯)
+
+> webpack, typescript, lazy
+
+9. [Redux](#Redux)
 
 ---
 
-7. [UI](#ui)
+10. [UI](#ui)
 
-8. [JWT Token 管理方式](#jwt-token-管理方式)
+> rwd, styled-components
 
-9. [Google 第三方登入](#google-第三方登入)
+11. [JWT Token 管理方式](#jwt-token-管理方式)
 
-10. [系統信發送功能](#系統信發送功能)
+> access-token, refresh-token
 
-11. [網站部署](#網站部署)
+12. [Google 第三方登入](#google-第三方登入)
 
-12.  [使用技術](#使用技術)
+> gsi library, popup, credential as refresh-token, auth flow
+
+13. [系統信發送功能](#系統信發送功能)
+
+> aws ses, register success, forgot password, tell me
+
+14. [網站部署](#網站部署)
+
+15.  [使用技術](#使用技術)
 
 ## 安裝 
 
@@ -55,7 +81,27 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 ## 運行
 
 
-<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>
+![](<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>)
+
+[![My Skills](https://skillicons.dev/icons?i=js,html,css,wasm)](https://skillicons.dev)
+
+
+[![react](./readme/react.svg)](https://reactjs.org/)
+
+> [![react](./readme/react.svg)](https://reactjs.org/)
+
+[![react](./readme/react.svg)](https://reactjs.org/)
+
+> [![react](./readme/react.svg)](https://reactjs.org/)
+
+
+# [![react](./readme/react.svg)](https://reactjs.org/)
+
+
+
+<a href="https://reactjs.org/" target="_blank">
+    <img src="./readme/react.svg">
+</a>
 
 
 ## 專案結構
