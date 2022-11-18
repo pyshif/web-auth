@@ -14,7 +14,7 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 1. [安裝](#安裝)
 
-2. [運行](#**運行**)
+2. [運行](#運行)
 
 3. [沙盒模式](#沙盒模式)
 
@@ -88,7 +88,7 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
     npm run build
     ```
 
-    > 正式環境生成後，預設會進行打包分析，如不需要直接中止
+    > 正式環境生成於 `/build` 資料夾。生成後預設會進行打包分析，如不需要直接中止
 
 - 運行 Jest 測試檔案
   
@@ -113,6 +113,8 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 - 模組、庫實驗（透過 path alias 可以輕鬆的引入模組，詳見 [5. 模組引用路徑](#模組引用路徑)）
 
 - 設定檔實驗（webpack, tsconfig, babel, jest... 等）
+
+啟用方式：
 
 1. 啟用沙盒模式前，請先『建立入口檔案 `/sand/index.tsx`』
 
@@ -164,6 +166,7 @@ if (element) {
 }
 ```
 
+[回目錄](#目錄)
 
 ## 專案結構
 
@@ -175,7 +178,7 @@ if (element) {
 .env.example
 ```
 
-環境變數對應套用設定檔以及腳本命令
+環境變數『對應設定檔』以及『腳本命令』
 
 | env | webpack | npm |
 |:-----:|:---------:|:-----:|
@@ -195,7 +198,7 @@ webpack.prod.js
 webpack.sand.js
 ```
 
-設定檔預設繼承關係，以及對應腳本命令
+設定檔預設『繼承關係』，以及對應『腳本命令』
 
 | parent | child | npm |
 |:------:|:-----:|:---:|
@@ -203,7 +206,11 @@ webpack.sand.js
 | webpack.common.js | webpack.prod.js | npm run build |
 | webpack.dev.js | webpack.sand.js | npm run sand |
 
-> `npm run build` 會生成正式環境打包檔案於專案目錄下方 `/build` 資料夾
+舉例：
+
+webpack.dev.js 會先套用 webpack.common.js 中的設定再套用本身自己的設定。
+
+> 詳細請參考 [Webpack 官方文件](https://webpack.js.org/guides/production/#setup)
 
 ### TypeScript 設定檔
 
@@ -266,14 +273,15 @@ src/
 
 | folder | description | detail |
 |--------|-------------|--------|
-|`api/`| API 管理 | [詳見 API 管理](#api-管理)
-|`components/` | React 元件 | -
-|`hooks/` | React Custom Hooks | -
-|`images/` | 媒體檔案 | -
-|`pages/` | 前端頁面元件 | [詳見 前端路由管理](#前端路由管理)
-|`store/` | Redux | [詳見 Redux](#redux)
-|`styles/`| .css, .scss | -
-|`utils/` | 通用工具
+|`public/`| HTML 模板 | - |
+|`src/api/`| API 管理 | [詳見 API 管理](#api-管理)
+|`src/components/` | React 元件 | -
+|`src/hooks/` | React Custom Hooks | -
+|`src/images/` | 媒體檔案 | -
+|`src/pages/` | 前端頁面元件 | [詳見 前端路由管理](#前端路由管理)
+|`src/store/` | Redux | [詳見 Redux](#redux)
+|`src/styles/`| .css, .scss | -
+|`src/utils/` | 通用工具
 
 ### 沙盒模式
 
@@ -285,7 +293,7 @@ sand/
     index.tsx
 ```
 
-沙盒模式資夾需要自行建立
+沙盒模式資夾需要自行建立，詳見 [3. 沙盒模式](#沙盒模式)。
 
 ### 正式環境
 
@@ -297,13 +305,13 @@ build/
 
 index.html 由 `/public/index.html` 模板而來；其餘 .js/.jsx, .ts/.tsx, .css ... 等打包進 static 資料夾。
 
-關於細節，詳見下方 [打包編譯](#打包編譯)。
+關於細節，詳見 [8. 打包編譯](#打包編譯)。
 
 [回目錄](#目錄)
 
 ## 模組引用路徑
 
-專案有設定資料夾別名，引用時直接使用對應 alias 即可。
+專案設有資料夾別名（alias），引用模組時直接使用『對應別名』取代『相對路徑』即可。
 
 | alias | folder |
 |-------|--------|
@@ -330,13 +338,15 @@ import A from 'components/A';
 
 ### 自行修改 alias
 
-alias 修改，牽涉 `.tsconfig.json`、`webpack.common.js`、`jest.config.js` 三個檔案
+alias 修改，牽涉 `.tsconfig.json`、`webpack.common.js`、`jest.config.js` 三個設定檔案。
 
-| config | property |
-|--------|----------|
-|`.tsconfig.json` | `paths` |
-|`webpack.common.js` | `resolve.alias` |
-|`jest.config.js` | `moduleNameMapper` |
+依照文件規則，修改對應屬性即可。
+
+| config | property | Docs |
+|--------|----------|------|
+|`.tsconfig.json` | `paths` | [Docs](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping)|
+|`webpack.common.js` | `resolve.alias` | [Docs](https://webpack.js.org/configuration/resolve/#resolvealias) |
+|`jest.config.js` | `moduleNameMapper` | [Docs](https://jestjs.io/docs/configuration#modulenamemapper-objectstring-string--arraystring) |
 
 > 由於 Jest 測試是獨立環境，所以諸多設定需要另外處理
 
