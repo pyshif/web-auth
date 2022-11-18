@@ -1,10 +1,8 @@
 ## 介紹
 
-web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 的前端和後端專案。
+web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 的『前端』和『後端專案』。
 
 關於後端部分詳見：[https://github.com/pyshif/web-auth-server](https://github.com/pyshif/web-auth-server)
-
-[TOC]
 
 ## 目錄
 
@@ -45,8 +43,6 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 6. [前端路由管理](#前端路由管理)
 
 7. [API 管理](#api-管理)
-
-> named-url, routes, folder-structure
 
 8. [打包編譯](#打包編譯)
 
@@ -412,8 +408,162 @@ console.log(' "/auth/signin/" :>> ', routes.auth.signin);
 
 ## API 管理
 
+API 管理分３個部分：
 
+- `api/` 資料夾結構
+- API 路由
+- Request 函式生成
 
+### `api/` 資料夾結構
+
+```
+src/
+    api/
+        v1/ 
+            routes/
+            some/
+            ...
+        v2/
+            routes/
+            some/
+            ...
+        index.ts
+```
+
+| file / folder | description |
+|--------|-------------|
+| `index.ts` | 模組引用入口 |
+| `v1/` | v1 版本 api |
+| `v2/` | v2 版本 api | 
+| `routes/` | 各版本 api 路由 |
+| `some/` | Request 函式 |
+
+每個版本的 API 存在唯一 `routes/index.ts` 檔案來管理路由；意即：
+
+- 涉及『名稱變動』時：更改 `routes/index.ts` 即可
+- 涉及『結構變動』時：更改 `routes/index.ts` 以及對應 `some/` 檔案
+
+### API 路由
+
+API 路由的管理，同樣由 named-urls 第三方套件輔助我們生成路由。
+
+在路由的生成和前端有一小不同處，即所有路由物件皆以 HTTP Request Method 名稱作為結尾，以提示使用者該 API 路由呼叫方式。
+
+另外，涉及路徑參數時以 `_` 開頭作為變數命名，以提示 `reverse` 函式（named-urls 套件方法）使用。
+
+如下：
+
+```ts
+// src/api/v1/routes/index.ts
+import { include } from 'named-urls';
+
+const routes = {
+    auth: include('auth/', {
+        signUp: include('signup/, {
+            POST: ''
+            _token: include(':_token/, {
+                GET: ''
+            })
+        }),
+        signOut: include('signout/, {
+            DELETE: ''
+        })
+    }),
+};
+
+console.log(' "/auth/signup/" :>> ', routes.auth.signUp.POST);
+console.log(' "/auth/signup/:_token/" :>> ', routes.auth._token.GET);
+console.log(' "/auth/signout/" :>> ', routes.auth.signOut);
+```
+
+可以注意到，`routes` 物件紀錄的路由，並不包含 domain 的部分。
+
+這個部分，`axios` 套件提供我們 `baseURL` 以及 `url`２個參數來進行設定。
+
+舉例：
+
+```ts
+import axios from 'axios';
+
+// generate custom axios object
+const instance = axios({
+    baseURL: process.env.API_URL || 'http://localhost:3003/',
+});
+
+// call api -> DELETE http://localhost:3003/auth/signout/ 
+function apiSignOut() {
+    return instance({
+        method: 'DELETE',
+        url: routes.auth.signOut.DELETE,
+        // ...
+    });
+}
+```
+
+### Request 函式生成
+
+從上方我們知道：
+
+- domain 由 Axios 進行設定
+- routes 由 named-urls 進行管理
+
+而在 `api/v1/` 資料夾下的各個檔案需要定義的則是能夠生成 Request 函式的模組，最後由 `api/index.ts` 進行組合。
+
+讓最後使用起來像：
+
+```ts
+import api from 'api';
+
+// api call
+async function responseSignUp(data) {
+    try {
+        const response = await api.v1.auth.apiSignUp(data);
+        return response.data;
+    } catch (error) {
+        return null; 
+    }
+}
+```
+
+Request 生成函式定義：
+
+```ts
+// api/v1/auth/signup.ts 
+import { AxiosInstance } from 'axios';
+import routes from 'api/v1/routes';
+import { reverse } from 'named-urls';
+
+// request data type
+export type DataSignUp = {
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+    passwordHint: string,
+};
+
+// axios
+function signUp(axios: AxiosInstance) {
+    return {
+        signUp: (data: DataSignUp) => {
+            return axios({
+                method: 'POST',
+                url: routes.auth.signUp.POST,
+                data
+            })
+        },
+        validateEmailAddress: (linkToken: string) => {
+            return axios({
+                method: 'GET',
+                // 將 /auth/signup/:_token/ 中 :_token 替換成 linkToken
+                url: reverse(routes.auth.signUp._token.GET, { _token: linkToken })
+            });
+        }
+    }
+}
+
+export default signUp;
+```
 
 [回目錄](#目錄)
 
