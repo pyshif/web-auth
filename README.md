@@ -114,7 +114,7 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
     npm run sand
     ```
 
-    > 沙盒模式設定方詳見『3. 沙盒模式』（如不需要使用可略）
+    > 沙盒模式設定方詳見『[3. 沙盒模式](#沙盒模式)』（如不需要使用可略）
 
 [回目錄](#目錄)
 
@@ -436,7 +436,7 @@ src/
 | `v1/` | v1 版本 api |
 | `v2/` | v2 版本 api | 
 | `routes/` | 各版本 api 路由 |
-| `some/` | Request 函式 |
+| `some/` | Request 函式定義 |
 
 每個版本的 API 存在唯一 `routes/index.ts` 檔案來管理路由；意即：
 
@@ -445,17 +445,17 @@ src/
 
 ### API 路由
 
-API 路由的管理，同樣由 named-urls 第三方套件輔助我們生成路由。
+API 路由的管理，同樣由 [named-urls](https://www.npmjs.com/package/named-urls) 第三方套件輔助我們生成路由。
 
-在路由的生成和前端有一小不同處，即所有路由物件皆以 HTTP Request Method 名稱作為結尾，以提示使用者該 API 路由呼叫方式。
+『在命名路由變數』時，皆以 HTTP Request Method 名稱作為結尾，以方便編輯器提示使用者該 API 呼叫方式。
 
-另外，涉及路徑參數時以 `_` 開頭作為變數命名，以提示 `reverse` 函式（named-urls 套件方法）使用。
+另外，涉及『路徑參數』時以 `_` 開頭作為變數命名，以提示 `reverse` 函式（named-urls 套件方法）使用。
 
 如下：
 
 ```ts
 // src/api/v1/routes/index.ts
-import { include } from 'named-urls';
+import { include, reverse } from 'named-urls';
 
 const routes = {
     auth: include('auth/', {
@@ -473,12 +473,13 @@ const routes = {
 
 console.log(' "/auth/signup/" :>> ', routes.auth.signUp.POST);
 console.log(' "/auth/signup/:_token/" :>> ', routes.auth._token.GET);
+console.log(' "/auth/signup/this-is-token/" :>> ', reverse(routes.auth._token.GET, { _token: 'this-is-token'}));
 console.log(' "/auth/signout/" :>> ', routes.auth.signOut);
 ```
 
-可以注意到，`routes` 物件紀錄的路由，並不包含 domain 的部分。
+可以注意到，`routes` 物件中只負責管理路由，並不包含 domain 的部分。
 
-這個部分，`axios` 套件提供我們 `baseURL` 以及 `url`２個參數來進行設定。
+domain 的部份由 `axios` 套件提供給我們的 `baseURL` 參數來進行設定。
 
 舉例：
 
@@ -500,30 +501,14 @@ function apiSignOut() {
 }
 ```
 
-### Request 函式生成
+### Request 函式定義
 
-從上方我們知道：
+在解決路由的部分後，我們需要定義 Request 函式，來處理一些預設值，方便我們使用呼叫
 
-- domain 由 Axios 進行設定
-- routes 由 named-urls 進行管理
+- 宣告 request payload 相關參數的型別
+- 宣告 response payload 相關資料的型別
+- 預設值編寫
 
-而在 `api/v1/` 資料夾下的各個檔案需要定義的則是能夠生成 Request 函式的模組，最後由 `api/index.ts` 進行組合。
-
-讓最後使用起來像：
-
-```ts
-import api from 'api';
-
-// api call
-async function responseSignUp(data) {
-    try {
-        const response = await api.v1.auth.apiSignUp(data);
-        return response.data;
-    } catch (error) {
-        return null; 
-    }
-}
-```
 
 Request 生成函式定義：
 
@@ -563,6 +548,24 @@ function signUp(axios: AxiosInstance) {
 }
 
 export default signUp;
+```
+
+### `api` 模組使用
+
+最後整個 `api` 模組在元件中使用起來像：
+
+```ts
+import api from 'api';
+
+// api call
+async function responseSignUp(data) {
+    try {
+        const response = await api.v1.auth.apiSignUp(data);
+        return response.data;
+    } catch (error) {
+        return null; 
+    }
+}
 ```
 
 [回目錄](#目錄)
