@@ -14,15 +14,11 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 1. [安裝](#安裝)
 
-2. [運行](#運行)
-
-> npm command, mode introduction
+2. [運行](#**運行**)
 
 3. [沙盒模式](#沙盒模式)
 
 4. [專案結構](#專案結構)
-
-> folder structure purpose
 
 5. [模組引用路徑](#模組引用路徑)
 
@@ -32,7 +28,7 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 > named-url, routes
 
-7. [後端路由管理](#後端路由管理)
+7. [API 管理](#api-管理)
 
 > named-url, routes, folder-structure
 
@@ -40,7 +36,7 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 > webpack, typescript, lazy
 
-9. [Redux](#Redux)
+9. [Redux](#redux)
 
 ---
 
@@ -76,83 +72,315 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
     依照 `.env.example` 中的內容建立 `.env.dev` 和 `.env.prod` 環境檔於專案目錄底下
 
-<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>
+[回目錄](#目錄)
 
 ## 運行
 
+- 運行測試環境（套用 webpack.dev.js）
+   
+   ```bash
+   npm start
+   ```
 
-![](<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>)
+- 生成正式環境（套用 webpack.prod.js）
+
+    ```bash
+    npm run build
+    ```
+
+    > 正式環境生成後，預設會進行打包分析，如不需要直接中止
+
+- 運行 Jest 測試檔案
+  
+    ```bash
+    npm test
+    ```
+
+- 運行沙盒模式（套用 webpack.sand.js）
+
+    ```bash
+    npm run sand
+    ```
+
+    > 沙盒模式設定方詳見『3. 沙盒模式』（如不需要使用可略）
+
+[回目錄](#目錄)
+
+## 沙盒模式
+
+沙盒模式提供一個封閉的實驗環境（套用 webpack.sand.js 設定檔）
+
+- 模組、庫實驗（透過 path alias 可以輕鬆的引入模組，詳見 [5. 模組引用路徑](#模組引用路徑)）
+
+- 設定檔實驗（webpack, tsconfig, babel, jest... 等）
+
+1. 啟用沙盒模式前，請先『建立入口檔案 `/sand/index.tsx`』
+
+2. 編寫 `/sand/index.tsx` 內容作為應用程式入口（可參考下方代碼）
+
+3. （參考）建立第一個測試模組資料夾 `/sand/Exp1/`
+
+4. 將需要實驗的模組引入 `/sand/index.tsx` 後執行 `npm run sand`
+
+### /sand/index.tsx 參考代碼
+
+```ts
+// import package
+import { createRoot } from 'react-dom/client';
+import React, { lazy } from 'react';
+
+// import .css/.scss/...
+
+// import module
+// *** use lazy loading to avoid large bundle ***
+const Exp1 = lazy(() => import('./Exp1'));
+const Exp2 = lazy(() => import('./Exp2'));
+const Exp3 = lazy(() => import('./Exp3'));
+// ....
+
+// choose sand box
+const which = 3;
+
+function Test(n: number) {
+    switch (n) {
+        // ... add above
+        case 3:
+            return <Exp3 />;
+        case 2:
+            return <Exp2 />;
+        case 1:
+            return <Exp1 />;
+        default:
+            return <h1>Welcome to sandbox.</h1>;
+    }
+}
+
+// render root element
+const element = document.querySelector('#root') as HTMLDivElement;
+
+if (element) {
+    const root = createRoot(element);
+    root.render(<React.StrictMode>{Test(which)}</React.StrictMode>);
+}
+```
+
 
 ## 專案結構
 
+### 環境變數
+
 ```
-/public
-    index.html
-/src
-    /components
-    /hooks
-    /images
-    /pages
-    /styles
-    /utils
-    App.tsx
-    index.tsx
 .env.dev
 .env.prod
-.gitignore
-.prettierrc
-babel.config.json
-jest.config.json
-package-lock.json
-package.json
-postcss.config.js
-tailwind.config.js
-tsconfig.json
+.env.example
+```
+
+環境變數對應套用設定檔以及腳本命令
+
+| env | webpack | npm |
+|:-----:|:---------:|:-----:|
+|.env.dev| webpack.dev.js | npm start |
+|.env.dev| webpack.sand.js | npm run sand |
+|.env.prod | webpack.prod.js | npm run build |
+
+> Jest 測試需要使用 dotenv 套件自行處理環境變數檔匯入
+
+### Webpack 設定檔
+
+```
+.babel.config.json
 webpack.common.js
 webpack.dev.js
 webpack.prod.js
+webpack.sand.js
 ```
 
-<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>
+設定檔預設繼承關係，以及對應腳本命令
+
+| parent | child | npm |
+|:------:|:-----:|:---:|
+| webpack.common.js | webpack.dev.js | npm start | 
+| webpack.common.js | webpack.prod.js | npm run build |
+| webpack.dev.js | webpack.sand.js | npm run sand |
+
+> `npm run build` 會生成正式環境打包檔案於專案目錄下方 `/build` 資料夾
+
+### TypeScript 設定檔
+
+```
+.tsconfig.json
+types/
+    assets.d.ts
+```
+
+TypeScript 設定檔，以及非預設模組宣告。
+
+若有需要引用模組尚未宣告，自行增加定義檔、或修改 assets.d.ts 即可。
+
+### Jest 設定檔
+
+```
+.jest.config.json
+```
+
+Jest 測試框架設定檔
+
+### CSS 後處理器
+
+```
+postcss.config.js
+tailwind.config.js
+```
+
+進行 tailwindcss 以及 autoprefixer 等處理
+
+> 目前已使用 styled-components 框架，tailwind 可能在未來移除
+
+### 其餘設定檔
+
+```
+.gitignore
+.prettierrc
+package-lock.json
+package.json
+```
+
+### 主要代碼
+
+```
+public/
+    index.html
+    favicon.png
+src/
+    api/
+    components/
+    hooks/
+    images/
+    pages/
+    store/
+    styles/
+    utils/
+    App.tsx
+    index.tsx
+```
+
+| folder | description | detail |
+|--------|-------------|--------|
+|`api/`| API 管理 | [詳見 API 管理](#api-管理)
+|`components/` | React 元件 | -
+|`hooks/` | React Custom Hooks | -
+|`images/` | 媒體檔案 | -
+|`pages/` | 前端頁面元件 | [詳見 前端路由管理](#前端路由管理)
+|`store/` | Redux | [詳見 Redux](#redux)
+|`styles/`| .css, .scss | -
+|`utils/` | 通用工具
+
+### 沙盒模式
+
+```
+sand/
+    Exp1/
+    Exp2/
+    ...
+    index.tsx
+```
+
+沙盒模式資夾需要自行建立
+
+### 正式環境
+
+```
+build/
+    static/
+    index.html
+```
+
+index.html 由 `/public/index.html` 模板而來；其餘 .js/.jsx, .ts/.tsx, .css ... 等打包進 static 資料夾。
+
+關於細節，詳見下方 [打包編譯](#打包編譯)。
+
+[回目錄](#目錄)
 
 ## 模組引用路徑
 
-<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>
+專案有設定資料夾別名，引用時直接使用對應 alias 即可。
+
+| alias | folder |
+|-------|--------|
+| `api` | `src/api/` |
+| `components` | `src/components/` |
+| `hooks` | `src/hooks/` |
+| `images` | `src/images/` |
+| `pages` | `src/pages/` |
+| `store` | `src/store/` |
+| `styles` | `src/styles/` |
+| `utils` | `src/utils/` |
+
+舉例：
+
+```ts
+// src/pages/home.tsx
+
+// 原本：引用 A 元件
+import A from '../components/A';
+
+// 使用 alias：引用 A 元件
+import A from 'components/A';
+```
+
+### 自行修改 alias
+
+alias 修改，牽涉 `.tsconfig.json`、`webpack.common.js`、`jest.config.js` 三個檔案
+
+| config | property |
+|--------|----------|
+|`.tsconfig.json` | `paths` |
+|`webpack.common.js` | `resolve.alias` |
+|`jest.config.js` | `moduleNameMapper` |
+
+> 由於 Jest 測試是獨立環境，所以諸多設定需要另外處理
+
+[回目錄](#目錄)
 
 ## 前端路由管理
 
-<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>
+[回目錄](#目錄)
 
-## 後端路由管理
+## API 管理
 
-<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>
+[回目錄](#目錄)
+
+## 打包編譯
+
+[回目錄](#目錄)
+
+## Redux
+
+[回目錄](#目錄)
 
 ## UI
 
-<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>
+[回目錄](#目錄)
 
 ## JWT Token 管理方式
 
-<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>
+[回目錄](#目錄)
 
 ## Google 第三方登入
 
-<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>
+[回目錄](#目錄)
 
 ## 系統信發送功能
 
-<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>
+[回目錄](#目錄)
 
 ## 網站部署
 
 網站部署使用 AWS 服務，整體架構如下：
 
-**DNS (Route 53)** > **CDN (CloudFront)** > **Clinet (S3)** > **Server (EC2)** > **DB (RDS)**
+**DNS (Route 53)** > **CDN (CloudFront)** > **<ins>Clinet (S3)</ins>** > **Server (EC2)** > **DB (RDS)**
 
-
-
-<div style="display:flow-root;"><a href="#目錄" style="float:right; font-size: 1rem;">回目錄</a></div>
-
+[回目錄](#目錄)
 
 
 ## 使用技術
@@ -183,5 +411,4 @@ UI 框架使用：Ant Design (v4.23)、Styled Components (v5.3)
 [![github-action](./readme/github-action.svg)](https://github.com/features/actions)&ensp;
 [![greensock](./readme/greensock.svg)](https://greensock.com/)&ensp;
 
-> [回目錄](#目錄)
 [回目錄](#目錄)
