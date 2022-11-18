@@ -18,11 +18,29 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 3. [沙盒模式](#沙盒模式)
 
+    3-1. [參考代碼](#sandindextsx-參考代碼)
+
 4. [專案結構](#專案結構)
 
-5. [模組引用路徑](#模組引用路徑)
+    4-1. [環境變數](#環境變數)
 
-> webpack alias, tsconfig paths, jest.config
+    4-2. [Webpack 設定檔](#webpack-設定檔)
+
+    4-3. [TypeScript 設定檔](#typescript-設定檔)
+
+    4-4. [Jest 設定檔](#jest-設定檔)
+
+    4-5. [CSS 後處理器](#css-後處理器)
+
+    4-6. [其餘設定檔](#其餘設定檔)
+
+    4-7. [主要代碼](#主要代碼)
+
+    4-8. [沙盒環境](#沙盒環境)
+
+    4-9. [正式環境](#正式環境)
+
+5. [模組引用別名](#模組引用別名)
 
 6. [前端路由管理](#前端路由管理)
 
@@ -110,7 +128,7 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 沙盒模式提供一個封閉的實驗環境（套用 webpack.sand.js 設定檔）
 
-- 模組、庫實驗（透過 path alias 可以輕鬆的引入模組，詳見 [5. 模組引用路徑](#模組引用路徑)）
+- 模組、庫實驗（透過 path alias 可以輕鬆的引入模組，詳見 [5. 模組引用別名](#模組引用別名)）
 
 - 設定檔實驗（webpack, tsconfig, babel, jest... 等）
 
@@ -283,7 +301,7 @@ src/
 |`src/styles/`| .css, .scss | -
 |`src/utils/` | 通用工具
 
-### 沙盒模式
+### 沙盒環境
 
 ```
 sand/
@@ -293,7 +311,7 @@ sand/
     index.tsx
 ```
 
-沙盒模式資夾需要自行建立，詳見 [3. 沙盒模式](#沙盒模式)。
+沙盒環境資夾需要自行建立，詳見 [3. 沙盒模式](#沙盒模式)。
 
 ### 正式環境
 
@@ -309,7 +327,7 @@ index.html 由 `/public/index.html` 模板而來；其餘 .js/.jsx, .ts/.tsx, .c
 
 [回目錄](#目錄)
 
-## 模組引用路徑
+## 模組引用別名
 
 專案設有資料夾別名（alias），引用模組時直接使用『對應別名』取代『相對路徑』即可。
 
