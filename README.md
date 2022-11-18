@@ -44,8 +44,6 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 6. [前端路由管理](#前端路由管理)
 
-> named-url, routes
-
 7. [API 管理](#api-管理)
 
 > named-url, routes, folder-structure
@@ -372,9 +370,50 @@ alias 修改，牽涉 `.tsconfig.json`、`webpack.common.js`、`jest.config.js` 
 
 ## 前端路由管理
 
+| file | description |
+|:------:|:-------------:|
+|`utils/routes.ts`| 前端路由管理 |
+
+前端路由，使用 named-urls 第三方套件幫助我們生成路徑。
+
+整個專案我們會使用到 `include` 以及 `reverse` 2 個函式。此處簡單呈現 `include` 效用。
+
+> 細節請參考 [named-urls 文件](https://www.npmjs.com/package/named-urls)。
+
+舉例：
+
+```ts
+import { include } from 'named-urls';
+
+const routes = {
+    home: '/',
+    auth: include('/auth', {
+        self: '',
+        signin: 'signin/',
+    });
+};
+
+console.log(' "/" :>> ', routes.home);
+console.log(' "/auth/" :>> ', routes.auth.self);
+console.log(' "/auth/signin/" :>> ', routes.auth.signin);
+```
+
+搭配 React Router 使用
+
+```html
+<Routes>
+   <Route path={routes.home} element={}></Route>
+   <Route path={routes.auth.self} element={}></Route>
+   <Route path={routes.auth.signin} element={}></Route>
+</Routes>
+```
+
 [回目錄](#目錄)
 
 ## API 管理
+
+
+
 
 [回目錄](#目錄)
 
