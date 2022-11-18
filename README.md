@@ -266,21 +266,22 @@ package.json
 
 ### 主要代碼
 
-```
-public/
-    index.html
-    favicon.png
-src/
-    api/
-    components/
-    hooks/
-    images/
-    pages/
-    store/
-    styles/
-    utils/
-    App.tsx
-    index.tsx
+```graphql
+.
+├── public
+│   ├── favicon.png
+│   └── index.html
+└── src
+    ├── api
+    ├── components
+    ├── hooks
+    ├── images
+    ├── pages
+    ├── store
+    ├── styles
+    ├── utils
+    ├── App.tsx
+    └── index.tsx
 ```
 
 | folder | description | detail |
