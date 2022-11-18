@@ -8,9 +8,9 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 ## 目錄
 
-如果你想『運行專案進行修改』，詳見 1 ~ 8。
+如果你想『運行專案進行修改』，詳見 1 ~ 9。
 
-如果你想『了解網站功能、使用技術』，詳見 9 ~ 14。
+如果你想『了解網站功能、使用技術』，詳見 10 ~ 15。
 
 1. [安裝](#安裝)
 
@@ -200,9 +200,9 @@ if (element) {
 
 | env | webpack | npm |
 |:-----:|:---------:|:-----:|
-|.env.dev| webpack.dev.js | npm start |
-|.env.dev| webpack.sand.js | npm run sand |
-|.env.prod | webpack.prod.js | npm run build |
+|`.env.dev`| `webpack.dev.js` | `npm start` |
+|`.env.dev`| `webpack.sand.js` | `npm run sand` |
+|`.env.prod `| `webpack.prod.js` | `npm run build` |
 
 > Jest 測試需要使用 dotenv 套件自行處理環境變數檔匯入
 
@@ -220,9 +220,9 @@ webpack.sand.js
 
 | parent | child | npm |
 |:------:|:-----:|:---:|
-| webpack.common.js | webpack.dev.js | npm start | 
-| webpack.common.js | webpack.prod.js | npm run build |
-| webpack.dev.js | webpack.sand.js | npm run sand |
+| `webpack.common.js` | `webpack.dev.js` | `npm start` | 
+| `webpack.common.js` | `webpack.prod.js` | `npm run build` |
+| `webpack.dev.js` | `webpack.sand.js` | `npm run sand` |
 
 舉例：
 
