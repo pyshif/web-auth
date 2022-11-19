@@ -453,11 +453,10 @@ function App() {
 
 ## API 管理
 
-API 管理分３個部分：
-
 - `api/` 資料夾結構
 - API 路由
-- Request 函式生成
+- Request 函式定義
+- api 模組使用
 
 ### `api/` 資料夾結構
 
@@ -465,8 +464,8 @@ API 管理分３個部分：
 .
 └── src
     └── api
-        ├── v1
-        │   ├── auth
+        ├── v1 - # API 版本
+        │   ├── auth - # 身份驗證
         │   │   ├── forgot.ts
         │   │   ├── gsi.ts
         │   │   ├── index.ts
@@ -476,29 +475,19 @@ API 管理分３個部分：
         │   │   ├── signup.ts
         │   │   ├── token.ts
         │   │   └── user.ts
-        │   ├── help
+        │   ├── help - # 幫助
         │   │   ├── index.ts
         │   │   └── tellme.ts
-        │   ├── routes
+        │   ├── routes - # v1 版本路由名稱管理
         │   │   └── index.ts
         │   └── static
-        ├── v2
-        ├── ...
-        └── index.ts
+        └── index.ts - # 模組入口
 ```
 
-| file / folder | description |
-|--------|-------------|
-| `index.ts` | 模組引用入口 |
-| `v1/` | v1 版本 api |
-| `v2/` | v2 版本 api | 
-| `routes/` | 各版本 api 路由 |
-| `some/` | Request 函式定義 |
-
-每個版本的 API 存在唯一 `routes/index.ts` 檔案來管理路由；意即：
+每個版本的 API 存在唯一 `routes/index.ts` 檔案來管理路由。
 
 - 涉及『名稱變動』時：更改 `routes/index.ts` 即可
-- 涉及『結構變動』時：更改 `routes/index.ts` 以及對應 `some/` 檔案
+- 涉及『結構變動』時：更改 `routes/index.ts` 以及對應使用的檔案
 
 ### API 路由
 
@@ -508,7 +497,7 @@ API 路由的管理，同樣由 [named-urls](https://www.npmjs.com/package/named
 
 另外，涉及『路徑參數』時以 `_` 開頭作為變數命名，以提示 `reverse` 函式（named-urls 套件方法）使用。
 
-如下：
+舉例：
 
 ```ts
 // src/api/v1/routes/index.ts
@@ -534,9 +523,11 @@ console.log(' "/auth/signup/this-is-token/" :>> ', reverse(routes.auth._token.GE
 console.log(' "/auth/signout/" :>> ', routes.auth.signOut);
 ```
 
-可以注意到，`routes` 物件中只負責管理路由，並不包含 domain 的部分。
+`routes` 物件中只負責紀錄路由，並不包含 domain 的部分。
 
-domain 的部份由 `axios` 套件提供給我們的 `baseURL` 參數來進行設定。
+我們提供 `baseURL` 給 axios 物件，來創建一個客製化的實例。
+
+當我們使用該實例時，axios 會幫我們結合 `baseURL` 和 `url` 完成 API 完整的 endpoint。
 
 舉例：
 
@@ -560,14 +551,9 @@ function apiSignOut() {
 
 ### Request 函式定義
 
-在解決路由的部分後，我們需要定義 Request 函式，來處理一些預設值，方便我們使用呼叫
+定義參數型別、預設值...等，來簡化呼叫 API 的方式。
 
-- 宣告 request payload 相關參數的型別
-- 宣告 response payload 相關資料的型別
-- 預設值編寫
-
-
-Request 生成函式定義：
+舉例：
 
 ```ts
 // api/v1/auth/signup.ts 
@@ -575,7 +561,7 @@ import { AxiosInstance } from 'axios';
 import routes from 'api/v1/routes';
 import { reverse } from 'named-urls';
 
-// request data type
+// 定義請求酬載資料型別
 export type DataSignUp = {
     name: string,
     email: string,
@@ -584,7 +570,7 @@ export type DataSignUp = {
     passwordHint: string,
 };
 
-// axios
+// API 函式
 function signUp(axios: AxiosInstance) {
     return {
         signUp: (data: DataSignUp) => {
@@ -608,8 +594,6 @@ export default signUp;
 ```
 
 ### `api` 模組使用
-
-最後整個 `api` 模組在元件中使用起來像：
 
 ```ts
 import api from 'api';
