@@ -392,17 +392,16 @@ alias 修改，牽涉 `.tsconfig.json`、`webpack.common.js`、`jest.config.js` 
 
 ## 前端路由管理
 
-| file | description |
-|:------:|:-------------:|
-|`utils/routes.ts`| 前端路由管理 |
+```graphql
+.
+└── src
+    └── utils
+        └── routes.ts
+```
 
-前端路由，使用 named-urls 第三方套件幫助我們生成路徑。
+前端路由，使用 [React Router v6.4](https://reactrouter.com/en/main) 建構；路由名稱的部分，使用 [named-urls](https://www.npmjs.com/package/named-urls) 來管理。
 
-整個專案我們會使用到 `include` 以及 `reverse` 2 個函式。此處簡單呈現 `include` 效用。
-
-> 細節請參考 [named-urls 文件](https://www.npmjs.com/package/named-urls)。
-
-舉例：
+`routes.ts` 範例：
 
 ```ts
 import { include } from 'named-urls';
@@ -420,14 +419,32 @@ console.log(' "/auth/" :>> ', routes.auth.self);
 console.log(' "/auth/signin/" :>> ', routes.auth.signin);
 ```
 
-搭配 React Router 使用
+和 React Router 搭配使用：
 
-```html
-<Routes>
-   <Route path={routes.home} element={}></Route>
-   <Route path={routes.auth.self} element={}></Route>
-   <Route path={routes.auth.signin} element={}></Route>
-</Routes>
+```tsx
+import routes from 'utils/routes';
+// ... other components
+
+function App() {
+
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path={routes.home} element={<Layout/ >}>
+                    <Route path={routes.auth.self} element={<Auth />}>
+                        <Route
+                            path={routes.auth.signin}
+                            element={<SignIn />}
+                        ></Route>
+                    </Route>
+                    <Route index element={<Home />}></Route>
+                </Route>
+                <Route path="*" element={<Error />}></Route>
+            </Routes>
+        </BrowserRouter>
+    );
+}
+
 ```
 
 <p align="right">
