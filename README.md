@@ -136,7 +136,8 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 4. 將需要實驗的模組引入 `/sand/index.tsx` 後執行 `npm run sand`
 
-### /sand/index.tsx 參考代碼
+<details>
+<summary><code>/sand/index.tsx</code> 參考代碼</summary>
 
 ```ts
 // import package
@@ -177,6 +178,8 @@ if (element) {
     root.render(<React.StrictMode>{Test(which)}</React.StrictMode>);
 }
 ```
+
+</details>
 
 [回目錄](#目錄)
 
