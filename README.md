@@ -84,7 +84,9 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
     依照 `.env.example` 中的內容建立 `.env.dev` 和 `.env.prod` 環境檔於專案目錄底下
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## 運行
 
@@ -116,7 +118,9 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
     > 沙盒模式設定方詳見『[3. 沙盒模式](#沙盒模式)』（如不需要使用可略）
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## 沙盒模式
 
@@ -181,7 +185,9 @@ if (element) {
 
 </details>
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## 專案結構
 
@@ -335,7 +341,9 @@ index.html 由 `/public/index.html` 模板而來；其餘 .js/.jsx, .ts/.tsx, .c
 
 關於細節，詳見 [8. 打包編譯](#打包編譯)。
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## 模組引用別名
 
@@ -378,7 +386,9 @@ alias 修改，牽涉 `.tsconfig.json`、`webpack.common.js`、`jest.config.js` 
 
 > 由於 Jest 測試是獨立環境，所以諸多設定需要另外處理
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## 前端路由管理
 
@@ -420,7 +430,9 @@ console.log(' "/auth/signin/" :>> ', routes.auth.signin);
 </Routes>
 ```
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## API 管理
 
@@ -596,31 +608,45 @@ async function responseSignUp(data) {
 }
 ```
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## 打包編譯
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## Redux
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## UI
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## JWT Token 管理方式
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## Google 第三方登入
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## 系統信發送功能
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 ## 網站部署
 
@@ -628,7 +654,9 @@ async function responseSignUp(data) {
 
 **DNS (Route 53)** > **CDN (CloudFront)** > **<ins>Clinet (S3)</ins>** > **Server (EC2)** > **DB (RDS)**
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
 
 
 ## 使用技術
@@ -659,4 +687,6 @@ UI 框架使用：Ant Design (v4.23)、Styled Components (v5.3)
 [![github-action](./readme/github-action.svg)](https://github.com/features/actions)&ensp;
 [![greensock](./readme/greensock.svg)](https://greensock.com/)&ensp;
 
-[回目錄](#目錄)
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
