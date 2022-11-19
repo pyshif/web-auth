@@ -184,11 +184,14 @@ if (element) {
 
 ### 環境變數
 
+```graphql
+.
+├── .env.dev
+├── .env.prod 
+└── .env.example
 ```
-.env.dev
-.env.prod
-.env.example
-```
+
+> `.env.dev`、`.env.prod` 需自行建立
 
 環境變數『對應設定檔』以及『腳本命令』
 
@@ -202,12 +205,13 @@ if (element) {
 
 ### Webpack 設定檔
 
-```
-.babel.config.json
-webpack.common.js
-webpack.dev.js
-webpack.prod.js
-webpack.sand.js
+```graphql
+.
+├── .babel.config.json
+├── webpack.common.js
+├── webpack.dev.js
+├── webpack.prod.js
+└── webpack.sand.js
 ```
 
 設定檔預設『繼承關係』，以及對應『腳本命令』
@@ -226,10 +230,11 @@ webpack.dev.js 會先套用 webpack.common.js 中的設定再套用本身自己�
 
 ### TypeScript 設定檔
 
-```
-.tsconfig.json
-types/
-    assets.d.ts
+```graphql
+.
+├── .tsconfig.json
+└── types
+    └── assets.d.ts   
 ```
 
 TypeScript 設定檔，以及非預設模組宣告。
@@ -238,17 +243,19 @@ TypeScript 設定檔，以及非預設模組宣告。
 
 ### Jest 設定檔
 
-```
-.jest.config.json
+```graphql
+.
+└── jest.config.json
 ```
 
 Jest 測試框架設定檔
 
 ### CSS 後處理器
 
-```
-postcss.config.js
-tailwind.config.js
+```graphql
+.
+├── postcss.config.js
+└── tailwind.config.js
 ```
 
 進行 tailwindcss 以及 autoprefixer 等處理
@@ -257,11 +264,12 @@ tailwind.config.js
 
 ### 其餘設定檔
 
-```
-.gitignore
-.prettierrc
-package-lock.json
-package.json
+```graphql
+.
+├── .gitignore
+├── .prettierrc
+├── package-lock.json
+└── package.json
 ```
 
 ### 主要代碼
@@ -298,23 +306,27 @@ package.json
 
 ### 沙盒環境
 
-```
-sand/
-    Exp1/
-    Exp2/
-    ...
-    index.tsx
+```graphql
+.
+└── sand
+    ├── Exp1
+    ├── Exp2
+    ├── ...
+    └── index.tsx
 ```
 
 沙盒環境資夾需要自行建立，詳見 [3. 沙盒模式](#沙盒模式)。
 
 ### 正式環境
 
+```graphql
+.
+└── build
+    ├── static
+    └── index.html
 ```
-build/
-    static/
-    index.html
-```
+
+> 使用 `npm run build` 生成 `build` 資料夾
 
 index.html 由 `/public/index.html` 模板而來；其餘 .js/.jsx, .ts/.tsx, .css ... 等打包進 static 資料夾。
 
@@ -417,18 +429,30 @@ API 管理分３個部分：
 
 ### `api/` 資料夾結構
 
-```
-src/
-    api/
-        v1/ 
-            routes/
-            some/
-            ...
-        v2/
-            routes/
-            some/
-            ...
-        index.ts
+```graphql
+.
+└── src
+    └── api
+        ├── v1
+        │   ├── auth
+        │   │   ├── forgot.ts
+        │   │   ├── gsi.ts
+        │   │   ├── index.ts
+        │   │   ├── reset.ts
+        │   │   ├── signin.ts
+        │   │   ├── signout.ts
+        │   │   ├── signup.ts
+        │   │   ├── token.ts
+        │   │   └── user.ts
+        │   ├── help
+        │   │   ├── index.ts
+        │   │   └── tellme.ts
+        │   ├── routes
+        │   │   └── index.ts
+        │   └── static
+        ├── v2
+        ├── ...
+        └── index.ts
 ```
 
 | file / folder | description |
