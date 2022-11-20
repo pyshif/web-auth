@@ -16,8 +16,6 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 3. [沙盒模式](#沙盒模式)
 
-    3-1. [參考代碼](#sandindextsx-參考代碼)
-
 4. [專案結構](#專案結構)
 
     4-1. [環境變數](#環境變數)
@@ -46,15 +44,15 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 8. [打包編譯](#打包編譯)
 
-> webpack, typescript, lazy
-
 9. [Redux](#redux)
+
+> store, slice (state, action type, reducer, thunk function)
 
 ---
 
 10. [UI](#ui)
 
-> rwd, styled-components
+> rwd, styled-components, ant-design
 
 11. [JWT Token 管理方式](#jwt-token-管理方式)
 
@@ -614,6 +612,75 @@ async function responseSignUp(data) {
 </p>
 
 ## 打包編譯
+
+Webpack 相關設定檔：
+
+```graphql
+.
+├── postcss.config.js
+├── babel.config.js
+├── webpack.common.js
+├── webpack.dev.js
+├── webpack.prod.js
+├── webpack.sand.js
+└── tsconfig.json
+```
+
+### HTML
+
+HTML 由 Webpack Plugin 處理後生成：
+
+| Syntax | Webpack Plugin | Source | Config |
+|:------:|:--------------:|:------:|:------:|
+| HTML   | HtmlWebpackPlugin | `public/index.html` | `webpack.common.js` |
+
+> 關於 HtmlWebpackPlugin 詳細資訊，請參考 [官方文件](https://webpack.js.org/plugins/html-webpack-plugin/)
+
+### CSS
+
+CSS 由 Webpack Loader 處理後生成；依序如下方表格：
+
+| Syntax | Webpack Loader | Config | 
+|:------:|:--------------:|:------:|
+| CSS    | postcss-loader | `webpack.common.js` |
+| CSS    | css-loader | `webpack.common.js` |
+| CSS    | MiniCssExtractPlugin.loader | `webpack.common.js` |
+
+> PostCSS 預處理細節，請參考 `postcss.config.js` 設定檔
+
+> MiniCssExtractPlugin.loader 進行 .css 檔案抽離處理，細節請參考 [官方文件](https://webpack.js.org/plugins/mini-css-extract-plugin/)
+
+
+### JavaScript
+
+JavaScript 由 Webpack Loader 處理後生成；依序如下方表格：
+
+| Syntax | Webpack Loader | Config |
+|:------:|:--------------:|:------:|
+| TypeScript | ts-loader | `webpack.common.js` |
+| ES5、React | babel-loader | `webpack.common.js` |
+
+<details>
+<summary>React、JavaScript(ES5)、TypeScript 對應『編譯器 Compiler、設定檔』</summary>
+
+| Syntax | Compiler | Config |
+|:------:|:--------:|:------:|
+| ES5 | Babel    | `babel.config.js` |
+| React  | Babel    | `babel.config.js` |
+| TypeScript | tsc | `tsconfig.json` |
+
+> 實際上 `babel.config.js` 中的設定值可以直接寫進 `webpack` 設定檔中不需要額外建立
+
+</details>
+
+### Others
+
+正式環境優化
+
+- Minimizer (JS, CSS)
+- Tree Shaking
+- Lazy Loading
+- Split Chunks (`node_modules`, `react`, `react-dom`, `react-router-dom`)
 
 <p align="right">
     <a href="#目錄">回目錄</a>
