@@ -50,19 +50,11 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 10. [UI](#ui)
 
-> rwd, styled-components, ant-design
-
 11. [JWT Token 管理方式](#jwt-token-管理方式)
-
-> access-token, refresh-token
 
 12. [Google 第三方登入](#google-第三方登入)
 
-> gsi library, popup, credential as refresh-token, auth flow
-
 13. [系統信發送功能](#系統信發送功能)
-
-> aws ses, register success, forgot password, tell me
 
 14. [網站部署](#網站部署)
 
@@ -834,11 +826,89 @@ export default helpSlice.reducer;
 
 ## UI
 
+```graphql
+.
+└── src
+    └── utils
+        ├── device.ts - # RWD 斷點
+        └── font.ts - # 字體
+```
+
+UI Framework 使用 [styled-component](https://styled-components.com/) 和 [Ant Design](https://ant.design/)。
+
+RWD 手機版、平板/電腦版，斷點於 `768px`； `src/utils/device.ts` 定義各斷點數值。
+
+網頁切版使用 `Grid` 佈局（請參考 `src/pages/Layout`），再進行細切。
+
 <p align="right">
     <a href="#目錄">回目錄</a>
 </p>
 
 ## JWT Token 管理方式
+
+Token 共有兩種，Access Token 和 Refresh Token。
+
+### Access Token
+
+用於請求時的授權驗證，會寫入 Http 標頭中的 Authorization
+
+登入成功後，存儲於前端『記憶體』中，Token 有效性後端預設為 15 分鐘過期。
+
+<details>
+<summary>Access Token 使用範例</summary>
+
+```ts
+// src/api/v1/auth/token.ts
+import { AxiosInstance } from "axios";
+import routes from 'api/v1/routes';
+
+// response data type
+export type DataResponseRequestToken = {
+    accessToken: string;
+};
+
+function token(axios: AxiosInstance) {
+    return {
+        // 驗證 Access Token 有效性
+        validateToken: (accessToken: string) => {
+            return axios({
+                method: 'GET',
+                url: routes.auth.token.GET,
+                withCredentials: true,
+                // 將 Access Token 於標頭中帶給後端
+                headers: { Authorization: `Bearer ${accessToken}` }
+            });
+        },
+        // 請求新的 Access Token
+        requestToken: () => {
+            return axios({
+                method: 'GET',
+                url: routes.auth.token.new.GET,
+                withCredentials: true,
+            })
+        }
+    }
+}
+
+export default token;
+
+```
+
+</details>
+
+### Refresh Token
+
+用於刷新 Access Token，保持登入狀態。
+
+登入成功後，存儲在 Http-Only、Secure 的 Cookie 中 (正式環境)，Token 有效時長預設為 90 天。
+
+> 開發環境，Refresh Token 則存儲在一般 Cookie 中
+
+### 情境說明
+
+- 登入：登入成功後會獲取 Access Token 和 Refresh Token 各一組，存儲在上述說明的位置。
+- 刷新：當網頁 F5 強制刷新時，存儲在記憶體中的 Access Token 會直接消失，此使會將 Refresh Token 帶給後端重新獲取新的 Access Token。
+- 登出：使用者登出時，不論後端處理成功失敗，前端皆會同時清除 Access Token 和 Refresh Token。
 
 <p align="right">
     <a href="#目錄">回目錄</a>
@@ -846,11 +916,110 @@ export default helpSlice.reducer;
 
 ## Google 第三方登入
 
+### 庫
+
+使用 [Google Identity Services](https://developers.google.com/identity/gsi/web/guides/overview) 庫來串接 Google 第三方登入。
+
+React 部分使用 Custom Hooks 於 DidMount 生命週期進行 GSI 庫加載。
+
+<details>
+<summary>GSI 加載代碼（<code>src/hooks/GSI/index.ts</code>）</summary>
+
+```ts
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useScript from 'hooks/useScript';
+import { useAppDispatch } from 'store';
+import { apiGoogleSignIn } from 'store/features/authSlice';
+import { message } from 'antd';
+import routes from 'utils/routes';
+import { CredentialResponse } from 'google-one-tap';
+
+declare namespace window {
+    let onGoogleLibraryLoad: () => void;
+}
+
+// popup mode
+function useGSI() {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const state = useScript(process.env.GOOGLE_GSI_SRC as string);
+
+    const handleResponse = (user: CredentialResponse) => {
+        // console.log('user :>> ', user);
+        // const decodeJWT = import('jwt-decode');
+        // console.log('user.credential :>> ', user.credential);
+        // console.log('decodeJWT(user.credential) :>> ', decodeJWT(user.credential));
+        const hide = message.loading('Google sign-in in progress...', 0);
+        dispatch(apiGoogleSignIn(user.credential)).then((action) => {
+            const { error } = action as any;
+            if (error) {
+                message.error('Google sign-in failed!', 3);
+                return hide();
+            }
+            message.success('Google sign-in success!', 3);
+            navigate(routes.user);
+            return hide();
+        });
+    }
+
+    useEffect(() => {
+        // console.log('state :>> ', state);
+        if (state.status === 'succeeded') {
+            google.accounts.id.initialize({
+                client_id: process.env.GOOGLE_GSI_CLIENT_ID as string,
+                callback: handleResponse,
+                ux_mode: 'popup',
+                auto_select: true,
+            });
+
+            const gsiBtn = document.querySelector('#gsi-btn') as HTMLElement;
+            google.accounts.id.renderButton(gsiBtn, {
+                type: 'standard',
+                size: 'large',
+                width: 278,
+                theme: 'outline',
+                text: 'signin_with',
+                logo_alignment: 'center',
+                locale: 'en',
+            });
+        }
+    }, [state]);
+}
+
+export default useGSI;
+```
+
+</details>
+
+### 登入方式
+
+在 One Tap 和 Sign In With Google Button 兩種方式中，選擇後者進行實作。
+
+### 流程
+
+Google Sign In With Button 提供 redirect 和 popup 兩種流程，本專案『為前後端分離』，故選擇 popup 的流程進行實作，細節如下：
+
+1. 使用者按下 Google 登入按鈕
+2. 於 Google 頁面選擇帳號進行授權
+3. 授權完成後，Google 將使用者相關資料回傳至前端
+4. 前端接收到資料後將其中的『ID Token (JWT)』傳至後端
+5. 後端將取得的 ID Token 和 Google Server 進行驗證
+6. 驗證通過後存儲至資料庫，並回傳 Access Token、Refresh Token 給前端
+7. 登入成功
+
 <p align="right">
     <a href="#目錄">回目錄</a>
 </p>
 
 ## 系統信發送功能
+
+系統信的發送使用 AWS SES 服務，前端的部分會使用到的功能如下：
+
+- 註冊成功：發送『Email Address 驗證連結』至使用者信箱
+- 第三方首次登入：發送『加入成功通知信』至使用者信箱
+- 忘記密碼：發送『重設密碼連結』至使用者信箱
+- Tell Me 功能：將使用者於 Footer 『回饋訊息』輸入框中的鍵入內容，寄至客服信箱
 
 <p align="right">
     <a href="#目錄">回目錄</a>
@@ -858,14 +1027,19 @@ export default helpSlice.reducer;
 
 ## 網站部署
 
-網站部署使用 AWS 服務，整體架構如下：
+網站部署使用 AWS 服務，整體架構流程如下：
 
-**DNS (Route 53)** > **CDN (CloudFront)** > **<ins>Clinet (S3)</ins>** > **Server (EC2)** > **DB (RDS)**
+| Item | AWS |
+|:----:|:---:|
+| DNS | Route 53 |
+| CDN | CloudFront |
+| Client | S3 |
+| Server | EC2 |
+| DB | RDS |
 
 <p align="right">
     <a href="#目錄">回目錄</a>
 </p>
-
 
 ## 使用技術
 
