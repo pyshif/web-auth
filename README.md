@@ -840,6 +840,8 @@ RWD 手機版、平板/電腦版，斷點於 `768px`； `src/utils/device.ts` �
 
 網頁切版使用 `Grid` 佈局（請參考 `src/pages/Layout`），再進行細切。
 
+首頁動畫使用 [GreenSock](https://greensock.com/) 套件製作。
+
 <p align="right">
     <a href="#目錄">回目錄</a>
 </p>
