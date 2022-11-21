@@ -46,8 +46,6 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 9. [Redux](#redux)
 
-> store, slice (state, action type, reducer, thunk function)
-
 ---
 
 10. [UI](#ui)
@@ -687,6 +685,148 @@ JavaScript 由 Webpack Loader 處理後生成；依序如下方表格：
 </p>
 
 ## Redux
+
+專案使用 [Redux ToolKit](https://redux-toolkit.js.org) 來管理全域狀態；資料夾結構如下：
+
+> Redux ToolKit 自動幫我們加入 Middleware Enhancer 以及 Thunk Middleware ，提供我們處理異步代碼
+
+```graphql
+.
+└── src
+    └── store
+        ├── features
+        │   ├── authSlice.ts
+        │   └── helpSlice.ts
+        └── index.ts
+```
+
+### Store
+
+Redux 中的全域儲存空間，透過 `react-redux` 套件提供的 `Provider` 元件和 React 交互。
+
+<details>
+<summary>匯入 store 範例</summary>
+
+```tsx
+// src/index.tsx
+import { createRoot } from 'react-dom/client';
+import store from 'store';
+import { Provider } from 'react-redux';
+import App from './App';
+
+const element = document.querySelector('#root') as HTMLDivElement;
+if (element) {
+    const root = createRoot(element);
+    root.render(
+        <Provider store={store}>
+            <App />
+        </Provider>
+    );
+}
+```
+
+</details>
+
+
+透過 `store` 引入 `useAppSelector` 和 `useAppDispatch` 這兩個 Hooks，來『取得、操作全域狀態』。
+
+<detail>
+<summary>登出按鈕範例</summary>
+
+```tsx
+import { useAppDispatch, useAppSelector } from 'store';
+import { apiSignOut } from 'store/feature/authSlice';
+
+function SomeComponent() {
+    // 取得 dispatch
+    const dispatch = useAppDispatch();
+    // 取得 定義於 store 中的 auth 全域物件狀態
+    const { user } = useAppSelector(state => state.auth);
+
+    const handleSignOut = () => {
+        // apiSignOut is a thunk function to handle api
+        dispatch(apiSignOut());
+        // above dispatch will return a Promise, so you can write like this...
+        dispatch(apiSignOut()).then(action => {
+            if (action.error) {
+                // ...error
+            }
+            // ...success
+        });
+    }
+
+    return <button onClick={handleClick}>Sign Out</button>
+}
+```
+
+</details>
+
+
+### Slice
+
+Slice 是 Redux ToolKit 的術語，我們會在 Slice 檔案中定義幾件事
+
+- State 型別、初始狀態
+- Action 型別
+- Reducer 名稱、方法
+- Thunk Function
+
+<details>
+<summary>helpSlice 代碼範例</summary>
+
+```tsx
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from 'api';
+
+// State 型別
+export type StateHelp = {
+    status: 'idle' | 'loading' | 'succeeded' | 'failed',
+}
+
+// State 初始狀態
+const initialState = {
+    status: 'loading'
+}
+
+// Thunk Function 處理發送 API 的異步代碼
+export const apiTellMe = createAsyncThunk<void, { accessToken: string, feedback: string }>('help/tellme', async ({ accessToken, feedback }) => {
+    const response = await api.v1.help.tellMe(accessToken, feedback);
+
+    // 此 callback 實際上就是一個 action payload creator，有 payload 需要回傳時直接 return 即可，return 的 payload 會被下方 extra reducer 中的同步代碼處理
+});
+
+const helpSlice = createSlice({
+    // 該 reducer 的 type 名稱
+    name: 'help',
+    // 初始 state
+    initialState,
+    // reducer
+    reducers: {},
+    // extra reducer 處理 thunk function 狀態
+    extraReducers: (builder) => {
+        builder
+            .addCase(apiTellMe.pending, (state, action) => {
+                // console.log('pending :>>', state, action);
+                state.status = 'loading';
+            })
+            .addCase(apiTellMe.fulfilled, (state, action) => {
+                // console.log('fulfilled :>>', state, action);
+                // action.payload 會儲存上方 createAsyncThunk 中 callback 裡 return 的物件
+                state.status = 'succeeded';
+            })
+            .addCase(apiTellMe.rejected, (state, action) => {
+                // console.log('rejected :>>', state, action);
+                state.status = 'failed';
+            })
+    }
+});
+
+export default helpSlice.reducer;
+```
+
+</details>
+
+> 如對 Thunks and Async Logic 感到模糊，請參考 [Redux 官方文件](https://redux.js.org/tutorials/essentials/part-5-async-logic#thunks-and-async-logic)
 
 <p align="right">
     <a href="#目錄">回目錄</a>
