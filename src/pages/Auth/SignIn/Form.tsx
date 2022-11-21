@@ -53,7 +53,6 @@ function Form() {
             message.success('Sign-in success!', 3);
             navigate(routes.user);
             // remember feature
-            // FIXME: protect user data in localstorage
             // cookies -> aes -> user email, password
             if (remember) {
                 localStorage.setItem(

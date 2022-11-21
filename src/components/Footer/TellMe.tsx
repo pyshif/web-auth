@@ -35,7 +35,6 @@ const TA = styled(TextArea)`
     }
 `;
 
-// TODO: complete tell me api features
 function TellMe(props: PropsTellMe) {
     const dispatch = useAppDispatch();
     const { token } = useAppSelector((state) => state.auth);
