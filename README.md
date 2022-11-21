@@ -1021,7 +1021,7 @@ Google Sign In With Button 提供 redirect 和 popup 兩種流程，本專案『
 - 註冊成功：發送『Email Address 驗證連結』至使用者信箱
 - 第三方首次登入：發送『加入成功通知信』至使用者信箱
 - 忘記密碼：發送『重設密碼連結』至使用者信箱
-- Tell Me 功能：將使用者於 Footer 『回饋訊息』輸入框中的鍵入內容，寄至客服信箱
+- Tell Me 功能：將使用者於 Footer 中的『回饋訊息』，寄至客服信箱
 
 <p align="right">
     <a href="#目錄">回目錄</a>
