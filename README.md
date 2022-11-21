@@ -50,7 +50,7 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 10. [UI](#ui)
 
-11. [JWT Token 管理方式](#jwt-token-管理方式)
+11. [JWT 管理方式](#jwt-管理方式)
 
 12. [Google 第三方登入](#google-第三方登入)
 
@@ -722,7 +722,7 @@ if (element) {
 
 透過 `store` 引入 `useAppSelector` 和 `useAppDispatch` 這兩個 Hooks，來『取得、操作全域狀態』。
 
-<detail>
+<details>
 <summary>登出按鈕範例</summary>
 
 ```tsx
@@ -846,7 +846,7 @@ RWD 手機版、平板/電腦版，斷點於 `768px`； `src/utils/device.ts` �
     <a href="#目錄">回目錄</a>
 </p>
 
-## JWT Token 管理方式
+## JWT 管理方式
 
 Token 共有兩種，Access Token 和 Refresh Token。
 
