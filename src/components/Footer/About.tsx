@@ -21,9 +21,17 @@ import { Nodejs } from '@styled-icons/boxicons-logos/Nodejs';
 import { Express } from '@styled-icons/simple-icons/Express';
 import { Mariadb } from '@styled-icons/simple-icons/Mariadb';
 import { Aws } from '@styled-icons/boxicons-logos/Aws';
+import { Pm2 } from '@styled-icons/simple-icons/Pm2';
+import Knex from 'images/knex-js.svg';
 
 const IconWrapper = styled.div`
     & svg {
+        margin: 0 0 1rem 0.85rem;
+        width: 2.5rem;
+    }
+
+    & img {
+        display: inline;
         margin: 0 0 1rem 0.85rem;
         width: 2.5rem;
     }
@@ -147,6 +155,12 @@ function About(props: PropsAbout) {
                 </ALink>
                 <ALink href="https://aws.amazon.com/" title="aws">
                     <Aws />
+                </ALink>
+                <ALink href="https://pm2.keymetrics.io" title="pm2">
+                    <Pm2 />
+                </ALink>
+                <ALink href="https://knexjs.org" title="knex">
+                    <img src={Knex} alt="" />
                 </ALink>
             </IconWrapper>
             <Text>
