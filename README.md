@@ -1031,13 +1031,14 @@ Google Sign In With Button 提供 redirect 和 popup 兩種流程，本專案『
 
 網站部署使用 AWS 服務，整體架構流程如下：
 
-| Item | AWS |
-|:----:|:---:|
-| DNS | Route 53 |
-| CDN | CloudFront |
-| Client | S3 |
-| Server | EC2 |
-| DB | RDS |
+| Item | AWS | Detail |
+|:----:|:---:|:------:|
+| DNS | Route 53 | - |
+| <ins>CDN</ins> | CloudFront | SSL |
+| <ins>Client</ins> | S3 | - |
+| Load Balance | (ELB) | SSL |
+| Server | EC2 | CentOS 7 / Pm2 |
+| DB | RDS | MariaDB v10.6.10 |
 
 <p align="right">
     <a href="#目錄">回目錄</a>
