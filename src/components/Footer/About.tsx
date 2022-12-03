@@ -162,6 +162,15 @@ function About(props: PropsAbout) {
                 <ALink href="https://knexjs.org" title="knex">
                     <img src={Knex} alt="" />
                 </ALink>
+                <ALink href="https://jestjs.io/" title="jest">
+                    <Jest />
+                </ALink>
+                <ALink
+                    href="https://github.com/features/actions"
+                    title="github-action"
+                >
+                    <Githubactions />
+                </ALink>
             </IconWrapper>
             <Text>
                 If you want to know more about our project, welcome to my github
