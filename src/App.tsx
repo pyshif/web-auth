@@ -1,13 +1,10 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import routes from 'utils/routes';
 import 'styles/App.css';
 import 'antd/dist/antd.css';
 import Loading from 'components/Loading';
-
-// redux
-import { useAppDispatch } from 'store';
-import { apiRequestToken } from 'store/features/authSlice';
+import useRequestToken from 'hooks/useRequestToken';
 
 // page
 const Layout = lazy(() => import('pages/Layout'));
@@ -27,22 +24,6 @@ function lazyPage(Component: any) {
             <Component />
         </Suspense>
     );
-}
-
-// hook
-function useRequestToken() {
-    // request access-token by refresh-token which store in cookies (http-only, secure)
-    const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        dispatch(apiRequestToken())
-            .then(() => {
-                // console.log('request token success!');
-            })
-            .catch((error) => {
-                // console.log('request token failed!');
-            });
-    }, []);
 }
 
 function App() {
