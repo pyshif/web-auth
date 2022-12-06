@@ -21,9 +21,7 @@ const Profile = styled(Card)`
     margin: 0 auto;
 `;
 
-type PropsUser = void;
-
-function User(props: PropsUser) {
+function User() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { token, user } = useAppSelector((state) => state.auth);
