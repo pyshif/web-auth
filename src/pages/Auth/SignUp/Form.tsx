@@ -77,7 +77,7 @@ function Form(props: PropsForm) {
                         message: 'Please input your name',
                     },
                     {
-                        pattern: /^[a-zA-Z,\s]{1,30}$/,
+                        pattern: /^[a-zA-Z,\s\u4e00-\u9FFF]{1,30}$/,
                         message: '1 - 30 characters (letter, comma, space)',
                     },
                 ]}
