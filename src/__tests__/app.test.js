@@ -39,86 +39,51 @@ afterEach(cleanup);
 describe('Router Testing', () => {
     it('should render home page', async () => {
         renderWithReduxAndRouter(<App />, routes.home);
-        const titleEl = await waitFor(() => screen.getByText(/^jwt authentication$/i));
-        expect(titleEl).toBeInTheDocument();
-
-        const navEl = await screen.findByText(/^colorful$/);
-        expect(navEl).toBeInTheDocument();
-
-        const footEl = await screen.findByText(/^what is this project \?$/i);
-        expect(footEl).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/^jwt authentication$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
     });
 
     it('should render sign-up page', async () => {
         renderWithReduxAndRouter(<App />, routes.auth.signup);
-        const titleEl = await waitFor(() => screen.getByText(/sign up your account/i));
-        expect(titleEl).toBeInTheDocument();
-
-        const navEl = await screen.findByText(/^colorful$/);
-        expect(navEl).toBeInTheDocument();
-
-        const footEl = await screen.findByText(/^what is this project \?$/i);
-        expect(footEl).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/sign up your account/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
     });
 
     it('should render sign-in page', async () => {
         renderWithReduxAndRouter(<App />, routes.auth.signin);
-        const titleEl = await waitFor(() => screen.getByText(/sign in to your account/i));
-        expect(titleEl).toBeInTheDocument();
-
-        const navEl = await screen.findByText(/^colorful$/);
-        expect(navEl).toBeInTheDocument();
-
-        const footEl = await screen.findByText(/^what is this project \?$/i);
-        expect(footEl).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/sign in to your account/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
     });
 
     it('should render forgot password page', async () => {
         renderWithReduxAndRouter(<App />, routes.auth.forgot);
-        const titleEl = await waitFor(() => screen.getByText(/get your reset password link/i));
-        expect(titleEl).toBeInTheDocument();
-
-        const navEl = await screen.findByText(/^colorful$/);
-        expect(navEl).toBeInTheDocument();
-
-        const footEl = await screen.findByText(/^what is this project \?$/i);
-        expect(footEl).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/get your reset password link/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
     });
 
     it('should render reset password page', async () => {
         renderWithReduxAndRouter(<App />, routes.auth.reset.self);
-        const titleEl = await waitFor(() => screen.getByText(/^reset your password in 30 mins$/i));
-        expect(titleEl).toBeInTheDocument();
-
-        const navEl = await screen.findByText(/^colorful$/);
-        expect(navEl).toBeInTheDocument();
-
-        const footEl = await screen.findByText(/^what is this project \?$/i);
-        expect(footEl).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/^reset your password in 30 mins$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
     });
 
     it('should render reset password by link page (same with reset page)', async () => {
         renderWithReduxAndRouter(<App />, reverse(routes.auth.reset.resetId, { resetId: 'token' }));
-        const titleEl = await waitFor(() => screen.getByText(/^reset your password in 30 mins$/i));
-        expect(titleEl).toBeInTheDocument();
-
-        const navEl = await screen.findByText(/^colorful$/);
-        expect(navEl).toBeInTheDocument();
-
-        const footEl = await screen.findByText(/^what is this project \?$/i);
-        expect(footEl).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/^reset your password in 30 mins$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
     });
 
     it('should render user profile page', async () => {
         renderWithReduxAndRouter(<App />, routes.user);
-        const titleEl = await waitFor(() => screen.getByText(/^update$/i));
-        expect(titleEl).toBeInTheDocument();
-
-        const navEl = await screen.findByText(/^colorful$/);
-        expect(navEl).toBeInTheDocument();
-
-        const footEl = await screen.findByText(/^what is this project \?$/i);
-        expect(footEl).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/^update$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
     });
 
     it('should render navbar and link can work', async () => {
@@ -196,7 +161,11 @@ describe('Router Testing', () => {
     });
 });
 
-describe('Sign Up Flow Testing', () => { });
+describe('Sign Up Flow Testing', () => {
+    it('should sign up success', async () => {
+
+    });
+});
 
 describe('Sign In Flow Testing', () => { });
 
