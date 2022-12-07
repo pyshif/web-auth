@@ -1,4 +1,5 @@
 import { include } from 'named-urls';
+export { reverse } from 'named-urls';
 
 const routes = {
     home: '/',
