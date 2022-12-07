@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import routes from 'utils/routes';
 import 'styles/App.css';
 import 'antd/dist/antd.css';
@@ -30,38 +30,36 @@ function App() {
     useRequestToken();
 
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path={routes.home} element={lazyPage(Layout)}>
-                    <Route path={routes.auth.self} element={lazyPage(Auth)}>
-                        <Route
-                            path={routes.auth.signin}
-                            element={lazyPage(SignIn)}
-                        ></Route>
-                        <Route
-                            path={routes.auth.signup}
-                            element={lazyPage(SignUp)}
-                        ></Route>
-                        <Route
-                            path={routes.auth.forgot}
-                            element={lazyPage(Forgot)}
-                        ></Route>
-                        <Route
-                            path={routes.auth.reset.self}
-                            element={lazyPage(Reset)}
-                        ></Route>
-                        <Route
-                            path={routes.auth.reset.resetId}
-                            element={lazyPage(Reset)}
-                        ></Route>
-                        <Route index element={<Navigate to="/404" />}></Route>
-                    </Route>
-                    <Route index element={lazyPage(Home)}></Route>
-                    <Route path={routes.user} element={lazyPage(User)}></Route>
+        <Routes>
+            <Route path={routes.home} element={lazyPage(Layout)}>
+                <Route path={routes.auth.self} element={lazyPage(Auth)}>
+                    <Route
+                        path={routes.auth.signin}
+                        element={lazyPage(SignIn)}
+                    ></Route>
+                    <Route
+                        path={routes.auth.signup}
+                        element={lazyPage(SignUp)}
+                    ></Route>
+                    <Route
+                        path={routes.auth.forgot}
+                        element={lazyPage(Forgot)}
+                    ></Route>
+                    <Route
+                        path={routes.auth.reset.self}
+                        element={lazyPage(Reset)}
+                    ></Route>
+                    <Route
+                        path={routes.auth.reset.resetId}
+                        element={lazyPage(Reset)}
+                    ></Route>
+                    <Route index element={<Navigate to="/404" />}></Route>
                 </Route>
-                <Route path="*" element={lazyPage(Error)}></Route>
-            </Routes>
-        </BrowserRouter>
+                <Route index element={lazyPage(Home)}></Route>
+                <Route path={routes.user} element={lazyPage(User)}></Route>
+            </Route>
+            <Route path="*" element={lazyPage(Error)}></Route>
+        </Routes>
     );
 }
 
