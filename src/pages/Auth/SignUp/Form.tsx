@@ -109,7 +109,7 @@ function Form(props: PropsForm) {
                 rules={[
                     {
                         required: true,
-                        message: 'Please input your password',
+                        message: 'Please input your password!',
                     },
                     {
                         pattern: /^[a-zA-Z\d!@#$%&*?]{8,25}$/,
@@ -145,7 +145,7 @@ function Form(props: PropsForm) {
                 rules={[
                     {
                         required: true,
-                        message: 'Please input your password',
+                        message: 'Please input your password again!',
                     },
                     // TODO: validate password and confirm-password are equal.
                 ]}
@@ -162,7 +162,7 @@ function Form(props: PropsForm) {
                 rules={[
                     {
                         required: true,
-                        message: 'Please input your password!',
+                        message: 'Please input your password hint!',
                     },
                     {
                         pattern: /^[a-zA-Z\d\s]{6,25}$/,

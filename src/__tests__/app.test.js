@@ -1,6 +1,8 @@
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { cleanup, fireEvent, getByText, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
+import { configure } from '@testing-library/dom';
+configure({ asyncUtilTimeout: 2000 });
 // module
 import store from 'store';
 import { Provider } from 'react-redux';
@@ -46,7 +48,7 @@ describe('Router Testing', () => {
 
     it('should render sign-up page', async () => {
         renderWithReduxAndRouter(<App />, routes.auth.signup);
-        await waitFor(() => expect(screen.getByText(/sign up your account/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^sign up your account$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
     });
@@ -96,15 +98,16 @@ describe('Router Testing', () => {
         const homeLinks = await findAllByText(/^home$/i);
         const authLinks = await findAllByText(/^auth$/i);
         // link to sign-in page, and make sure render success
-        jest.spyOn(document, 'querySelector').mockReturnValueOnce({ scroll: jest.fn((x, y) => '') });
+        const mockScroll = jest.spyOn(document, 'querySelector');
+        mockScroll.mockReturnValueOnce({ scroll: jest.fn((x, y) => '') });
         await user.click(authLinks[0]);
         await waitFor(() => expect(screen.getByText(/^sign in to your account$/i)).toBeInTheDocument());
         // link back to home page, and make sure render success
-        jest.spyOn(document, 'querySelector').mockReturnValueOnce({ scroll: jest.fn((x, y) => '') });
+        mockScroll.mockReturnValueOnce({ scroll: jest.fn((x, y) => '') });
         await user.click(homeLinks[0]);
         await waitFor(() => expect(screen.getByText(/^jwt authentication$/i)).toBeInTheDocument());
 
-        jest.spyOn(document, 'querySelector').mockReturnValueOnce({ scroll: jest.fn((x, y) => '') });
+        mockScroll.mockReturnValueOnce({ scroll: jest.fn((x, y) => '') });
         await user.click(brandLink);
         await waitFor(() => expect(screen.getByText(/^jwt authentication$/i)).toBeInTheDocument());
     });
@@ -162,9 +165,32 @@ describe('Router Testing', () => {
 });
 
 describe('Sign Up Flow Testing', () => {
-    it('should sign up success', async () => {
+    it('should correctly validate input data from user', async () => {
+        // render
+        const { user, getByLabelText, getByRole } = renderWithReduxAndRouter(<App />, routes.auth.signup);
+        await waitFor(() => expect(screen.getByText(/^sign up your account$/i)).toBeInTheDocument());
+        // get input element
+        const username = getByLabelText(/^username$/i);
+        const email = getByLabelText(/^email$/i);
+        const password = getByLabelText(/^password$/i);
+        const confirmPassword = getByLabelText(/^confirm password$/i);
+        const passwordHint = getByLabelText(/^password hint$/i);
+        const register = getByRole('button', { name: /^register$/i });
+        // empty warning test
+        await user.click(register);
+        await waitFor(() => expect(screen.getByText(/please input your name/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/please input your email/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^please input your password!$/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/please input your password again/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/please input your password hint/i)).toBeInTheDocument());
 
     });
+
+    it('should navigate back to sign in page', async () => {
+
+    });
+
+    it('should sign up success', async () => { })
 });
 
 describe('Sign In Flow Testing', () => { });
