@@ -3,17 +3,20 @@ import userEvent from '@testing-library/user-event';
 import { cleanup, fireEvent, getByText, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import { configure } from '@testing-library/dom';
 configure({ asyncUtilTimeout: 2000 });
+
 // module
 import store from 'store';
 import { Provider } from 'react-redux';
 import App from '../App';
 import { BrowserRouter } from 'react-router-dom';
 import routes, { reverse } from 'utils/routes';
+import api from 'api';
 // mock
 import 'mocks/browser/window';
+import axios from 'axios';
 jest.mock('styles/App.css', () => ({}));
 jest.mock('hooks/useRequestToken', () => jest.fn());
-
+// mock
 
 function renderWithReduxAndRouter(component, route) {
     window.history.pushState({}, '', route);
@@ -31,6 +34,14 @@ function renderWithReduxAndRouter(component, route) {
     }
 }
 
+async function waitForLoading() {
+    try {
+        await waitForElementToBeRemoved(screen.queryByText(/loading/i));
+    } catch (error) {
+    }
+    return;
+}
+
 afterAll(() => {
     // FIXME: sometimes testing failed with unknown reason. guess environment not complete clear ?
     jest.resetModules();
@@ -41,6 +52,7 @@ afterEach(cleanup);
 describe('Router Testing', () => {
     it('should render home page', async () => {
         renderWithReduxAndRouter(<App />, routes.home);
+        await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^jwt authentication$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
@@ -48,6 +60,7 @@ describe('Router Testing', () => {
 
     it('should render sign-up page', async () => {
         renderWithReduxAndRouter(<App />, routes.auth.signup);
+        await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^sign up your account$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
@@ -55,6 +68,7 @@ describe('Router Testing', () => {
 
     it('should render sign-in page', async () => {
         renderWithReduxAndRouter(<App />, routes.auth.signin);
+        await waitForLoading();
         await waitFor(() => expect(screen.getByText(/sign in to your account/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
@@ -62,6 +76,7 @@ describe('Router Testing', () => {
 
     it('should render forgot password page', async () => {
         renderWithReduxAndRouter(<App />, routes.auth.forgot);
+        await waitForLoading();
         await waitFor(() => expect(screen.getByText(/get your reset password link/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
@@ -69,6 +84,7 @@ describe('Router Testing', () => {
 
     it('should render reset password page', async () => {
         renderWithReduxAndRouter(<App />, routes.auth.reset.self);
+        await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^reset your password in 30 mins$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
@@ -76,6 +92,7 @@ describe('Router Testing', () => {
 
     it('should render reset password by link page (same with reset page)', async () => {
         renderWithReduxAndRouter(<App />, reverse(routes.auth.reset.resetId, { resetId: 'token' }));
+        await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^reset your password in 30 mins$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
@@ -83,6 +100,7 @@ describe('Router Testing', () => {
 
     it('should render user profile page', async () => {
         renderWithReduxAndRouter(<App />, routes.user);
+        await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^update$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
@@ -92,6 +110,7 @@ describe('Router Testing', () => {
         // render
         const { user, findByText, findAllByText } = renderWithReduxAndRouter(<App />, routes.home);
         // make sure render complete
+        await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^jwt authentication$/i)).toBeInTheDocument());
         // get links
         const brandLink = await findByText(/^colorful$/);
@@ -115,6 +134,7 @@ describe('Router Testing', () => {
     it('should render footer and webmap can work', async () => {
         // render
         const { user, findByText, findAllByText } = renderWithReduxAndRouter(<App />, routes.home);
+        await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^jwt authentication$/i)).toBeInTheDocument());
         // get links from footer
         const homeLink = await findByText(/^introduction$/i);
@@ -168,6 +188,7 @@ describe('Sign Up Flow Testing', () => {
     it('should correctly validate input data from user', async () => {
         // render
         const { user, getByLabelText, getByRole } = renderWithReduxAndRouter(<App />, routes.auth.signup);
+        await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^sign up your account$/i)).toBeInTheDocument());
         // get input element
         const username = getByLabelText(/^username$/i);
@@ -183,14 +204,55 @@ describe('Sign Up Flow Testing', () => {
         await waitFor(() => expect(screen.getByText(/^please input your password!$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/please input your password again/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/please input your password hint/i)).toBeInTheDocument());
-
+        // 
     });
 
     it('should navigate back to sign in page', async () => {
 
     });
 
-    it('should sign up success', async () => { })
+    it('should sign up success', async () => {
+        // render
+        const { user, getByLabelText, getByRole } = renderWithReduxAndRouter(<App />, routes.auth.signup);
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/^sign up your account$/i)).toBeInTheDocument());
+        // mock
+        const mockSignUp = jest.spyOn(api.v1.auth, 'signUp');
+        mockSignUp.mockReturnValueOnce({ status: 200, statusText: 'OK' });
+        // get input element
+        const username = getByLabelText(/^username$/i);
+        const email = getByLabelText(/^email$/i);
+        const password = getByLabelText(/^password$/i);
+        const confirmPassword = getByLabelText(/^confirm password$/i);
+        const passwordHint = getByLabelText(/^password hint$/i);
+        const register = getByRole('button', { name: /^register$/i });
+        // input
+        await user.click(username);
+        await user.keyboard('Liz');
+        // console.log('username.value :>> ', username.value);
+
+        await user.click(email);
+        await user.keyboard('liz@mail.com');
+        // console.log('email.value :>> ', email.value);
+
+        await user.click(password);
+        await user.keyboard('Aa123456@');
+        // console.log('password.value :>> ', password.value);
+
+        await user.click(confirmPassword);
+        await user.keyboard('Aa123456@');
+        // console.log('confirmPassword.value :>> ', confirmPassword.value);
+
+        await user.click(passwordHint);
+        await user.keyboard('it was a nice day');
+        // console.log('passwordHint.value :>> ', passwordHint.value);
+
+        await user.click(register);
+
+        await waitFor(() => expect(screen.getByText(/sign-up in progress/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/sign-up success/i)).toBeInTheDocument());
+        expect(mockSignUp).toHaveBeenCalled();
+    });
 });
 
 describe('Sign In Flow Testing', () => { });
