@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env.dev' });
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { cleanup, fireEvent, getByText, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
@@ -35,12 +37,12 @@ function renderWithReduxAndRouter(component, route) {
 }
 
 async function waitForLoading() {
-    try {
-        await waitForElementToBeRemoved(screen.queryByText(/loading/i));
-    } catch (error) {
-    }
-    return;
+    await waitForElementToBeRemoved(screen.queryByText(/loading/i)).catch(err => '');
 }
+
+beforeAll(() => {
+    console.log('process.env :>> ', process.env);
+})
 
 afterAll(() => {
     // FIXME: sometimes testing failed with unknown reason. guess environment not complete clear ?
@@ -198,6 +200,8 @@ describe('Sign Up Flow Testing', () => {
         const passwordHint = getByLabelText(/^password hint$/i);
         const register = getByRole('button', { name: /^register$/i });
         // empty warning test
+        const mockWarning = jest.spyOn(console, 'warn');
+        mockWarning.mockImplementation(() => ''); // prevent frequently warning by ant-design from component
         await user.click(register);
         await waitFor(() => expect(screen.getByText(/please input your name/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/please input your email/i)).toBeInTheDocument());
@@ -208,7 +212,17 @@ describe('Sign Up Flow Testing', () => {
     });
 
     it('should navigate back to sign in page', async () => {
-
+        // render
+        const { user, getByText } = renderWithReduxAndRouter(<App />, routes.auth.signup);
+        await waitForLoading();
+        // get link element
+        const signInLink = getByText(/back to sign in/i);
+        // event
+        const mockScroll = jest.spyOn(document, 'querySelector');
+        mockScroll.mockReturnValueOnce({ scroll: (x, y) => '' });
+        await user.click(signInLink);
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/sign in to your account/i)).toBeInTheDocument());
     });
 
     it('should sign up success', async () => {
