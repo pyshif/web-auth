@@ -7,17 +7,19 @@ import { configure } from '@testing-library/dom';
 configure({ asyncUtilTimeout: 2000 });
 
 // module
-import store from 'store';
+import store, { useAppDispatch, useAppSelector } from 'store';
 import { Provider } from 'react-redux';
 import App from '../App';
 import { BrowserRouter } from 'react-router-dom';
 import routes, { reverse } from 'utils/routes';
 import api from 'api';
+import mockJWTDecode from 'jwt-decode';
 // mock
 import 'mocks/browser/window';
 import axios from 'axios';
 jest.mock('styles/App.css', () => ({}));
 jest.mock('hooks/useRequestToken', () => jest.fn());
+jest.mock('jwt-decode', () => jest.fn());
 // mock
 
 function renderWithReduxAndRouter(component, route) {
@@ -46,7 +48,7 @@ beforeAll(() => {
 
 afterAll(() => {
     // FIXME: sometimes testing failed with unknown reason. guess environment not complete clear ?
-    jest.resetModules();
+    // jest.resetModules();
 })
 
 afterEach(cleanup);
@@ -242,24 +244,24 @@ describe('Sign Up Flow Testing', () => {
         const register = getByRole('button', { name: /^register$/i });
         // input
         await user.click(username);
-        await user.keyboard('Liz');
-        // console.log('username.value :>> ', username.value);
+        await user.keyboard(process.env.JEST_USER_NAME);
+        expect(username).toHaveDisplayValue(process.env.JEST_USER_NAME);
 
         await user.click(email);
-        await user.keyboard('liz@mail.com');
-        // console.log('email.value :>> ', email.value);
+        await user.keyboard(process.env.JEST_USER_EMAIL);
+        expect(email).toHaveDisplayValue(process.env.JEST_USER_EMAIL);
 
         await user.click(password);
-        await user.keyboard('Aa123456@');
-        // console.log('password.value :>> ', password.value);
+        await user.keyboard(process.env.JEST_USER_PASSWORD);
+        expect(password).toHaveDisplayValue(process.env.JEST_USER_PASSWORD);
 
         await user.click(confirmPassword);
-        await user.keyboard('Aa123456@');
-        // console.log('confirmPassword.value :>> ', confirmPassword.value);
+        await user.keyboard(process.env.JEST_USER_PASSWORD);
+        expect(confirmPassword).toHaveDisplayValue(process.env.JEST_USER_PASSWORD);
 
         await user.click(passwordHint);
-        await user.keyboard('it was a nice day');
-        // console.log('passwordHint.value :>> ', passwordHint.value);
+        await user.keyboard(process.env.JEST_USER_PASSWORD_HINT);
+        expect(passwordHint).toHaveDisplayValue(process.env.JEST_USER_PASSWORD_HINT);
 
         await user.click(register);
 
@@ -269,7 +271,93 @@ describe('Sign Up Flow Testing', () => {
     });
 });
 
-describe('Sign In Flow Testing', () => { });
+describe('Sign In Flow Testing', () => {
+    it('should validate sign in infromation from user input', async () => {
+        const { user, getByText, getByPlaceholderText, getByRole } = renderWithReduxAndRouter(<App />, routes.auth.signin);
+        await waitForLoading();
+        await waitFor(() => expect(getByText(/^sign in to your account$/i)).toBeInTheDocument());
+        // get input element
+        const login = getByRole('button', { name: 'Log in' });
+        expect(login).toBeInTheDocument();
+        // bad input
+        await user.click(login);
+        // expect warning message
+        await waitFor(() => expect(screen.getByText(/^please input your email/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/^please input your password/i)).toBeInTheDocument());
+    });
+
+    it('should link to correct page', async () => {
+        const { user, getByText, getByRole } = renderWithReduxAndRouter(<App />, routes.auth.signin);
+        await waitForLoading();
+        await waitFor(() => expect(getByText(/^sign in to your account$/i)).toBeInTheDocument());
+        // mock
+        const mockScroll = jest.spyOn(document, 'querySelector');
+        // click forgot link
+        mockScroll.mockReturnValueOnce({ scroll: (x, y) => '' });
+        const forgotLink = getByRole('link', { name: /^forgot password \?/i });
+        expect(forgotLink).toBeInTheDocument();
+        await user.click(forgotLink);
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/^get your reset password link$/i)).toBeInTheDocument());
+        // back
+        window.history.back();
+        await waitFor(() => expect(getByText(/^sign in to your account$/i)).toBeInTheDocument());
+        // click sign up link
+        mockScroll.mockReturnValueOnce({ scroll: (x, y) => '' });
+        const signUpLink = getByRole('link', { name: /^sign up by here/i });
+        expect(signUpLink).toBeInTheDocument();
+        await user.click(signUpLink);
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/^sign up your account$/i)).toBeInTheDocument());
+    });
+
+    it('should sign in success', async () => {
+        const { user, getByText, getByPlaceholderText, getByRole } = renderWithReduxAndRouter(<App />, routes.auth.signin);
+        await waitForLoading();
+        await waitFor(() => expect(getByText(/^sign in to your account$/i)).toBeInTheDocument());
+        // input
+        const email = getByPlaceholderText(/^email$/i);
+        const password = getByPlaceholderText(/^password$/i);
+        const login = getByRole('button', { name: /^log in$/i });
+        expect(email).toBeInTheDocument();
+        expect(password).toBeInTheDocument();
+        expect(login).toBeInTheDocument();
+        // user
+        await user.click(email);
+        await user.keyboard(process.env.JEST_USER_EMAIL);
+        expect(email).toHaveDisplayValue(process.env.JEST_USER_EMAIL);
+
+        await user.click(password);
+        await user.keyboard(process.env.JEST_USER_PASSWORD);
+        expect(password).toHaveDisplayValue(process.env.JEST_USER_PASSWORD);
+
+        // mock sign in api
+        const spySignIn = jest.spyOn(api.v1.auth, 'signIn');
+        spySignIn.mockReturnValueOnce({
+            status: 200,
+            statusText: 'OK',
+            data: {
+                accessToken: 'someToken'
+            }
+        });
+
+        mockJWTDecode.mockReturnValueOnce({
+            name: process.env.JEST_USER_NAME,
+            birthday: process.env.JEST_USER_NEW_BIRTHDAY,
+            phone: process.env.JEST_USER_NEW_PHONE,
+            gender: process.env.JEST_USER_NEW_GENDER,
+            avatar: '',
+            email: process.env.JEST_USER_EMAIL
+        });
+
+        await user.click(login);
+        // success message
+        await waitFor(() => expect(screen.getByText(/sign-in success/i)).toBeInTheDocument());
+        // navigate to user profile page
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/^update$/i)).toBeInTheDocument());
+    });
+});
 
 describe('Forgot Password Testing', () => { });
 
