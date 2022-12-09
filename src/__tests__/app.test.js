@@ -8,6 +8,7 @@ configure({ asyncUtilTimeout: 2000 });
 
 // module
 import store, { useAppDispatch, useAppSelector } from 'store';
+import { reset } from 'store/features/authSlice';
 import { Provider } from 'react-redux';
 import App from '../App';
 import { BrowserRouter } from 'react-router-dom';
@@ -44,6 +45,7 @@ async function waitForLoading() {
 
 beforeAll(() => {
     console.log('process.env :>> ', process.env);
+    cleanup();
     // sleep 3 secs
     return new Promise(resolve => setTimeout(resolve, 3000));
 })
@@ -53,9 +55,7 @@ afterAll(() => {
     // jest.resetModules();
 })
 
-afterEach(() => {
-    cleanup();
-});
+afterEach(cleanup);
 
 describe('Router Testing', () => {
     it('should render home page', async () => {
@@ -347,9 +347,9 @@ describe('Sign In Flow Testing', () => {
 
         mockJWTDecode.mockReturnValueOnce({
             name: process.env.JEST_USER_NAME,
-            birthday: process.env.JEST_USER_NEW_BIRTHDAY,
-            phone: process.env.JEST_USER_NEW_PHONE,
-            gender: process.env.JEST_USER_NEW_GENDER,
+            birthday: process.env.JEST_USER_BIRTHDAY,
+            phone: process.env.JEST_USER_PHONE,
+            gender: process.env.JEST_USER_GENDER,
             avatar: '',
             email: process.env.JEST_USER_EMAIL
         });
@@ -457,6 +457,7 @@ describe('User Profile Updating Testing', () => {
         const { user } = renderWithReduxAndRouter(<App />, routes.user);
         await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^update$/i)).toBeInTheDocument());
+
         // get form element
         const username = screen.getByLabelText(/^username$/i);
         const birthday = screen.getByLabelText(/^birthday$/i);
@@ -476,8 +477,8 @@ describe('User Profile Updating Testing', () => {
         expect(username).toHaveDisplayValue(process.env.JEST_USER_NEW_NAME);
 
         await user.clear(birthday);
-        user.value = process.env.JEST_USER_NEW_BIRTHDAY;
-        // console.log('user.value :>> ', user.value);
+        fireEvent.change(birthday, { target: { value: process.env.JEST_USER_NEW_BIRTHDAY } });
+        expect(birthday).toHaveDisplayValue(process.env.JEST_USER_NEW_BIRTHDAY);
 
         await user.clear(gender);
         await user.click(gender);
@@ -500,17 +501,27 @@ describe('User Profile Updating Testing', () => {
         const spyUpdateUserPhone = jest.spyOn(api.v1.auth, 'updateUserPhone');
         const spyUpdateUserGender = jest.spyOn(api.v1.auth, 'updateUserGender');
         const spyUpdateUserEmail = jest.spyOn(api.v1.auth, 'updateUserEmail');
-        spyUpdateUserName.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
-        spyUpdateUserBirthday.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
-        spyUpdateUserPhone.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
-        spyUpdateUserGender.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
-        spyUpdateUserEmail.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+        spyUpdateUserName.mockResolvedValue({ status: 200, statusText: 'OK' });
+        spyUpdateUserBirthday.mockResolvedValue({ status: 200, statusText: 'OK' });
+        spyUpdateUserPhone.mockResolvedValue({ status: 200, statusText: 'OK' });
+        spyUpdateUserGender.mockResolvedValue({ status: 200, statusText: 'OK' });
+        spyUpdateUserEmail.mockResolvedValue({ status: 200, statusText: 'OK' });
 
         await user.click(update);
+        expect(spyUpdateUserName).toHaveBeenCalledTimes(1);
+        expect(spyUpdateUserBirthday).toHaveBeenCalledTimes(1);
+        expect(spyUpdateUserPhone).toHaveBeenCalledTimes(1);
+        expect(spyUpdateUserGender).toHaveBeenCalledTimes(1);
+        expect(spyUpdateUserEmail).toHaveBeenCalledTimes(1);
         await waitFor(() => expect(screen.getByText(/update user name success/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/update birthday success/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/update phone number success/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/update gender success/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/update email address success/i)).toBeInTheDocument());
+        // console.log('spyUpdateUserName.mock.calls.length :>> ', spyUpdateUserName.mock.calls.length);
+        // console.log('spyUpdateUserBirthday.mock.calls.length :>> ', spyUpdateUserBirthday.mock.calls.length);
+        // console.log('spyUpdateUserPhone.mock.calls.length :>> ', spyUpdateUserPhone.mock.calls.length);
+        // console.log('spyUpdateUserGender.mock.calls.length :>> ', spyUpdateUserGender.mock.calls.length);
+        // console.log('spyUpdateUserEmail.mock.calls.length :>> ', spyUpdateUserEmail.mock.calls.length);
     });
 });

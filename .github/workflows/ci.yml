@@ -37,6 +37,9 @@ jobs:
         JEST_USER_EMAIL= ${{ secrets.JEST_USER_EMAIL }}
         JEST_USER_PASSWORD= ${{ secrets.JEST_USER_PASSWORD }}
         JEST_USER_PASSWORD_HINT= ${{ secrets.JEST_USER_PASSWORD_HINT }}
+        JEST_USER_GENDER= ${{ secrets.JEST_USER_GENDER }}
+        JEST_USER_PHONE= ${{ secrets.JEST_USER_PHONE }}
+        JEST_USER_BIRTHDAY= ${{ secrets.JEST_USER_BIRTHDAY }}
         JEST_USER_NEW_EMAIL= ${{ secrets.JEST_USER_NEW_EMAIL }}
         JEST_USER_NEW_NAME= ${{ secrets.JEST_USER_NEW_NAME }}
         JEST_USER_NEW_PASSWORD= ${{ secrets.JEST_USER_NEW_PASSWORD }}

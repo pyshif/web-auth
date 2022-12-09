@@ -35,6 +35,8 @@ function User() {
         setUploading(true);
 
         // updating username
+        // console.log('name :>> ', name);
+        // console.log('user.name :>> ', user.name);
         if (name !== user.name) {
             const hide = message.loading('Update user name in progress...', 0);
             dispatch(
@@ -51,6 +53,8 @@ function User() {
         }
 
         // updaing birthday
+        // console.log('birthday :>> ', birthday);
+        // console.log('user.birthday :>> ', user.birthday);
         if (birthday !== user.birthday) {
             const hide = message.loading('Update birthday in progress...', 0);
             dispatch(
@@ -69,6 +73,8 @@ function User() {
             });
         }
         // updaing gender
+        // console.log('gender :>> ', gender);
+        // console.log('user.gender :>> ', user.gender);
         if (gender !== user.gender) {
             const hide = message.loading('Update gender in progress...', 0);
             dispatch(
@@ -87,6 +93,8 @@ function User() {
             });
         }
         // updating phone number
+        // console.log('phone :>> ', phone);
+        // console.log('user.phone :>> ', user.phone);
         if (phone !== user.phone) {
             const hide = message.loading(
                 'Update phone number in progress...',
@@ -108,6 +116,8 @@ function User() {
             });
         }
         // updating email address
+        // console.log('email :>> ', email);
+        // console.log('user.email :>> ', user.email);
         if (email !== user.email) {
             const hide = message.loading('Update email address in progress', 0);
             dispatch(
