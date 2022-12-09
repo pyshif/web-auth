@@ -44,6 +44,8 @@ async function waitForLoading() {
 
 beforeAll(() => {
     console.log('process.env :>> ', process.env);
+    // sleep 3 secs
+    return new Promise(resolve => setTimeout(resolve, 3000));
 })
 
 afterAll(() => {
@@ -234,7 +236,7 @@ describe('Sign Up Flow Testing', () => {
         await waitFor(() => expect(screen.getByText(/^sign up your account$/i)).toBeInTheDocument());
         // mock
         const mockSignUp = jest.spyOn(api.v1.auth, 'signUp');
-        mockSignUp.mockReturnValueOnce({ status: 200, statusText: 'OK' });
+        mockSignUp.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
         // get input element
         const username = getByLabelText(/^username$/i);
         const email = getByLabelText(/^email$/i);
@@ -333,7 +335,7 @@ describe('Sign In Flow Testing', () => {
 
         // mock sign in api
         const spySignIn = jest.spyOn(api.v1.auth, 'signIn');
-        spySignIn.mockReturnValueOnce({
+        spySignIn.mockResolvedValueOnce({
             status: 200,
             statusText: 'OK',
             data: {
@@ -352,6 +354,7 @@ describe('Sign In Flow Testing', () => {
 
         await user.click(login);
         // success message
+        // await waitFor(() => expect(screen.getByText(/sign-in in progress/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/sign-in success/i)).toBeInTheDocument());
         // navigate to user profile page
         await waitForLoading();
@@ -359,8 +362,92 @@ describe('Sign In Flow Testing', () => {
     });
 });
 
-describe('Forgot Password Testing', () => { });
+describe('Forgot Password Testing', () => {
+    it('should be link to sign-in page', async () => {
+        const { user } = renderWithReduxAndRouter(<App />, routes.auth.forgot);
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/^get your reset password link$/i)).toBeInTheDocument());
+        // get link element
+        const signInLink = screen.getByText(/^back to sign in/i);
+        expect(signInLink).toBeInTheDocument();
+        // click
+        const spyScroll = jest.spyOn(document, 'querySelector');
+        spyScroll.mockReturnValueOnce({ scroll: (x, y) => '' });
+        await user.click(signInLink);
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/^sign in to your account$/i)).toBeInTheDocument());
+    });
 
-describe('Reset Password Testing', () => { });
+    it('should be success get reset password link', async () => {
+        const { user } = renderWithReduxAndRouter(<App />, routes.auth.forgot);
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/^get your reset password link$/i)).toBeInTheDocument());
+        // get form element
+        const email = screen.getByLabelText(/^email$/i);
+        const passwordHint = screen.getByLabelText(/^password hint$/i);
+        const submit = screen.getByRole('button', { name: /^submit$/i });
+        // event
+        await user.click(email);
+        await user.keyboard(process.env.JEST_USER_EMAIL);
+        expect(email).toHaveDisplayValue(process.env.JEST_USER_EMAIL);
+
+        await user.click(passwordHint);
+        await user.keyboard(process.env.JEST_USER_PASSWORD_HINT);
+        expect(passwordHint).toHaveDisplayValue(process.env.JEST_USER_PASSWORD_HINT);
+        // submit
+        const spyForgotAPI = jest.spyOn(api.v1.auth, 'forgotPassword');
+        spyForgotAPI.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+        await user.click(submit);
+        // assertion
+        // await waitFor(() => expect(screen.getByText(/forgot password in progress/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/reset-password link has been sent/i)).toBeInTheDocument());
+        expect(spyForgotAPI).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('Reset Password Testing', () => {
+    it('should be link to sign-in page', async () => {
+        const { user } = renderWithReduxAndRouter(<App />, routes.auth.reset.self);
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/^reset your password in 30 mins$/i)).toBeInTheDocument());
+        // get link element
+        const signInLink = screen.getByText(/^back to sign in/i);
+        // event
+        const spyScroll = jest.spyOn(document, 'querySelector');
+        spyScroll.mockReturnValueOnce({ scroll: (x, y) => '' });
+        await user.click(signInLink);
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/^sign in to your account$/i)).toBeInTheDocument());
+    });
+
+    it('should be success reset password', async () => {
+        const { user } = renderWithReduxAndRouter(<App />, routes.auth.reset.self);
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/^reset your password in 30 mins$/i)).toBeInTheDocument());
+        // get form element
+        const newPassword = screen.getByLabelText(/^new password$/i);
+        const confirmPassword = screen.getByLabelText(/^confirm password$/i);
+        const submit = screen.getByRole('button', { name: /^submit$/i });
+        // event
+        const spyResetAPI = jest.spyOn(api.v1.auth, 'ResetPassword');
+        spyResetAPI.mockResolvedValueOnce({
+            status: 200,
+            statusText: 'OK'
+        });
+
+        await user.click(newPassword);
+        await user.keyboard(process.env.JEST_USER_NEW_PASSWORD);
+        expect(newPassword).toHaveDisplayValue(process.env.JEST_USER_NEW_PASSWORD);
+
+        await user.click(confirmPassword);
+        await user.keyboard(process.env.JEST_USER_NEW_PASSWORD);
+        expect(confirmPassword).toHaveDisplayValue(process.env.JEST_USER_NEW_PASSWORD);
+
+        await user.click(submit);
+        // await waitFor(() => expect(screen.getByText(/reset password in progress/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/reset password success/i)).toBeInTheDocument());
+        expect(spyResetAPI).toHaveBeenCalledTimes(1);
+    });
+});
 
 describe('User Profile Updating Testing', () => { });
