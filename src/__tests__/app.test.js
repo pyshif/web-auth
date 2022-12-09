@@ -53,7 +53,9 @@ afterAll(() => {
     // jest.resetModules();
 })
 
-afterEach(cleanup);
+afterEach(() => {
+    cleanup();
+});
 
 describe('Router Testing', () => {
     it('should render home page', async () => {
@@ -450,4 +452,65 @@ describe('Reset Password Testing', () => {
     });
 });
 
-describe('User Profile Updating Testing', () => { });
+describe('User Profile Updating Testing', () => {
+    it('should be success update user profile', async () => {
+        const { user } = renderWithReduxAndRouter(<App />, routes.user);
+        await waitForLoading();
+        await waitFor(() => expect(screen.getByText(/^update$/i)).toBeInTheDocument());
+        // get form element
+        const username = screen.getByLabelText(/^username$/i);
+        const birthday = screen.getByLabelText(/^birthday$/i);
+        const gender = screen.getByLabelText(/^gender$/i);
+        const phone = screen.getByLabelText(/^phone$/i);
+        const email = screen.getByLabelText(/^email$/i);
+        const update = screen.getByRole('button', { name: /^update$/i });
+        console.log('username.value :>> ', username.value);
+        console.log('birthday.value :>> ', birthday.value);
+        console.log('gender.value :>> ', gender.value);
+        console.log('phone.value :>> ', phone.value);
+        console.log('email.value :>> ', email.value);
+        // event
+        await user.clear(username);
+        await user.click(username);
+        await user.keyboard(process.env.JEST_USER_NEW_NAME);
+        expect(username).toHaveDisplayValue(process.env.JEST_USER_NEW_NAME);
+
+        await user.clear(birthday);
+        user.value = process.env.JEST_USER_NEW_BIRTHDAY;
+        // console.log('user.value :>> ', user.value);
+
+        await user.clear(gender);
+        await user.click(gender);
+        await user.keyboard(process.env.JEST_USER_NEW_GENDER);
+        expect(gender).toHaveDisplayValue(process.env.JEST_USER_NEW_GENDER);
+
+        await user.clear(phone);
+        await user.click(phone);
+        await user.keyboard(process.env.JEST_USER_NEW_PHONE);
+        expect(phone).toHaveDisplayValue(process.env.JEST_USER_NEW_PHONE);
+
+        await user.clear(email);
+        await user.click(email);
+        await user.keyboard(process.env.JEST_USER_NEW_EMAIL);
+        expect(email).toHaveDisplayValue(process.env.JEST_USER_NEW_EMAIL);
+
+        // mock
+        const spyUpdateUserName = jest.spyOn(api.v1.auth, 'updateUserName');
+        const spyUpdateUserBirthday = jest.spyOn(api.v1.auth, 'updateUserBirthday');
+        const spyUpdateUserPhone = jest.spyOn(api.v1.auth, 'updateUserPhone');
+        const spyUpdateUserGender = jest.spyOn(api.v1.auth, 'updateUserGender');
+        const spyUpdateUserEmail = jest.spyOn(api.v1.auth, 'updateUserEmail');
+        spyUpdateUserName.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+        spyUpdateUserBirthday.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+        spyUpdateUserPhone.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+        spyUpdateUserGender.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+        spyUpdateUserEmail.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+
+        await user.click(update);
+        await waitFor(() => expect(screen.getByText(/update user name success/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/update birthday success/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/update phone number success/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/update gender success/i)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/update email address success/i)).toBeInTheDocument());
+    });
+});
