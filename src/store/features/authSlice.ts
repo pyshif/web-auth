@@ -34,7 +34,7 @@ export type StateAuth = {
     }
 };
 
-const initialState: StateAuth = {
+export const initialState: StateAuth = {
     status: 'idle',
     error: null,
     token: '',

@@ -7,8 +7,8 @@ import { configure } from '@testing-library/dom';
 configure({ asyncUtilTimeout: 2000 });
 
 // module
-import store, { useAppDispatch, useAppSelector } from 'store';
-import { reset } from 'store/features/authSlice';
+import { setupStore } from 'store';
+import { initialState as authInitialState } from 'store/features/authSlice';
 import { Provider } from 'react-redux';
 import App from '../App';
 import { BrowserRouter } from 'react-router-dom';
@@ -23,9 +23,10 @@ jest.mock('hooks/useRequestToken', () => jest.fn());
 jest.mock('jwt-decode', () => jest.fn());
 // mock
 
-function renderWithReduxAndRouter(component, route) {
+function renderWithReduxAndRouter(component, route, preloadedState = {}) {
     window.history.pushState({}, '', route);
     const user = userEvent.setup();
+    const store = setupStore(preloadedState);
     const Wrapper = ({ children }) => <Provider store={store}>
         <BrowserRouter>
             {children}
@@ -44,10 +45,9 @@ async function waitForLoading() {
 }
 
 beforeAll(() => {
-    console.log('process.env :>> ', process.env);
-    cleanup();
+    // console.log('process.env :>> ', process.env);
     // sleep 3 secs
-    return new Promise(resolve => setTimeout(resolve, 3000));
+    // return new Promise(resolve => setTimeout(resolve, 3000));
 })
 
 afterAll(() => {
@@ -61,9 +61,12 @@ describe('Router Testing', () => {
     it('should render home page', async () => {
         renderWithReduxAndRouter(<App />, routes.home);
         await waitForLoading();
-        await waitFor(() => expect(screen.getByText(/^jwt authentication$/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
+        await expect(screen.findByText(/^jwt authentication$/i)).resolves.toBeInTheDocument();
+        await expect(screen.findByText(/^colorful$/i)).resolves.toBeInTheDocument();
+        await expect(screen.findByText(/^what is this project \?$/i)).resolves.toBeInTheDocument();
+        // await waitFor(() => expect(screen.getByText(/^jwt authentication$/i)).toBeInTheDocument());
+        // await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
+        // await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
     });
 
     it('should render sign-up page', async () => {
@@ -423,9 +426,10 @@ describe('Reset Password Testing', () => {
     });
 
     it('should be success reset password', async () => {
-        const { user } = renderWithReduxAndRouter(<App />, routes.auth.reset.self);
+        const { user, store } = renderWithReduxAndRouter(<App />, routes.auth.reset.self, { auth: { ...authInitialState, token: '123' } });
         await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^reset your password in 30 mins$/i)).toBeInTheDocument());
+        // console.log('store.getState() :>> ', store.getState());
         // get form element
         const newPassword = screen.getByLabelText(/^new password$/i);
         const confirmPassword = screen.getByLabelText(/^confirm password$/i);
@@ -435,7 +439,7 @@ describe('Reset Password Testing', () => {
         spyResetAPI.mockResolvedValueOnce({
             status: 200,
             statusText: 'OK'
-        });
+        }).mockName('spyResetAPI');
 
         await user.click(newPassword);
         await user.keyboard(process.env.JEST_USER_NEW_PASSWORD);
@@ -446,13 +450,14 @@ describe('Reset Password Testing', () => {
         expect(confirmPassword).toHaveDisplayValue(process.env.JEST_USER_NEW_PASSWORD);
 
         await user.click(submit);
-        // await waitFor(() => expect(screen.getByText(/reset password in progress/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/reset password success/i)).toBeInTheDocument());
         expect(spyResetAPI).toHaveBeenCalledTimes(1);
+        // await expect(screen.findByText(/reset password in progress/i)).resolves.toBeInTheDocument();
+        await expect(screen.findByText(/reset password success/i)).resolves.toBeInTheDocument();
+        // await expect(screen.findByText(/reset password failed/i)).resolves.toBeInTheDocument();
     });
 });
 
-describe('User Profile Updating Testing', () => {
+describe.only('User Profile Updating Testing', () => {
     it('should be success update user profile', async () => {
         const { user } = renderWithReduxAndRouter(<App />, routes.user);
         await waitForLoading();
@@ -465,11 +470,11 @@ describe('User Profile Updating Testing', () => {
         const phone = screen.getByLabelText(/^phone$/i);
         const email = screen.getByLabelText(/^email$/i);
         const update = screen.getByRole('button', { name: /^update$/i });
-        console.log('username.value :>> ', username.value);
-        console.log('birthday.value :>> ', birthday.value);
-        console.log('gender.value :>> ', gender.value);
-        console.log('phone.value :>> ', phone.value);
-        console.log('email.value :>> ', email.value);
+        // console.log('username.value :>> ', username.value);
+        // console.log('birthday.value :>> ', birthday.value);
+        // console.log('gender.value :>> ', gender.value);
+        // console.log('phone.value :>> ', phone.value);
+        // console.log('email.value :>> ', email.value);
         // event
         await user.clear(username);
         await user.click(username);
@@ -501,11 +506,14 @@ describe('User Profile Updating Testing', () => {
         const spyUpdateUserPhone = jest.spyOn(api.v1.auth, 'updateUserPhone');
         const spyUpdateUserGender = jest.spyOn(api.v1.auth, 'updateUserGender');
         const spyUpdateUserEmail = jest.spyOn(api.v1.auth, 'updateUserEmail');
+        const spySignOut = jest.spyOn(api.v1.auth, 'signOut');
+        // const spyUpdateUserAvatar = jest.spyOn(api.v1.auth, 'updateUserAvatar');
         spyUpdateUserName.mockResolvedValue({ status: 200, statusText: 'OK' });
         spyUpdateUserBirthday.mockResolvedValue({ status: 200, statusText: 'OK' });
         spyUpdateUserPhone.mockResolvedValue({ status: 200, statusText: 'OK' });
         spyUpdateUserGender.mockResolvedValue({ status: 200, statusText: 'OK' });
         spyUpdateUserEmail.mockResolvedValue({ status: 200, statusText: 'OK' });
+        spySignOut.mockResolvedValue({ status: 200, statusText: 'OK' });
 
         await user.click(update);
         expect(spyUpdateUserName).toHaveBeenCalledTimes(1);
@@ -513,15 +521,18 @@ describe('User Profile Updating Testing', () => {
         expect(spyUpdateUserPhone).toHaveBeenCalledTimes(1);
         expect(spyUpdateUserGender).toHaveBeenCalledTimes(1);
         expect(spyUpdateUserEmail).toHaveBeenCalledTimes(1);
-        await waitFor(() => expect(screen.getByText(/update user name success/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/update birthday success/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/update phone number success/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/update gender success/i)).toBeInTheDocument());
-        await waitFor(() => expect(screen.getByText(/update email address success/i)).toBeInTheDocument());
+        expect(spySignOut).toHaveBeenCalledTimes(1);
+        await expect(screen.findByText(/update user name success/i)).resolves.toBeInTheDocument();
+        await expect(screen.findByText(/update birthday success/i)).resolves.toBeInTheDocument();
+        await expect(screen.findByText(/update phone number success/i)).resolves.toBeInTheDocument();
+        await expect(screen.findByText(/update gender success/i)).resolves.toBeInTheDocument();
+        await expect(screen.findByText(/update email address success/i)).resolves.toBeInTheDocument();
         // console.log('spyUpdateUserName.mock.calls.length :>> ', spyUpdateUserName.mock.calls.length);
         // console.log('spyUpdateUserBirthday.mock.calls.length :>> ', spyUpdateUserBirthday.mock.calls.length);
         // console.log('spyUpdateUserPhone.mock.calls.length :>> ', spyUpdateUserPhone.mock.calls.length);
         // console.log('spyUpdateUserGender.mock.calls.length :>> ', spyUpdateUserGender.mock.calls.length);
         // console.log('spyUpdateUserEmail.mock.calls.length :>> ', spyUpdateUserEmail.mock.calls.length);
+        // console.log('spySignOut.mock.calls.length :>> ', spySignOut.mock.calls.length);
+        // console.log('spyUpdateUserAvatar.mock.calls.length :>> ', spyUpdateUserAvatar.mock.calls.length);
     });
 });
