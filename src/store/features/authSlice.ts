@@ -238,16 +238,16 @@ const authSlice = createSlice({
         builder
             // health
             .addCase(apiHealth.pending, (state, action) => {
-                console.log('pending :>>', state, action);
+                // console.log('pending :>>', state, action);
                 state.status = 'loading';
 
             })
             .addCase(apiHealth.fulfilled, (state, action) => {
-                console.log('fulfilled :>>', state, action);
+                // console.log('fulfilled :>>', state, action);
                 state.status = 'succeeded';
             })
             .addCase(apiHealth.rejected, (state, action) => {
-                console.log('rejected :>>', state, action);
+                // console.log('rejected :>>', state, action);
                 state.status = 'failed';
             })
             // sign-up

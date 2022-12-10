@@ -21,6 +21,7 @@ import axios from 'axios';
 jest.mock('styles/App.css', () => ({}));
 jest.mock('hooks/useRequestToken', () => jest.fn());
 jest.mock('jwt-decode', () => jest.fn());
+jest.spyOn(console, 'warn').mockImplementation(() => '');
 // mock
 
 function renderWithReduxAndRouter(component, route, preloadedState = {}) {
@@ -56,6 +57,9 @@ afterAll(() => {
 })
 
 afterEach(cleanup);
+afterEach(() => {
+    jest.clearAllMocks();
+});
 
 describe('Router Testing', () => {
     it('should render home page', async () => {
@@ -80,6 +84,7 @@ describe('Router Testing', () => {
     it('should render sign-in page', async () => {
         renderWithReduxAndRouter(<App />, routes.auth.signin);
         await waitForLoading();
+        await expect(screen.findByText(/google/i)).resolves.toBeInTheDocument();
         await waitFor(() => expect(screen.getByText(/sign in to your account/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^what is this project \?$/i)).toBeInTheDocument());
@@ -436,10 +441,9 @@ describe('Reset Password Testing', () => {
         const submit = screen.getByRole('button', { name: /^submit$/i });
         // event
         const spyResetAPI = jest.spyOn(api.v1.auth, 'ResetPassword');
-        spyResetAPI.mockResolvedValueOnce({
-            status: 200,
-            statusText: 'OK'
-        }).mockName('spyResetAPI');
+        const spySignOut = jest.spyOn(api.v1.auth, 'signOut');
+        spyResetAPI.mockResolvedValueOnce({ status: 200, statusText: 'OK' }).mockName('spyResetAPI');
+        spySignOut.mockResolvedValueOnce({ status: 200, statusText: 'OK' }).mockName('spySignOut');
 
         await user.click(newPassword);
         await user.keyboard(process.env.JEST_USER_NEW_PASSWORD);
@@ -451,13 +455,14 @@ describe('Reset Password Testing', () => {
 
         await user.click(submit);
         expect(spyResetAPI).toHaveBeenCalledTimes(1);
+        expect(spySignOut).toHaveBeenCalledTimes(1);
         // await expect(screen.findByText(/reset password in progress/i)).resolves.toBeInTheDocument();
         await expect(screen.findByText(/reset password success/i)).resolves.toBeInTheDocument();
         // await expect(screen.findByText(/reset password failed/i)).resolves.toBeInTheDocument();
     });
 });
 
-describe.only('User Profile Updating Testing', () => {
+describe('User Profile Updating Testing', () => {
     it('should be success update user profile', async () => {
         const { user } = renderWithReduxAndRouter(<App />, routes.user);
         await waitForLoading();
@@ -507,13 +512,16 @@ describe.only('User Profile Updating Testing', () => {
         const spyUpdateUserGender = jest.spyOn(api.v1.auth, 'updateUserGender');
         const spyUpdateUserEmail = jest.spyOn(api.v1.auth, 'updateUserEmail');
         const spySignOut = jest.spyOn(api.v1.auth, 'signOut');
+        // const spyGoogleSignOut = jest.spyOn(api.v1.auth, 'googleSignOut');
+        // const spyRequestToken = jest.spyOn(api.v1.auth, 'requestToken');
+        // const spyGoogleSignIn = jest.spyOn(api.v1.auth, 'googleSignIn');
         // const spyUpdateUserAvatar = jest.spyOn(api.v1.auth, 'updateUserAvatar');
-        spyUpdateUserName.mockResolvedValue({ status: 200, statusText: 'OK' });
-        spyUpdateUserBirthday.mockResolvedValue({ status: 200, statusText: 'OK' });
-        spyUpdateUserPhone.mockResolvedValue({ status: 200, statusText: 'OK' });
-        spyUpdateUserGender.mockResolvedValue({ status: 200, statusText: 'OK' });
-        spyUpdateUserEmail.mockResolvedValue({ status: 200, statusText: 'OK' });
-        spySignOut.mockResolvedValue({ status: 200, statusText: 'OK' });
+        spyUpdateUserName.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+        spyUpdateUserBirthday.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+        spyUpdateUserPhone.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+        spyUpdateUserGender.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+        spyUpdateUserEmail.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
+        spySignOut.mockResolvedValueOnce({ status: 200, statusText: 'OK' });
 
         await user.click(update);
         expect(spyUpdateUserName).toHaveBeenCalledTimes(1);
@@ -534,5 +542,8 @@ describe.only('User Profile Updating Testing', () => {
         // console.log('spyUpdateUserEmail.mock.calls.length :>> ', spyUpdateUserEmail.mock.calls.length);
         // console.log('spySignOut.mock.calls.length :>> ', spySignOut.mock.calls.length);
         // console.log('spyUpdateUserAvatar.mock.calls.length :>> ', spyUpdateUserAvatar.mock.calls.length);
+        // console.log('spyRequestToken.mock.calls.length :>> ', spyRequestToken.mock.calls.length);
+        // console.log('spyGoogleSignIn.mock.calls.length :>> ', spyGoogleSignIn.mock.calls.length);
+        // console.log('spyGoogleSignOut.mock.calls.length :>> ', spyGoogleSignOut.mock.calls.length);
     });
 });
