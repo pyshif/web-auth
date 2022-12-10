@@ -7,7 +7,8 @@
         "start": "webpack s --env mode=dev -c ./webpack.dev.js",
         "build": "webpack --env mode=prod -c ./webpack.prod.js",
         "prod": "http-server --port 3000 -P http://localhost:3000? ./build",
-        "test": "jest --coverage --runInBand",
+        "test": "jest --coverage",
+        "test-ci": "jest",
         "sand": "webpack s --env mode=dev -c ./webpack.sand.js"
     },
     "keywords": [],

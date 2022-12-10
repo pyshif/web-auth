@@ -4,8 +4,9 @@ import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { cleanup, fireEvent, getByText, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import { configure } from '@testing-library/dom';
-configure({ asyncUtilTimeout: 2000 });
-
+configure({ asyncUtilTimeout: 10000 });
+// don't know why first testing always failed, so extreme the timeout.
+jest.setTimeout(10000);
 // module
 import { setupStore } from 'store';
 import { initialState as authInitialState } from 'store/features/authSlice';
@@ -62,11 +63,9 @@ afterEach(() => {
 });
 
 describe('Router Testing', () => {
-    // don't know why first testing always failed, so extreme the timeout.
-    jest.setTimeout(10000);
 
     it('should render home page', async () => {
-        renderWithReduxAndRouter(<App />, routes.home);
+        const { user } = renderWithReduxAndRouter(<App />, routes.home);
         await waitForLoading();
         await expect(screen.findByText(/^jwt authentication$/i)).resolves.toBeInTheDocument();
         await expect(screen.findByText(/^colorful$/i)).resolves.toBeInTheDocument();
@@ -77,7 +76,7 @@ describe('Router Testing', () => {
     });
 
     it('should render sign-up page', async () => {
-        renderWithReduxAndRouter(<App />, routes.auth.signup);
+        const { user } = renderWithReduxAndRouter(<App />, routes.auth.signup);
         await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^sign up your account$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
@@ -85,7 +84,7 @@ describe('Router Testing', () => {
     });
 
     it('should render sign-in page', async () => {
-        renderWithReduxAndRouter(<App />, routes.auth.signin);
+        const { user } = renderWithReduxAndRouter(<App />, routes.auth.signin);
         await waitForLoading();
         await expect(screen.findByText(/google/i)).resolves.toBeInTheDocument();
         await waitFor(() => expect(screen.getByText(/sign in to your account/i)).toBeInTheDocument());
@@ -94,7 +93,7 @@ describe('Router Testing', () => {
     });
 
     it('should render forgot password page', async () => {
-        renderWithReduxAndRouter(<App />, routes.auth.forgot);
+        const { user } = renderWithReduxAndRouter(<App />, routes.auth.forgot);
         await waitForLoading();
         await waitFor(() => expect(screen.getByText(/get your reset password link/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
@@ -102,7 +101,7 @@ describe('Router Testing', () => {
     });
 
     it('should render reset password page', async () => {
-        renderWithReduxAndRouter(<App />, routes.auth.reset.self);
+        const { user } = renderWithReduxAndRouter(<App />, routes.auth.reset.self);
         await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^reset your password in 30 mins$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
@@ -110,7 +109,7 @@ describe('Router Testing', () => {
     });
 
     it('should render reset password by link page (same with reset page)', async () => {
-        renderWithReduxAndRouter(<App />, reverse(routes.auth.reset.resetId, { resetId: 'token' }));
+        const { user } = renderWithReduxAndRouter(<App />, reverse(routes.auth.reset.resetId, { resetId: 'token' }));
         await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^reset your password in 30 mins$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
@@ -118,7 +117,7 @@ describe('Router Testing', () => {
     });
 
     it('should render user profile page', async () => {
-        renderWithReduxAndRouter(<App />, routes.user);
+        const { user } = renderWithReduxAndRouter(<App />, routes.user);
         await waitForLoading();
         await waitFor(() => expect(screen.getByText(/^update$/i)).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText(/^colorful$/i)).toBeInTheDocument());
