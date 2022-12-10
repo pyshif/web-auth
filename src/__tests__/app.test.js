@@ -4,6 +4,8 @@ import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { cleanup, fireEvent, getByText, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import { configure } from '@testing-library/dom';
+// in lack resoure ci environment, need more time to render dom tree
+// so extend timeout to prevent testing failed is important
 configure({ asyncUtilTimeout: 10000 });
 // don't know why first testing always failed, so extreme the timeout.
 jest.setTimeout(10000);
