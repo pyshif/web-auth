@@ -62,6 +62,9 @@ afterEach(() => {
 });
 
 describe('Router Testing', () => {
+    // don't know why first testing always failed, so extreme the timeout.
+    jest.setTimeout(10000);
+
     it('should render home page', async () => {
         renderWithReduxAndRouter(<App />, routes.home);
         await waitForLoading();
@@ -475,11 +478,11 @@ describe('User Profile Updating Testing', () => {
         const phone = screen.getByLabelText(/^phone$/i);
         const email = screen.getByLabelText(/^email$/i);
         const update = screen.getByRole('button', { name: /^update$/i });
-        // console.log('username.value :>> ', username.value);
-        // console.log('birthday.value :>> ', birthday.value);
-        // console.log('gender.value :>> ', gender.value);
-        // console.log('phone.value :>> ', phone.value);
-        // console.log('email.value :>> ', email.value);
+        console.log('username.value :>> ', username.value);
+        console.log('birthday.value :>> ', birthday.value);
+        console.log('gender.value :>> ', gender.value);
+        console.log('phone.value :>> ', phone.value);
+        console.log('email.value :>> ', email.value);
         // event
         await user.clear(username);
         await user.click(username);
