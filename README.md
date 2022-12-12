@@ -6,9 +6,9 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 ## 目錄
 
-如果你想『運行專案進行修改』，詳見 1 ~ 9。
+如果你想『運行專案進行修改』，詳見 1 ~ 10。
 
-如果你想『了解網站功能、使用技術』，詳見 10 ~ 15。
+如果你想『了解網站功能、使用技術』，詳見 11 ~ 16。
 
 1. [安裝](#安裝)
 
@@ -46,19 +46,21 @@ web-auth 以及 web-auth-server 是實作 JWT (Json Web Token)、Google Sign In 
 
 9. [Redux](#redux)
 
+10. [Testing \& CI](#testing--ci)
+
 ---
 
-10. [UI](#ui)
+1.  [UI](#ui)
 
-11. [JWT 管理方式](#jwt-管理方式)
+2.  [JWT 管理方式](#jwt-管理方式)
 
-12. [Google 第三方登入](#google-第三方登入)
+3.  [Google 第三方登入](#google-第三方登入)
 
-13. [系統信發送功能](#系統信發送功能)
+4.  [系統信發送功能](#系統信發送功能)
 
-14. [網站部署](#網站部署)
+5.  [網站部署](#網站部署)
 
-15.  [使用技術](#使用技術)
+6.   [使用技術](#使用技術)
 
 ## 安裝 
 
@@ -819,6 +821,30 @@ export default helpSlice.reducer;
 </details>
 
 > 如對 Thunks and Async Logic 感到模糊，請參考 [Redux 官方文件](https://redux.js.org/tutorials/essentials/part-5-async-logic#thunks-and-async-logic)
+
+<p align="right">
+    <a href="#目錄">回目錄</a>
+</p>
+
+
+## Testing & CI
+
+測試框架使用 Jest 和 @testing-library。
+
+CI 使用 Github Action 處理。
+
+| Integration Testing | Status |
+|---------------------|:--------:|
+| Web Router Testing  | ✅ |
+| Sign Up Flow Testing | ✅ |
+| Sign In Flow Testing | ✅ |
+| Forgot Password Flow Testing | ✅ |
+| Reset Password Flow Testing | ✅ |
+| User Profile Updating | ✅ |
+
+### CI
+
+`push` 進 `main` 分支時自動觸發，詳細設定檔請參考 `.github/workflows/ci.yml`
 
 <p align="right">
     <a href="#目錄">回目錄</a>
