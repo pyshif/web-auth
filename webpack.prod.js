@@ -33,6 +33,7 @@ module.exports = (env) => {
         optimization: {
             minimize: true,
             minimizer: [new CssMinimizerPlugin(), new TerserPlugin({ parallel: true })],
+            runtimeChunk: 'single',
             splitChunks: {
                 cacheGroups: {
                     react: {
