@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import routes from 'utils/routes';
 import styled from 'styled-components';
@@ -26,6 +26,12 @@ function User() {
     const dispatch = useAppDispatch();
     const { token, user } = useAppSelector((state) => state.auth);
     const [uploading, setUploading] = useState<boolean>(false);
+    // FIXME: forceRender to fix <Form /> can't correctly render redux data.
+    const [, forceRender] = useState<any>();
+    useEffect(() => {
+        forceRender({});
+    }, [user]);
+    // FIXME: end
 
     async function onFinish(values: any) {
         // data
