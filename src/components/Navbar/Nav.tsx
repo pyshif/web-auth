@@ -48,6 +48,7 @@ export function MobileNav(props: PropsNav) {
                 className="capitalize p-1 m-1"
                 defaults
                 scrollToTop
+                onClick={handleHiddenState}
             >
                 home
             </NavIconLink>,
@@ -57,6 +58,7 @@ export function MobileNav(props: PropsNav) {
                 className="capitalize p-1 m-1"
                 defaults
                 scrollToTop
+                onClick={handleHiddenState}
             >
                 auth
             </NavIconLink>,
